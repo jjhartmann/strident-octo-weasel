@@ -136,11 +136,15 @@ private:
     {
         if (!node->left && !node->right)
         {
+            delete node;
             return;
         }
 
-        RecDestory(node->left);
-        RecDestory(node->right);
+        if (node->left)
+            RecDestory(node->left);
+
+        if(node->right)
+            RecDestory(node->right);
 
         delete node;
     }
@@ -165,6 +169,6 @@ int main()
     Solution test;
     test.zigzagLevelOrder(testtree);
 
-//    CreateTree::DestroyBinTree(testtree);
+    CreateTree::DestroyBinTree(testtree);
     return 0;
 }
