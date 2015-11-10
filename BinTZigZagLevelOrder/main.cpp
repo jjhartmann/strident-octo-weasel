@@ -21,12 +21,15 @@ public:
     vector<vector<int>> zigzagLevelOrder(TreeNode* root)
     {
         SolVec sol;
-        IntVec cell(root->val, 1);
-        sol.push_back(cell);
-        cell.pop_back();
-
-        vector<TreeNode*> parents;
-        parents.push_back(root);
+        IntVec cell;
+        vector<TreeNode *> parents;
+        if (root)
+        {
+            cell.push_back(root->val);
+            sol.push_back(cell);
+            parents.push_back(root);
+            cell.clear();
+        }
 
         // Rest of body
         int depth = 1;
@@ -156,14 +159,21 @@ private:
 int main()
 {
     cout << "Ziz-zag level order traversal" << endl;
+//
+//    // Simple tree [1, 2, 6, 5, #, 8, 9]
+//    TreeNode *testtree = new TreeNode(1);
+//    testtree->left = new TreeNode(2);
+//    testtree->right = new TreeNode(3);
+//    testtree->left->left = new TreeNode(5);
+//    testtree->right->right = new TreeNode(8);
+//    testtree->right->left = new TreeNode(9);
 
-    // Simple tree [1, 2, 6, 5, #, 8, 9]
-    TreeNode *testtree = new TreeNode(1);
-    testtree->left = new TreeNode(2);
-    testtree->right = new TreeNode(3);
-    testtree->left->left = new TreeNode(5);
-    testtree->right->right = new TreeNode(8);
-    testtree->right->left = new TreeNode(9);
+    // Simple tree [3,9,20,#,#,15,7]
+    TreeNode *testtree = new TreeNode(3);
+    testtree->left = new TreeNode(9);
+    testtree->right = new TreeNode(20);
+    testtree->right->left = new TreeNode(15);
+    testtree->right->right = new TreeNode(7);
 
 
     Solution test;
