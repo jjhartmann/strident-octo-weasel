@@ -36,6 +36,7 @@ public:
         while (!parents.empty())
         {
             vector<TreeNode*> p_temp;
+            vector<TreeNode*>::reverse_iterator r_it = parents.rbegin();
             for (auto it : parents)
             {
                 if (depth % 2 == 0)
@@ -56,29 +57,29 @@ public:
                     if(it->left)
                         cell.push_back(it->left->val);
                 }
-            }
 
-            // Iterate over parents backward and store
-            for (vector<TreeNode*>::reverse_iterator it = parents.rbegin(); it != parents.rend(); ++it)
-            {
+
+                // Add reverse parent nodes. 
                 if (depth % 2 != 0)
                 {
                     // Add nodes to parent vec.
-                    if ((*it)->left)
-                        p_temp.push_back((*it)->left);
+                    if ((*r_it)->left)
+                        p_temp.push_back((*r_it)->left);
 
-                    if ((*it)->right)
-                        p_temp.push_back((*it)->right);
+                    if ((*r_it)->right)
+                        p_temp.push_back((*r_it)->right);
                 }
                 else
                 {
                     // Add nodes to parent vec.
-                    if ((*it)->right)
-                        p_temp.push_back((*it)->right);
+                    if ((*r_it)->right)
+                        p_temp.push_back((*r_it)->right);
 
-                    if ((*it)->left)
-                        p_temp.push_back((*it)->left);
+                    if ((*r_it)->left)
+                        p_temp.push_back((*r_it)->left);
                 }
+
+                ++r_it;
             }
 
             if (!cell.empty())
