@@ -59,7 +59,7 @@ public:
                 }
 
 
-                // Add reverse parent nodes. 
+                // Add reverse parent nodes.
                 if (depth % 2 != 0)
                 {
                     // Add nodes to parent vec.
