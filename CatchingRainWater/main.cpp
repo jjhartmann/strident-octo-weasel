@@ -10,7 +10,7 @@ public:
         
         // Scan left to right right to left
         // Store maximal heights, 
-        // O(n^2)
+        // O(2n)
         vector<int> heightLeft(height.size(), 0);
         vector<int> heightRight(height.size(), 0);
         int maxHLeft = 0;
