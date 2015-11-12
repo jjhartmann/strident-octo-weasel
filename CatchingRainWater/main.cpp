@@ -7,15 +7,20 @@ class Solution {
 public:
     int trap(vector<int>& height)
     {
-        
+        if (height.empty())
+        {
+            return 0;
+        }
+
         // Scan left to right right to left
         // Store maximal heights, 
         // O(2n)
-        vector<int> heightLeft(height.size(), 0);
-        vector<int> heightRight(height.size(), 0);
+        int size = height.size();
+        int *heightLeft = new int[size];
+        int *heightRight = new int[size];
         int maxHLeft = 0;
         int maxHRight = 0;
-        for (int i= 0, j = height.size()-1;
+        for (int i = 0, j = height.size() - 1;
              i < height.size(); ++i, --j)
         {
             // For left to right
@@ -28,8 +33,8 @@ public:
             else
             {
                 heightLeft[i] = maxHLeft;
-            }  
-            
+            }
+
             // For right to left
             int &currentHeightR = height[j];
             if (currentHeightR > maxHRight)
@@ -49,6 +54,9 @@ public:
         {
             res += min(heightLeft[i], heightRight[i]) - height[i];
         }
+
+        delete[] heightLeft;
+        delete[] heightRight;
 
         return res;
     }
