@@ -45,6 +45,11 @@ public:
     }
 
     int sumRegion(int row1, int col1, int row2, int col2) {
+
+        // Check m_DyanmicMap for elemtns
+        if (m_DynamicMap.empty())
+            return 0;
+
         int sub1 = m_DynamicMap[row2 * m_MatWidth + col2];
         int sub2 = (row1 > 0) ? m_DynamicMap[(row1 - 1) * m_MatWidth + col2] : 0;
         int sub3 = (col1 > 0) ? m_DynamicMap[row2 * m_MatWidth + col1 - 1] : 0;
