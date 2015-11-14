@@ -45,10 +45,14 @@ public:
     }
 
     int sumRegion(int row1, int col1, int row2, int col2) {
-        return m_DynamicMap[row2 * m_MatWidth + col2] -
-                m_DynamicMap[row1 * m_MatWidth - col2] -
-                m_DynamicMap[row1 * m_MatWidth - col1] +
-                m_DynamicMap[row1 * m_MatWidth - col1];
+        int sub1 = m_DynamicMap[row2 * m_MatWidth + col2];
+        int sub2 = (row1 > 0) ? m_DynamicMap[(row1 - 1) * m_MatWidth + col2] : 0;
+        int sub3 = (col1 > 0) ? m_DynamicMap[row2 * m_MatWidth + col1 - 1] : 0;
+        int sub4 = (row1 > 0 && col1 > 0) ? m_DynamicMap[(row1 - 1) * m_MatWidth + col1 - 1] : 0;
+
+        int res = sub1 - sub2 - sub3 + sub4;
+
+        return res;
     }
 
 private:
@@ -80,6 +84,11 @@ int main()
     // Testing Sol
     NumMatrix test(testMatrix);
 
+    cout << test.sumRegion(0, 0, 2, 2) << endl;
+    cout << test.sumRegion(1,2,3,4) << endl;
+    cout << test.sumRegion(0,0,0,0) << endl;
+    cout << test.sumRegion(3,3,3,3) << endl;
+    cout << test.sumRegion(2,2,3,4) << endl;
 
     return 0;
 }
