@@ -15,9 +15,14 @@ using namespace std;
 //////////////////////////////////////////////////////////////////////
 class NumMatrix {
 public:
-    NumMatrix(vector<vector<int>> &matrix){
+    NumMatrix(vector<vector<int>> &matrix) :
+        m_MatWidth(0)
+    {
         // Check if empty
         if (matrix.empty())
+            return ;
+
+        if (matrix[0].empty())
             return ;
 
         // Size
@@ -25,18 +30,19 @@ public:
         m_MatWidth = matrix[0].size();
         int sum = 0;
 
-        // Construct map.
-        map<int, int>::const_iterator it = m_DynamicMap.begin();
+        // allocate array
+        m_DP = new int[m_MatWidth*h];
+
         for (int i = 0; i < h; ++i)
         {
             sum = matrix[i][0];
-            for (int j = 1; j < m_MatWidth+1; ++j, ++it)
+            for (int j = 1; j < m_MatWidth+1; ++j)
             {
                 int subSum = 0;
                 if (i > 0)
-                    subSum += m_DynamicMap[(i - 1) * m_MatWidth + (j - 1)];
+                    subSum += m_DP[(i - 1) * m_MatWidth + (j - 1)];
 
-                m_DynamicMap.insert(it, pair<int, int>(i * m_MatWidth + (j - 1), sum + subSum));
+                m_DP[i * m_MatWidth + (j - 1)] = sum + subSum;
 
                 if (j < m_MatWidth)
                     sum += matrix[i][j];
@@ -44,26 +50,30 @@ public:
         }
     }
 
+    ~NumMatrix(){
+        // Delete array.
+        if (m_MatWidth != 0)
+            delete[] m_DP;
+    }
+
     int sumRegion(int row1, int col1, int row2, int col2) {
 
         // Check m_DyanmicMap for elemtns
-        if (m_DynamicMap.empty())
+        if (m_MatWidth == 0)
             return 0;
 
-        int sub1 = m_DynamicMap[row2 * m_MatWidth + col2];
-        int sub2 = (row1 > 0) ? m_DynamicMap[(row1 - 1) * m_MatWidth + col2] : 0;
-        int sub3 = (col1 > 0) ? m_DynamicMap[row2 * m_MatWidth + col1 - 1] : 0;
-        int sub4 = (row1 > 0 && col1 > 0) ? m_DynamicMap[(row1 - 1) * m_MatWidth + col1 - 1] : 0;
+        int sub1 = m_DP[row2 * m_MatWidth + col2];
+        int sub2 = (row1 > 0) ? m_DP[(row1 - 1) * m_MatWidth + col2] : 0;
+        int sub3 = (col1 > 0) ? m_DP[row2 * m_MatWidth + col1 - 1] : 0;
+        int sub4 = (row1 > 0 && col1 > 0) ? m_DP[(row1 - 1) * m_MatWidth + col1 - 1] : 0;
 
-        int res = sub1 - sub2 - sub3 + sub4;
-
-        return res;
+        return sub1 - sub2 - sub3 + sub4;
     }
 
 private:
     // Map Var
     // Key is w*h, Value is sum
-    map<int, int> m_DynamicMap;
+    int *m_DP; // Own.
     int m_MatWidth;
 
 };
@@ -86,6 +96,7 @@ int main()
             {1, 0, 3, 0, 5}
     };
 
+
     // Testing Sol
     NumMatrix test(testMatrix);
 
@@ -94,6 +105,10 @@ int main()
     cout << test.sumRegion(0,0,0,0) << endl;
     cout << test.sumRegion(3,3,3,3) << endl;
     cout << test.sumRegion(2,2,3,4) << endl;
+
+    vector<vector<int>> testMatrix2;
+    NumMatrix test2(testMatrix2);
+    test2.sumRegion(1, 2, 4, 5);
 
     return 0;
 }
