@@ -1,8 +1,9 @@
 #include <iostream>
 #include <map>
+#include <unordered_map>
 #include <stack>
 #include <string>
-
+#include <vector>
 using namespace std;
 
 ///////////////////////////////////////////////////////
@@ -26,12 +27,17 @@ public:
         BuildBasePalindrome(s);
 
         // (2) Match all base palindromes and build into meta-palindromes if possible.
-
+        BuildMetaPalindrome();
     }
 
 private:
+    void BuildMetaPalindrome()
+    {
+
+    }
+
     //////////////////////////////////////////////////
-    // Building the base palindromes in O(n) time. 
+    // Building the base palindromes in O(n) time.
     void BuildBasePalindrome(string s)
     {
         // Search for all smallest palindromes.
@@ -54,7 +60,7 @@ private:
             int ri = s.size() - 1;
             while(!m_memory.empty())
             {
-                m_MetaMap[ri--] = m_memory.top();
+                AddToMap(ToStr(m_memory.top()), ri--);
                 m_memory.pop();
             }
         }
@@ -96,7 +102,8 @@ private:
             }
             else
             {
-                m_MetaMap[rindex] = m_memory.top();
+                AddToMap(ToStr(m_memory.top()), rindex);
+
                 cout << "TEST CURR_PALIN:\t" << m_memory.top() << endl;
                 m_memory.pop();
                 match = false;
@@ -107,7 +114,7 @@ private:
         }
 
         // add current palindrom to metaMap
-        m_MetaMap[--index] = curr_palindrom;
+        AddToMap(curr_palindrom, --index);
         cout << "TEST CURR_PALIN:\t" << curr_palindrom << endl;
         return index;
     }
@@ -119,9 +126,16 @@ private:
         return s;
     }
 
+    /////////////////////////////////////////////////
+    // Metamap helper functions
+    void AddToMap(string s, int i)
+    {
+        vector<int> &ref = m_metaMap[s];
+        ref.push_back(i);
+    }
 
 private:
-    map<int, string> m_MetaMap;
+    unordered_map<string, vector<int> > m_metaMap;
     stack<char> m_memory;
 };
 
