@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <map>
 
 using namespace std;
 
@@ -58,7 +57,7 @@ public:
 
     int sumRegion(int row1, int col1, int row2, int col2) {
 
-        // Check m_DyanmicMap for elemtns
+        // Check m_DP for elements
         if (m_MatWidth == 0)
             return 0;
 
@@ -72,7 +71,6 @@ public:
 
 private:
     // Map Var
-    // Key is w*h, Value is sum
     int *m_DP; // Own.
     int m_MatWidth;
 
