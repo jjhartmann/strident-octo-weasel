@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 #include <stack>
+#include <string>
 
 using namespace std;
 
@@ -22,13 +23,17 @@ public:
     int minCut(string s)
     {
         // (1) Extract all of the base palindromes.
-        BuildMeta(s);
+        BuildBasePalindrome(s);
+
+        // (2) Match all base palindromes and build into meta-palindromes if possible.
+
     }
 
 private:
-    void BuildMeta(string s)
+    //////////////////////////////////////////////////
+    // Building the base palindromes in O(n) time. 
+    void BuildBasePalindrome(string s)
     {
-        string curr_palindrom = "";
         // Search for all smallest palindromes.
         for (int i = 0; i < s.size(); ++i)
         {
@@ -36,63 +41,74 @@ private:
             if (m_memory.empty())
             {
                 m_memory.push(s.at(i));
-                curr_palindrom = ToStr(s.at(i));
                 continue;
             }
 
             // Else Check for adjacent chars in string
-            Construct(i, curr_palindrom, s);
+            i = Construct(i, s);
         }
 
-
+        // Add rest of m_memory to map
+        if (!m_memory.empty())
+        {
+            int ri = s.size() - 1;
+            while(!m_memory.empty())
+            {
+                m_MetaMap[ri--] = m_memory.top();
+                m_memory.pop();
+            }
+        }
     }
 
     // Store metapalindromes
-    int Construct(int i, string &curr_palindrom, string s)
+    int Construct(int i, string &s)
     {
         int index = i;
-        int rindex = i;
-        m_memory.pop();
-
-        if (m_memory.top() == s.at(i))
-        {
-            //even
-            curr_palindrom += ToStr(s.at(index));
-        }
-        else if (i + 1 < s.size() && m_memory.top() == s.at(i + 1))
-        {
-        // Odd palindrome.
-            curr_palindrom = curr_palindrom + ToStr(s.at(index)) + ToStr(s.at(index + 1));
-        }
-        else
+        int rindex = 0;
+        string curr_palindrom;
+        if (m_memory.top() != s.at(index) &&
+            !(index + 1 < s.size() && m_memory.top() == s.at(index + 1)))
         {
             //Nothing matches. add to queue
-            m_memory.push(s.at(i));
-            curr_palindrom += ToStr(s.at(i));
+            m_memory.push(s.at(index));
             return index;
         }
 
+        // Set up even odd palindromes.
+        if (index + 1 < s.size() && m_memory.top() == s.at(index + 1))
+        {
+            rindex = index-1;
+            curr_palindrom =  ToStr(s.at(index++));
+        }
+        else
+        {
+            rindex = index - 1;
+        }
+
         // Start extraction
-        ++index;
+        bool match = true;
         while (!m_memory.empty())
         {
-            if (m_memory.top() == s.at(++index))
+            if (match && index < s.size() && m_memory.top() == s.at(index))
             {
+                curr_palindrom = ToStr(m_memory.top()) + curr_palindrom + ToStr(s.at(index++));
                 m_memory.pop();
-                curr_palindrom += ToStr(s.at(index));
             }
             else
             {
-                --index;
                 m_MetaMap[rindex] = m_memory.top();
+                cout << "TEST CURR_PALIN:\t" << m_memory.top() << endl;
                 m_memory.pop();
+                match = false;
             }
+
+            // Inc/De index
             --rindex;
         }
 
         // add current palindrom to metaMap
-        m_MetaMap[index] = curr_palindrom;
-        curr_palindrom.clear();
+        m_MetaMap[--index] = curr_palindrom;
+        cout << "TEST CURR_PALIN:\t" << curr_palindrom << endl;
         return index;
     }
 
@@ -113,8 +129,9 @@ int main()
 {
     Solution sol;
 
-    string test1 = "abadxyxdaba";
+    string test1 = "abcdxxyxxyxxdcba";
     sol.minCut(test1);
 
+    cout << "Finish" << endl;
     return 0;
 }
