@@ -27,18 +27,45 @@ public:
         BuildBasePalindrome(s);
 
         // (2) Match all base palindromes and build into meta-palindromes if possible.
-        BuildMetaPalindrome();
+        BuildMetaPalindrome(s);
     }
 
 private:
-    void BuildMetaPalindrome()
+    void BuildMetaPalindrome(const string &s)
     {
+        for (auto &it : m_metaMap)
+        {
+            // only test strings greater then size 1.
+            if (it.first.size() > 1 && it.second.size() > 1)
+            {
+                // Verify collisions.
+                vector<int> c_vec = it.second;
+                int size = c_vec.size();
+                for (int i = 0; i < size; ++i)
+                {
+                    for (int j = i; j < size; ++j)
+                    {
+                        // Check inner substring for palindrome.
+                        string substr = s.substr(c_vec[i] + 1, c_vec[i] - c_vec[j] - it.first.size());
+                        if (!CheckPalindrome(substr))
+                        {
+                            // add to result base string c_vec[i].
+                            continue;
+                        }
 
+                        // Check outer edges.
+
+
+                    }
+                }
+
+            }
+        }
     }
 
     //////////////////////////////////////////////////
     // Building the base palindromes in O(n) time.
-    void BuildBasePalindrome(string s)
+    void BuildBasePalindrome(const string s)
     {
         // Search for all smallest palindromes.
         for (int i = 0; i < s.size(); ++i)
@@ -67,7 +94,7 @@ private:
     }
 
     // Store metapalindromes
-    int Construct(int i, string &s)
+    int Construct(int i, const string &s)
     {
         int index = i;
         int rindex = 0;
@@ -119,6 +146,35 @@ private:
         return index;
     }
 
+    // Check for palindrome in given string
+    bool CheckPalindrome(string s)
+    {
+        for (int i = 0, j = s.size() - 1; i < s.size() / 2; ++i, --j)
+        {
+            if (s[i] != s[j])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Checks for the single case that the entire string may be a palindrome.
+    // Wondering if I should check this case in the beginning....
+    bool CheckPalindromeEdge(string s, int r_index, int l_index)
+    {
+        while (r_index < s.size() && r_index >= 0)
+        {
+            if (s[r_index++] != s[l_index--])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     // Converts char to string
     string ToStr(const char c)
     {
@@ -144,7 +200,9 @@ int main()
     Solution sol;
 
     string test1 = "abcdxxyxxyxxdcba";
-    sol.minCut(test1);
+    string test2 = "zxxbxxcxxcxxz";
+    string test3 = "zxxbxxcxxcbxxz";
+    sol.minCut(test2);
 
     cout << "Finish" << endl;
     return 0;
