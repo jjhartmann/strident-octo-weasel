@@ -89,7 +89,8 @@ private:
             string curr_pali = "";
             if (IsUnary(sol_opt[i])     &&
                 i + 2 < sol_opt.size()  &&
-                IsUnary(sol_opt[i + 2]))
+                IsUnary(sol_opt[i + 2]) &&
+                (sol_opt[i][0] == sol_opt[i+2][0]))
             {
                 // Conduct Optimization
                 string lStr = sol_opt[i];
@@ -297,22 +298,6 @@ private:
     }
 
     //////////////////////////////////////////////////
-    // Checks for the single case that the entire string may be a palindrome.
-    // Wondering if I should check this case in the beginning....
-    bool CheckPalindromeEdge(string s, int r_index, int l_index)
-    {
-        while (r_index < s.size() && l_index >= 0)
-        {
-            if (s[r_index++] != s[l_index--])
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    //////////////////////////////////////////////////
     // Converts char to string
     string ToStr(const char c)
     {
@@ -355,8 +340,9 @@ int main()
     string test8 = "caaaaaaaaaaaaaaaaaaaaaaaadjdjdjdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     string test9 = "aaabaa";
     string test10 = "ppdjdQdjd";
+    string test11 = "asdkfjaieafkdkdkdkdkdkdkalsakdkdkdkkkkkkkkkkkkkksjsjsjskkkkkkkkkkkkkkiejajdjskskskjadjkfasdfadfadf";
 
-    sol.minCut(test8);
+    sol.minCut(test11);
 
     cout << "Finish" << endl;
     return 0;
