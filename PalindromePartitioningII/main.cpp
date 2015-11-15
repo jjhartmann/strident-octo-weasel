@@ -34,6 +34,8 @@ public:
 
         // (2) Match all base palindromes and build into meta-palindromes if possible.
         BuildMetaPalindrome(s);
+
+        return m_Solution.size() - 1;
     }
 
 private:
@@ -71,6 +73,78 @@ private:
                 m_Solution.push_back(m_palindrome[i]);
             }
         }
+
+        // Check last meta_str
+        if (!meta_str.empty())
+        {
+            m_Solution.push_back(meta_str);
+        }
+
+
+        // Iterate over solution to perform unary set palindrome optimization
+        vector<string> sol_opt(m_Solution);
+        m_Solution.clear();
+        for (int i = 0; i < sol_opt.size(); ++i)
+        {
+            string curr_pali = "";
+            if (IsUnary(sol_opt[i])     &&
+                i + 2 < sol_opt.size()  &&
+                IsUnary(sol_opt[i + 2]))
+            {
+                // Conduct Optimization
+                string lStr = sol_opt[i];
+                string rStr = sol_opt[i+2];
+                int lSize = lStr.size();
+                int rSize = rStr.size();
+
+                string lSplit, rSplit;
+                if (lSize > rSize)
+                {
+                    lSplit = lStr.substr(0, lSize - rSize);
+                    rSplit = lStr.substr(lSplit.size(), lSize - lSplit.size());
+
+                    curr_pali = rSplit + sol_opt[i + 1] + rStr;
+
+                    m_Solution.push_back(lSplit);
+                    m_Solution.push_back(curr_pali);
+
+                }
+                else
+                {
+                    lSplit = rStr.substr(0, lSize);
+                    rSplit = rStr.substr(lSplit.size(), rSize - lSplit.size());
+
+                    curr_pali = lStr + sol_opt[i + 1] + lSplit;
+
+                    m_Solution.push_back(curr_pali);
+                    m_Solution.push_back(lSplit);
+                }
+
+                i += 2;
+            }
+            else
+            {
+                m_Solution.push_back(sol_opt[i]);
+            }
+
+        }
+    }
+
+    //////////////////////////////////////////////////
+    // Check it Palindrome is compsed of a unary set
+    bool IsUnary(string s)
+    {
+        if (s.size() == 1 )
+        {
+            return true;
+        }
+
+        if (s[0] == s[1])
+        {
+            return true;
+        }
+
+        return false;
     }
 
     //////////////////////////////////////////////////
@@ -83,7 +157,7 @@ private:
                 if (!VerifyMeta(bucket[i], bucket[j], palindromeMap))
                 {
                     // If false set i = j and continue with other comparisons
-                    i = j;
+                    i = j-1;
                     j = bucket.size();
                 }
 
@@ -172,7 +246,7 @@ private:
 
         // Start extraction
         bool match = true;
-        while (!m_memory.empty())
+         while (!m_memory.empty())
         {
             if (match && index < s.size() && m_memory.back() == s.at(index))
             {
@@ -185,6 +259,21 @@ private:
                 m_memory.pop_front();
                 match = false;
             }
+        }
+
+        // Check Repeated elements in unary and binary set.
+        char seed = curr_palindrom.front();
+        int curr_size = curr_palindrom.size();
+        while (index < s.size()     &&
+                    (
+                        (curr_size - 2 >= 0  &&  curr_palindrom[curr_size - 2] == s.at(index)) &&
+                        (seed == s.at(index) || (index + 1 < s.size() && curr_palindrom.back() == s.at(index + 1)))
+                    )
+              )
+        {
+            curr_palindrom += s.at(index++);
+            curr_size++;
+
         }
 
         // add current palindrome to metaMap
@@ -259,7 +348,15 @@ int main()
     string test1 = "abcdxxyxxyxxdcba";
     string test2 = "zxxbxxcxxcxxz";
     string test3 = "zxxbxxcxxbxxz";
-    sol.minCut(test2);
+    string test4 = "zxxbxxcxxgxxz";
+    string test5 = "jdjhrejaldjdjdjdhshhhhhsjskdkdqofakdjnkkdkaloeiekdjkfnkdakdkkkkslsldkdkkslaslllslsl";
+    string test6 = "adjdjdjdkd";
+    string test7 = "adjdjdjdkdaaaaa";
+    string test8 = "caaaaaaaaaaaaaaaaaaaaaaaadjdjdjdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    string test9 = "aaabaa";
+    string test10 = "ppdjdQdjd";
+
+    sol.minCut(test8);
 
     cout << "Finish" << endl;
     return 0;
