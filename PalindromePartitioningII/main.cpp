@@ -1,7 +1,7 @@
 #include <iostream>
 #include <map>
 #include <unordered_map>
-#include <stack>
+#include <deque>
 #include <string>
 #include <vector>
 #include <cmath>
@@ -33,10 +33,11 @@ public:
         BuildBasePalindrome(s);
 
         // (2) Match all base palindromes and build into meta-palindromes if possible.
-        BuildMetaPalindrome(s);
+//        BuildMetaPalindrome(s);
     }
 
 private:
+    //////////////////////////////////////////////////
     void BuildMetaPalindrome(const string &s)
     {
         for (auto &it : m_metaMap)
@@ -97,7 +98,7 @@ private:
             // if empty add c
             if (m_memory.empty())
             {
-                m_memory.push(s.at(i));
+                m_memory.push_back(s.at(i));
                 continue;
             }
 
@@ -108,68 +109,57 @@ private:
         // Add rest of m_memory to map
         if (!m_memory.empty())
         {
-            int ri = s.size() - 1;
             while(!m_memory.empty())
             {
-                AddToMap(ToStr(m_memory.top()), ri--);
-                m_memory.pop();
+                AddToMap(ToStr(m_memory.front()));
+                m_memory.pop_front();
             }
         }
     }
 
+    //////////////////////////////////////////////////
     // Store metapalindromes
     int Construct(int i, const string &s)
     {
         int index = i;
-        int rindex = 0;
         string curr_palindrom;
-        if (m_memory.top() != s.at(index) &&
-            !(index + 1 < s.size() && m_memory.top() == s.at(index + 1)))
+        if (m_memory.back() != s.at(index) &&
+            !(index + 1 < s.size() && m_memory.back() == s.at(index + 1)))
         {
             //Nothing matches. add to queue
-            m_memory.push(s.at(index));
+            m_memory.push_back(s.at(index));
             return index;
         }
 
         // Set up even odd palindromes.
-        if (index + 1 < s.size() && m_memory.top() == s.at(index + 1))
+        if (index + 1 < s.size() && m_memory.back() == s.at(index + 1))
         {
-            rindex = index-1;
             curr_palindrom =  ToStr(s.at(index++));
-        }
-        else
-        {
-            rindex = index - 1;
         }
 
         // Start extraction
         bool match = true;
         while (!m_memory.empty())
         {
-            if (match && index < s.size() && m_memory.top() == s.at(index))
+            if (match && index < s.size() && m_memory.back() == s.at(index))
             {
-                curr_palindrom = ToStr(m_memory.top()) + curr_palindrom + ToStr(s.at(index++));
-                m_memory.pop();
+                curr_palindrom = ToStr(m_memory.back()) + curr_palindrom + ToStr(s.at(index++));
+                m_memory.pop_back();
             }
             else
             {
-                AddToMap(ToStr(m_memory.top()), rindex);
-
-                cout << "TEST CURR_PALIN:\t" << m_memory.top() << endl;
-                m_memory.pop();
+                AddToMap(ToStr(m_memory.front()));
+                m_memory.pop_front();
                 match = false;
             }
-
-            // Inc/De index
-            --rindex;
         }
 
-        // add current palindrom to metaMap
-        AddToMap(curr_palindrom, --index);
-        cout << "TEST CURR_PALIN:\t" << curr_palindrom << endl;
-        return index;
+        // add current palindrome to metaMap
+        AddToMap(curr_palindrom);
+        return index - 1;
     }
 
+    //////////////////////////////////////////////////
     // Check for palindrome in given string
     bool CheckPalindrome(string s)
     {
@@ -184,6 +174,7 @@ private:
         return true;
     }
 
+    //////////////////////////////////////////////////
     // Checks for the single case that the entire string may be a palindrome.
     // Wondering if I should check this case in the beginning....
     bool CheckPalindromeEdge(string s, int r_index, int l_index)
@@ -199,6 +190,7 @@ private:
         return true;
     }
 
+    //////////////////////////////////////////////////
     // Converts char to string
     string ToStr(const char c)
     {
@@ -208,18 +200,25 @@ private:
 
     /////////////////////////////////////////////////
     // Metamap helper functions
-    void AddToMap(string s, int i)
+    void AddToMap(string s)
     {
+        // Get current size (index of s)
         vector<int> &ref = m_metaMap[s];
-        ref.push_back(i);
+        ref.push_back(m_palindrome.size());
+
+        m_palindrome.push_back(s);
     }
 
 private:
     unordered_map<string, vector<int> > m_metaMap;
+    vector<string> m_palindrome;
     vector<string> m_Solution;
-    stack<char> m_memory;
+    deque<char> m_memory;
 };
 
+
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
 int main()
 {
     Solution sol;
