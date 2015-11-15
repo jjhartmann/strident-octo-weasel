@@ -4,6 +4,7 @@
 #include <stack>
 #include <string>
 #include <vector>
+#include <cmath>
 using namespace std;
 
 ///////////////////////////////////////////////////////
@@ -23,6 +24,11 @@ class Solution {
 public:
     int minCut(string s)
     {
+        if (CheckPalindrome(s))
+        {
+            return 0;
+        }
+
         // (1) Extract all of the base palindromes.
         BuildBasePalindrome(s);
 
@@ -41,21 +47,39 @@ private:
                 // Verify collisions.
                 vector<int> c_vec = it.second;
                 int size = c_vec.size();
+                string b_pal = it.first;
+
                 for (int i = 0; i < size; ++i)
                 {
-                    for (int j = i; j < size; ++j)
+                    for (int j = i+1; j <= size; ++j)
                     {
-                        // Check inner substring for palindrome.
-                        string substr = s.substr(c_vec[i] + 1, c_vec[i] - c_vec[j] - it.first.size());
-                        if (!CheckPalindrome(substr))
+                        // If j == size, then all cases have passed.
+                        if (j == size)
                         {
-                            // add to result base string c_vec[i].
+                            // push substr to sol.
+                            m_Solution.push_back(s.substr(c_vec[i] + 1, abs(c_vec[i] - c_vec[j-1]) - it.first.size()));
                             continue;
                         }
 
-                        // Check outer edges.
+                        // Check inner substring for palindrome.
+                        string substr = s.substr(c_vec[i] + 1, abs(c_vec[i] - c_vec[j]) - it.first.size());
+                        if (!CheckPalindrome(substr))
+                        {
+                            // add to result base string c_vec[i].
+                            if (i == j-1)
+                            {
+                                m_Solution.push_back(it.first);
+                            }
+                            else
+                            {
+                                // Store previous substring
+                                m_Solution.push_back(b_pal + s.substr(c_vec[i] + 1, abs(c_vec[i] - c_vec[j-1]) - it.first.size()) + b_pal);
+                                i = j-1; // set to current unused base palindrome.
+                            }
 
-
+                            j = size + 1; // if first compare fail, all others fail.
+                            continue;
+                        }
                     }
                 }
 
@@ -192,6 +216,7 @@ private:
 
 private:
     unordered_map<string, vector<int> > m_metaMap;
+    vector<string> m_Solution;
     stack<char> m_memory;
 };
 
@@ -201,7 +226,7 @@ int main()
 
     string test1 = "abcdxxyxxyxxdcba";
     string test2 = "zxxbxxcxxcxxz";
-    string test3 = "zxxbxxcxxcbxxz";
+    string test3 = "zxxbxxcxxbxxz";
     sol.minCut(test2);
 
     cout << "Finish" << endl;
