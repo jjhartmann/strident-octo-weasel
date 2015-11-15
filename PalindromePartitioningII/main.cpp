@@ -19,7 +19,6 @@ using namespace std;
 // (3) Therefore, if palindrome is not complete, the
 //     sub-palindromes must be adjacent.
 ///////////////////////////////////////////////////////
-
 class Solution {
 public:
     int minCut(string s)
