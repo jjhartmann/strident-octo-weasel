@@ -33,59 +33,92 @@ public:
         BuildBasePalindrome(s);
 
         // (2) Match all base palindromes and build into meta-palindromes if possible.
-//        BuildMetaPalindrome(s);
+        BuildMetaPalindrome(s);
     }
 
 private:
     //////////////////////////////////////////////////
     void BuildMetaPalindrome(const string &s)
     {
-        for (auto &it : m_metaMap)
+        // Check and find all meta-palindromes
+        vector<bool> palindromeMap(m_palindrome.size(), false);
+
+        for (auto it : m_metaMap)
         {
-            // only test strings greater then size 1.
-            if (it.first.size() > 1 && it.second.size() > 1)
+            if (it.second.size() > 1)
             {
-                // Verify collisions.
-                vector<int> c_vec = it.second;
-                int size = c_vec.size();
-                string b_pal = it.first;
-
-                for (int i = 0; i < size; ++i)
-                {
-                    for (int j = i+1; j <= size; ++j)
-                    {
-                        // If j == size, then all cases have passed.
-                        if (j == size)
-                        {
-                            // push substr to sol.
-                            m_Solution.push_back(s.substr(c_vec[i] + 1, abs(c_vec[i] - c_vec[j-1]) - it.first.size()));
-                            continue;
-                        }
-
-                        // Check inner substring for palindrome.
-                        string substr = s.substr(c_vec[i] + 1, abs(c_vec[i] - c_vec[j]) - it.first.size());
-                        if (!CheckPalindrome(substr))
-                        {
-                            // add to result base string c_vec[i].
-                            if (i == j-1)
-                            {
-                                m_Solution.push_back(it.first);
-                            }
-                            else
-                            {
-                                // Store previous substring
-                                m_Solution.push_back(b_pal + s.substr(c_vec[i] + 1, abs(c_vec[i] - c_vec[j-1]) - it.first.size()) + b_pal);
-                                i = j-1; // set to current unused base palindrome.
-                            }
-
-                            j = size + 1; // if first compare fail, all others fail.
-                            continue;
-                        }
-                    }
-                }
-
+                CheckMetaPalindrome(it.second,  palindromeMap);
             }
         }
+
+        // Build Final Solution vector.
+        string meta_str = "";
+        for (int i = 0; i < m_palindrome.size(); ++i)
+        {
+            if (palindromeMap[i])
+            {
+                // Create meta-Palindrome
+                meta_str += m_palindrome[i];
+            }
+            else
+            {
+                if (!meta_str.empty())
+                {
+                    m_Solution.push_back(meta_str);
+                    meta_str.clear();
+                }
+
+                m_Solution.push_back(m_palindrome[i]);
+            }
+        }
+    }
+
+    //////////////////////////////////////////////////
+    bool CheckMetaPalindrome(vector<int> &bucket,  vector<bool> &palindromeMap)
+    {
+        for (int i = 0; i < bucket.size(); ++i)
+        {
+            for (int j = i + 1; j < bucket.size(); ++j)
+            {
+                if (!VerifyMeta(bucket[i], bucket[j], palindromeMap))
+                {
+                    // If false set i = j and continue with other comparisons
+                    i = j;
+                    j = bucket.size();
+                }
+
+                // If true, do nothing.
+            }
+        }
+    }
+
+    //////////////////////////////////////////////////
+    bool VerifyMeta(int l_index, int r_index,  vector<bool> &palindromeMap)
+    {
+        int size = m_palindrome.size();
+        int index = l_index;
+        vector<bool> temp(palindromeMap);
+
+        // Set initial base palindromes to true.
+        temp[r_index] = true;
+        temp[l_index] = true;
+
+        while (r_index != l_index)
+        {
+            if (m_palindrome[--r_index] != m_palindrome[++l_index])
+            {
+                return false;
+            }
+
+            // Add to temp bool vect
+            temp[r_index] = true;
+            temp[l_index] = true;
+        }
+
+        // Add to temp vector.
+        palindromeMap.swap(temp);
+        return true;
+
     }
 
     //////////////////////////////////////////////////
@@ -179,7 +212,7 @@ private:
     // Wondering if I should check this case in the beginning....
     bool CheckPalindromeEdge(string s, int r_index, int l_index)
     {
-        while (r_index < s.size() && r_index >= 0)
+        while (r_index < s.size() && l_index >= 0)
         {
             if (s[r_index++] != s[l_index--])
             {
