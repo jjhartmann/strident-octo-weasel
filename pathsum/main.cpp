@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stack>
 
 using namespace std;
 
@@ -21,7 +22,10 @@ public:
             return false;
         }
 
-        bool res = findSum(root, sum);
+        bool res;
+//         res = findSumIterative(root, sum);
+        res = findSumIterStack(root, sum);
+        res = findSum(root, sum);
         return res;
     }
 
@@ -47,6 +51,78 @@ private:
 
 
 
+    }
+
+    bool findSumIterStack(TreeNode* node, int sum)
+    {
+        stack<TreeNode*> p_stack;
+        stack<TreeNode*> p_visit;
+        p_stack.push(node);
+        p_visit.push(node);
+        p_visit.push(node->left);
+
+
+        while(!p_stack.empty())
+        {
+            if (p_visit.top() == p_stack.top()->right ||
+                (p_stack.top()->right == nullptr &&
+                (p_stack.top()->left == nullptr ||
+                        p_visit.top() == p_stack.top()->left)))
+            {
+                cout << p_stack.top()->val << endl;
+
+                if(p_stack.top()->left != nullptr)
+                    p_visit.pop();
+
+                if(p_stack.top()->right != nullptr)
+                    p_visit.top();
+
+                p_stack.pop();
+
+                continue;
+            }
+
+            if (p_stack.top()->left != nullptr)
+            {
+                p_stack.push(p_stack.top()->left);
+                p_visit.push(p_stack.top()->left);
+            }
+            else if (p_stack.top()->right != nullptr)
+            {
+                p_stack.push(p_stack.top()->right);
+                p_visit.push(p_stack.top()->right);
+            }
+        }
+    }
+
+    bool findSumIterative(TreeNode *node, int sum)
+    {
+        TreeNode* current = node->left;
+        TreeNode* parent = node;
+
+        while (current != nullptr)
+        {
+            if (parent != nullptr)
+            {
+                parent->left = current->right;
+                current->right = parent;
+            }
+
+
+            if (current->left != nullptr)
+            {
+                parent = current;
+                current = current->left;
+            }
+            else
+            {
+                cout << current->val << endl;
+                current = current->right;
+                parent = nullptr;
+            }
+
+
+        }
     }
 };
 
