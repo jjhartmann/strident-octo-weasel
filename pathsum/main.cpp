@@ -25,7 +25,7 @@ public:
         bool res;
 //         res = findSumIterative(root, sum);
         res = findSumIterStack(root, sum);
-        res = findSum(root, sum);
+//        res = findSum(root, sum);
         return res;
     }
 
@@ -59,8 +59,8 @@ private:
         stack<TreeNode*> p_visit;
         p_stack.push(node);
         p_visit.push(node);
-        p_visit.push(node->left);
 
+        int calcsum = p_stack.top()->val;
 
         while(!p_stack.empty())
         {
@@ -69,30 +69,49 @@ private:
                 (p_stack.top()->left == nullptr ||
                         p_visit.top() == p_stack.top()->left)))
             {
+                if (calcsum == sum && p_stack.top()->right == nullptr &&
+                        p_stack.top()->left == nullptr)
+                {
+                    return true;
+                }
+
                 cout << p_stack.top()->val << endl;
 
-                if(p_stack.top()->left != nullptr)
+                if (p_stack.top()->left != nullptr)
                     p_visit.pop();
 
-                if(p_stack.top()->right != nullptr)
-                    p_visit.top();
+                if (p_stack.top()->right != nullptr)
+                    p_visit.pop();
 
+                // Go up one level
+                calcsum = calcsum - p_stack.top()->val;
                 p_stack.pop();
+
+                // Check if tree traversal finished.
+                if (p_visit.top() == node->right)
+                    p_stack.pop();
 
                 continue;
             }
 
-            if (p_stack.top()->left != nullptr)
+            if (p_stack.top()->left != nullptr &&
+                p_stack.top()->left != p_visit.top())
             {
-                p_stack.push(p_stack.top()->left);
                 p_visit.push(p_stack.top()->left);
+                p_stack.push(p_stack.top()->left);
             }
-            else if (p_stack.top()->right != nullptr)
+            else if (p_stack.top()->right != nullptr &&
+                    p_stack.top()->right != p_visit.top())
             {
-                p_stack.push(p_stack.top()->right);
                 p_visit.push(p_stack.top()->right);
+                p_stack.push(p_stack.top()->right);
             }
+
+            // calculate the sum
+            calcsum += p_stack.top()->val;
         }
+
+        return false;
     }
 
     bool findSumIterative(TreeNode *node, int sum)
