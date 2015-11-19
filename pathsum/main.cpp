@@ -23,8 +23,8 @@ public:
         }
 
         bool res;
-//         res = findSumIterative(root, sum);
-        res = findSumIterStack(root, sum);
+        res = findSumIterative(root, sum);
+//        res = findSumIterStack(root, sum);
 //        res = findSum(root, sum);
         return res;
     }
@@ -75,8 +75,6 @@ private:
                     return true;
                 }
 
-                cout << p_stack.top()->val << endl;
-
                 if (p_stack.top()->left != nullptr)
                     p_visit.pop();
 
@@ -118,6 +116,7 @@ private:
     {
         TreeNode* current = node->left;
         TreeNode* parent = node;
+        int calcsum = node->val;
 
         while (current != nullptr)
         {
@@ -127,6 +126,8 @@ private:
                 current->right = parent;
             }
 
+            // Add value
+            calcsum += current->val;
 
             if (current->left != nullptr)
             {
@@ -135,13 +136,20 @@ private:
             }
             else
             {
-                cout << current->val << endl;
+                // Check for
+                if (calcsum == sum)
+                {
+                    return true;
+                }
+
+                int currentval = current->val;
+                calcsum = calcsum - current->val;
                 current = current->right;
                 parent = nullptr;
             }
-
-
         }
+
+        return false;
     }
 };
 
