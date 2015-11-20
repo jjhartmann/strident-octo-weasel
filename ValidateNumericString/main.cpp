@@ -91,19 +91,19 @@ public:
             return true;
         }
 
-        if (c == 'e' && expo == 0 && (decimal == 0 || p == '.' || deciFirst) && len > 0 && intcount > 0 && IsNumeric(s))
+        if (c == 'e' && expo == 0 && len > 0 && intcount > 0 && (IsNumeric(s) || s == '+' || s == '-'))
         {
             ++expo;
             return true;
         }
 
-        if (c == '-' && neg == 0 && len > 0 && intcount == 0 && (IsNumeric(s) || s == '.'))
+        if (c == '-' && (neg == 0 || p == 'e') && len > 0 && (intcount == 0 || p == 'e') && (IsNumeric(s) || s == '.'))
         {
             ++neg;
             return true;
         }
 
-        if (c == '+' && pos == 0 && len > 0 && intcount == 0 && (IsNumeric(s) || s == '.'))
+        if (c == '+' && (pos == 0 || p == 'e') && len > 0 && (intcount == 0 || p == 'e') && (IsNumeric(s) || s == '.'))
         {
             ++pos;
             return true;
@@ -158,7 +158,7 @@ private:
 int main()
 {
     Solution sol;
-    string test = "-.125e33";
+    string test = "+42e+76125";
     sol.isNumber(test);
 
     vector<bool> resultarray;
@@ -193,5 +193,6 @@ int main()
 
     }
 
+    cout << "FINISH" << endl;
     return 0;
 }
