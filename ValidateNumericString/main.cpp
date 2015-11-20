@@ -1,4 +1,7 @@
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <sstream>
 
 using namespace std;
 
@@ -11,22 +14,41 @@ public:
         count = 0;
         len = s.length() - 1;
         intcount = 0;
+        neg = 0;
+        pos = 0;
+        deciFirst = false;
         char next;
+        char prev;
 
-        int earselen = 0;
-        for (int i = 1; i <= len; ++i)
+        int lindex = 0;
+        int rindex = len;
+        bool boundsfound = false;
+        while (!boundsfound)
         {
-            if (s[i] == ' ')
+            if (s[lindex] == ' ')
             {
-
+                ++lindex;
             }
-            else
+
+            if (s[rindex] == ' ')
             {
-                i = len + 1;
+                --rindex;
+            }
+
+            if (s[lindex] != ' ' && s[rindex] != ' ')
+            {
+                boundsfound = true;
             }
         }
 
-        for (char c : s)
+        if (lindex > rindex)
+        {
+            return false;
+        }
+
+        count = lindex;
+        firsti = lindex;
+        for (int i = lindex; i <= rindex; ++i)
         {
             if (s.length()-1 >= count+1)
             {
@@ -37,16 +59,17 @@ public:
                 next = 0;
             }
 
-            if (!IsNumericOrE(c, next))
+            if (!IsNumericOrE(s[i], prev, next))
                 return false;
 
             ++count;
+            prev = s[i];
         }
 
         return true;
     }
 
-    bool IsNumericOrE(char c, char s)
+    bool IsNumericOrE(char c, char p, char s)
     {
         if (IsNumeric(c))
         {
@@ -58,15 +81,31 @@ public:
             return false;
         }
 
-        if (c == '.' && decimal == 0 && expo == 0 && len > 0 && (intcount > 0 || IsNumeric(s)))
+        if (c == '.' && decimal == 0 && expo == 0 && len > 0 && (intcount > 0 || IsNumeric(s) || s == 'e'))
         {
+            if (firsti == count || p == '-' || p == '+')
+            {
+                deciFirst = true;
+            }
             ++decimal;
             return true;
         }
 
-        if (c == 'e' && expo == 0 && decimal == 0 && len > 0 && intcount > 0 && IsNumeric(s))
+        if (c == 'e' && expo == 0 && (decimal == 0 || p == '.' || deciFirst) && len > 0 && intcount > 0 && IsNumeric(s))
         {
             ++expo;
+            return true;
+        }
+
+        if (c == '-' && neg == 0 && len > 0 && intcount == 0 && (IsNumeric(s) || s == '.'))
+        {
+            ++neg;
+            return true;
+        }
+
+        if (c == '+' && pos == 0 && len > 0 && intcount == 0 && (IsNumeric(s) || s == '.'))
+        {
+            ++pos;
             return true;
         }
 
@@ -110,15 +149,49 @@ private:
     int expo;
     int count;
     int len;
+    int neg;
+    int pos;
+    int firsti;
+    bool deciFirst;
 };
 
 int main()
 {
     Solution sol;
-    string test = "                                             .";
+    string test = "-.125e33";
+    sol.isNumber(test);
 
-    bool res = sol.isNumber(test);
+    vector<bool> resultarray;
 
-    cout << res << endl;
+    fstream file("testcases.txt");
+
+    string line;
+    while(getline(file, line))
+    {
+        stringstream stream(line);
+
+        string test;
+        getline(stream, test, '\t');
+
+        string result;
+        getline(stream, result);
+
+        bool res = sol.isNumber(test);
+
+        if (res)
+        {
+            resultarray.push_back(true);
+        }
+        else
+        {
+            resultarray.push_back(false);
+        }
+
+        cout << line << endl;
+        cout << test << endl;
+        cout << result << endl;
+
+    }
+
     return 0;
 }
