@@ -7,9 +7,15 @@ using namespace std;
 
 class Solution {
 public:
-    Solution() :
-        stateMatrix(55, -1)
+    Solution()
     {
+        stateMatrix = new int[60];
+
+        for (int i = 0; i < 60; ++i)
+        {
+            stateMatrix[i] = -1;
+        }
+
         // create StateType Map row = = 11 and col = 5
         //State 0
         stateMatrix[0*5 + 0] = 0;
@@ -61,6 +67,12 @@ public:
 
     }
 
+    // Destructor
+    ~Solution()
+    {
+        delete[] stateMatrix;
+    }
+
     // Main Algorithm
     bool isNumber(string s)
     {
@@ -105,14 +117,14 @@ public:
             int currentType = getType(c);
 
             // if Invalid Type return false
-            if (currentType == -1)
+            if (currentType < 0)
                 return false;
 
             // Get next state
             int nextState = stateMatrix[state * 5 + currentType];
 
             // return false if next state is invalid
-            if (nextState == -1)
+            if (nextState < 0)
             {
                 return false;
             }
@@ -157,7 +169,7 @@ private:
         return -1;
     }
 
-    // Check if state is a valid exit state. 
+    // Check if state is a valid exit state.
     bool isExitState(int in_state)
     {
         return in_state == 3 ||
@@ -209,7 +221,7 @@ private:
 
     ///////////////////////////////////////////
     // Private Vars.
-    vector<int> stateMatrix;
+    int *stateMatrix;
     int state;
 
 };
@@ -217,7 +229,7 @@ private:
 int main()
 {
     Solution sol;
-    string test = " T3";
+    string test = "9 ee ";
     sol.isNumber(test);
 
     vector<bool> resultarray;
