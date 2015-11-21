@@ -117,6 +117,7 @@ public:
                 return false;
             }
 
+            // Set the next state as current
             state = nextState;
         }
 
@@ -156,6 +157,7 @@ private:
         return -1;
     }
 
+    // Check if state is a valid exit state. 
     bool isExitState(int in_state)
     {
         return in_state == 3 ||
@@ -249,6 +251,8 @@ int main()
         cout << result << endl;
 
     }
+
+    file.close();
 
     cout << "FINISH" << endl;
     return 0;
