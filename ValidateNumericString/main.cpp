@@ -7,6 +7,61 @@ using namespace std;
 
 class Solution {
 public:
+    Solution() :
+        stateMatrix(55, -1)
+    {
+        // create StateType Map row = = 11 and col = 5
+        //State 0
+        stateMatrix[0*5 + 0] = 0;
+        stateMatrix[0*5 + 1] = 1;
+        stateMatrix[0*5 + 2] = 2;
+        stateMatrix[0*5 + 3] = 3;
+
+        // State 1
+        stateMatrix[1*5 + 3] = 4;
+
+        // State 2
+        stateMatrix[2*5 + 1] = 1;
+        stateMatrix[2*5 + 3] = 3;
+
+        // State 3
+        stateMatrix[3*5 + 0] = 10;
+        stateMatrix[3*5 + 1] = 5;
+        stateMatrix[3*5 + 3] = 3;
+        stateMatrix[3*5 + 4] = 6;
+
+        // State 4
+        stateMatrix[4*5 + 0] = 10;
+        stateMatrix[4*5 + 3] = 4;
+        stateMatrix[4*5 + 4] = 6;
+
+        // State 5
+        stateMatrix[5*5 + 3] = 9;
+        stateMatrix[5*5 + 4] = 6;
+
+        // State 6
+        stateMatrix[6*5 + 2] = 7;
+        stateMatrix[6*5 + 3] = 8;
+
+        // State 7
+        stateMatrix[7*5 + 3] = 8;
+
+        // State 8
+        stateMatrix[8*5 + 0] = 10;
+        stateMatrix[8*5 + 3] = 8;
+
+        // State 9
+        stateMatrix[9*5 + 0] = 10;
+        stateMatrix[9*5 + 3] = 9;
+        stateMatrix[9*5 + 4] = 6;
+
+        // State 10
+        stateMatrix[10*5 + 0] = 10;
+
+    }
+
+
+
     bool isNumber(string s)
     {
         if (s.empty())
@@ -47,9 +102,17 @@ public:
         for (int i = 1; i < s.length(), c = s[i]; ++i)
         {
             int currentType = getType(c);
+            int nextState = stateMatrix[state * 5 + currentType];
 
-          
+            if (nextState == -1)
+            {
+                return false;
+            }
+
+            state = nextState;
         }
+
+        return true;
 
     }
 
@@ -120,6 +183,7 @@ private:
 
     ///////////////////////////////////////////
     // Private Vars.
+    vector<int> stateMatrix;
     int state;
 
 };
