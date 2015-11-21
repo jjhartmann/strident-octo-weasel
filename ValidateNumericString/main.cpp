@@ -36,6 +36,7 @@ public:
         stateMatrix[4*5 + 4] = 6;
 
         // State 5
+        stateMatrix[5*5 + 0] = 10;
         stateMatrix[5*5 + 3] = 9;
         stateMatrix[5*5 + 4] = 6;
 
@@ -60,8 +61,7 @@ public:
 
     }
 
-
-
+    // Main Algorithm
     bool isNumber(string s)
     {
         if (s.empty())
@@ -101,9 +101,17 @@ public:
         char c = 0;
         for (int i = 1; i < s.length(), c = s[i]; ++i)
         {
+            // Get the type of character identifier
             int currentType = getType(c);
+
+            // if Invalid Type return false
+            if (currentType == -1)
+                return false;
+
+            // Get next state
             int nextState = stateMatrix[state * 5 + currentType];
 
+            // return false if next state is invalid
             if (nextState == -1)
             {
                 return false;
@@ -112,8 +120,11 @@ public:
             state = nextState;
         }
 
-        return true;
+        // Check it state is exit valid state
+        if (isExitState(state))
+            return true;
 
+        return false;
     }
 
 
@@ -140,6 +151,19 @@ private:
 
         if (isE(c))
             return 4;
+
+        // Default
+        return -1;
+    }
+
+    bool isExitState(int in_state)
+    {
+        return in_state == 3 ||
+               in_state == 4 ||
+               in_state == 5 ||
+               in_state == 8 ||
+               in_state == 9 ||
+               in_state == 10;
     }
 
     // check if c is an integer
@@ -191,7 +215,7 @@ private:
 int main()
 {
     Solution sol;
-    string test = "+42e+76125";
+    string test = " T3";
     sol.isNumber(test);
 
     vector<bool> resultarray;
