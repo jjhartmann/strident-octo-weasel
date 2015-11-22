@@ -47,7 +47,7 @@ int main()
 {
     Solution sol;
 
-    string test1 = "abcdxxyxxyxxdcba";
+    string test1 = "abababa";
     string test2 = "zxxbxxcxxcxxz";
     string test3 = "zxxbxxcxxbxxz";
     string test4 = "zxxbxxcxxgxxz";
