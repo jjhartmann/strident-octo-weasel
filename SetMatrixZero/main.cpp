@@ -15,7 +15,9 @@ public:
             return;
         }
 
-        vector<int> colNumbers;
+        // Find memory row and use it for temp storage.
+        int memoryRow = -1;
+        bool mSwitch = false;
 
         // Find zeros in matrix and set column and row to zero.
         for (int i = 0; i < height; ++i)
@@ -25,27 +27,42 @@ public:
             {
                 if (matrix[i][j] == 0)
                 {
+                    if (!mSwitch)
+                        memoryRow = i;
+                        mSwitch = true;
+
                     zero = true;
-                    colNumbers.push_back(j);
+                    matrix[memoryRow][j] = 0;
                 }
 
             }
 
             // Set col or row to zero;
-            if (zero)
+            if (zero && i != memoryRow)
             {
                 matrix[i] = vector<int>(width, 0);
             }
         }
 
         // Set all columns to zero
-        for (int i = 0; i < height; ++i)
+        if (memoryRow > -1)
         {
-            for (int j : colNumbers)
+            for (int i = 0; i < height; ++i)
             {
-                matrix[i][j] = 0;
+                int j = 0;
+                for (int val : matrix[memoryRow])
+                {
+                    if (val == 0)
+                        matrix[i][j] = 0;
+
+                    ++j;
+                }
             }
         }
+
+        // Set memory row to zero
+        if (memoryRow > -1)
+            matrix[memoryRow] = vector<int>(width, 0);
 
     }
 };
@@ -65,9 +82,17 @@ int main()
                     {8 , 1, 8, 8, 8, 1, 1, 0},
             };
 
+    vector<vector<int>> test2 =
+            {
+                    {0, 1}
+            };
+    vector<vector<int>> test3 =
+            {
+                {-1},{2},{3}
+            };
 
     // test Sol
-    sol.setZeroes(test1);
+    sol.setZeroes(test3);
 
     cout << "FINISH" << endl;
     return 0;
