@@ -35,12 +35,12 @@ public:
                 if (neighbours < 2 || neighbours > 3)
                 {
                     // Cell dies
-                    board[i][j] = 0;
+                    board[i-1][j] = 0;
                 }
                 else if (neighbours == 3)
                 {
                     // Lives or spawns
-                    board[i][j] = 1;
+                    board[i-1][j] = 1;
                 }
 
                 // Else, it will remain either 0 or 1.
@@ -69,7 +69,10 @@ private:
                 total = total + rowP[j] + rowN[j];
 
                 // check for cell
-//                if (count == 1 && )
+                if (count != 1)
+                {
+                    total += rowC[j];
+                }
             }
         }
 
