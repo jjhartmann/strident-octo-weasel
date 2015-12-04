@@ -1,34 +1,40 @@
 #include <iostream>
 #include <vector>
-#include <unordered_map>
 
 using namespace std;
 
 class Solution {
 public:
-    vector<int> singleNumber(vector<int>& nums) {
-        unordered_map<int, int> mapint;
-
-        // Iterate over nums and find duplicate ints
-        int numsSize = nums.size();
-        for (int i = 0; i < numsSize; ++i)
+    // Find exactly two single numbers in a vector of duplicate numbers.
+    vector<int> singleNumber(vector<int>& nums)
+    {
+        // First find the XOR of the two single numbers
+        int xornum = 0;
+        for (auto num : nums)
         {
-            pair<unordered_map<int, int>::iterator, bool> pairItr = mapint.insert(make_pair(nums[i], i));
+            xornum ^= num;
+        }
 
-            if (!pairItr.second)
+        // Then find single bit;
+        int test = -xornum;
+        xornum &= -xornum;
+
+        // Get result use bit
+        vector<int> res = {0, 0};
+        for (auto num: nums)
+        {
+            if ((num & xornum) == 0)
             {
-                mapint.erase(pairItr.first);
-
+                res[0] ^= num;
+            }
+            else
+            {
+                res[1] ^= num;
             }
         }
 
-        vector<int> res;
-        for (auto itr : mapint)
-        {
-            res.push_back(itr.first);
-        }
-
         return res;
+
     }
 
 
@@ -63,7 +69,8 @@ int main()
 
     // Test Find two single numbers
     vector<int> test = { 1,2,1,2,3,4,5,4,6,7,6,7,9,8,8};
-    sol.singleNumber(test);
+    vector<int> test3 = { 1, 2, 1, 3, 2, 5};
+    sol.singleNumber(test3);
 
     // Test find single number
     Solution2 sol2;
