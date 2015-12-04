@@ -45,6 +45,7 @@ public:
         // Iterate through the number of single numbers and find differential xors.
         for (int i = 0; i < xor_vec.size(); ++i)
         {
+            int andDiff = 0;
             // Iterate through each vector of numbers to determine differential xor
             for (int num : nums)
             {
@@ -63,6 +64,7 @@ public:
                 if (!flag)
                 {
                     xor_vec[i] ^= num;
+//                    xor_vec[i] = strongxor(xor_vec[i], num, andDiff);
                 }
             }
 
@@ -87,6 +89,26 @@ public:
 
         return res;
     }
+
+    // Stronger XOR
+    // Need to exclude any duplicate bits, odd or even.
+    int strongxor(int i, int j, int &anddiff)
+    {
+        // Get the xor of i and j
+        int xor_tmp = i ^ j;
+
+        // set anddiff with new value
+        anddiff |= i & j;
+
+        // Then mask agains the ones complement of anddiff
+        xor_tmp &= ~anddiff;
+
+
+        return xor_tmp;
+
+    }
+
+private:
 
 };
 
@@ -126,8 +148,8 @@ int main()
     vector<int> test2 = {1, 1, 2, 3, 4, 3, 2, 4, 5, 6, 5, 12, 6, 7, 8, 9, 8, 7, 9 };
     int singleNum = sol2.findSingleNumber(test2);
 
-    vector<int> test4 = { 1,2,1,2,3,4,5,4,6,7,6,7,9,8,8};
-    sol.generlizedFindSingleNumber(test4, 3);
+    vector<int> test4 = { 1,2,1,2,3,4,5,4,6,7,6,7,9,10,8,8};
+    sol.generlizedFindSingleNumber(test4, 4);
 
     cout << "FINISH" << endl;
     return 0;
