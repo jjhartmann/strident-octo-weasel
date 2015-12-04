@@ -38,6 +38,56 @@ public:
     }
 
 
+    vector<int> generlizedFindSingleNumber(vector<int> nums, int n_numbers)
+    {
+        vector<int> xor_vec(n_numbers, 0);
+
+        // Iterate through the number of single numbers and find differential xors.
+        for (int i = 0; i < xor_vec.size(); ++i)
+        {
+            // Iterate through each vector of numbers to determine differential xor
+            for (int num : nums)
+            {
+                // flag to determine if number is part of a different xor set
+                bool flag = false;
+                for (int k = 0; k < i; ++k)
+                {
+                    if ((xor_vec[k] & num) != 0)
+                    {
+                        flag = true;
+                        k = i;
+                    }
+                }
+
+                // if number is not part of xor set, add to current set.
+                if (!flag)
+                {
+                    xor_vec[i] ^= num;
+                }
+            }
+
+            // Create differential bit, to determine single number
+            xor_vec[i] &= -xor_vec[i];
+        }
+
+
+        // Iterate through nums and find all sort using differential bits.
+        vector<int> res(n_numbers, 0);
+        for (int num : nums)
+        {
+            for (int i = 0; i < xor_vec.size(); ++i)
+            {
+                if ((xor_vec[i] & num) == 0)
+                {
+                    res[i] ^= num;
+                }
+            }
+        }
+
+
+        return res;
+    }
+
 };
 
 
@@ -68,7 +118,6 @@ int main()
     Solution sol;
 
     // Test Find two single numbers
-    vector<int> test = { 1,2,1,2,3,4,5,4,6,7,6,7,9,8,8};
     vector<int> test3 = { 1, 2, 1, 3, 2, 5};
     sol.singleNumber(test3);
 
@@ -76,6 +125,9 @@ int main()
     Solution2 sol2;
     vector<int> test2 = {1, 1, 2, 3, 4, 3, 2, 4, 5, 6, 5, 12, 6, 7, 8, 9, 8, 7, 9 };
     int singleNum = sol2.findSingleNumber(test2);
+
+    vector<int> test4 = { 1,2,1,2,3,4,5,4,6,7,6,7,9,8,8};
+    sol.generlizedFindSingleNumber(test4, 3);
 
     cout << "FINISH" << endl;
     return 0;
