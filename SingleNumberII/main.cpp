@@ -1,13 +1,14 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <cmath>
 
 using namespace std;
 
 class Solution {
 public:
     int singleNumber(vector<int>& nums) {
-        int sum = 0;
+        string sum;
 
         // Iterate through vector over all integers.
         for (int num : nums)
@@ -15,23 +16,39 @@ public:
             string base3 = converttoBase3(num);
 
             // Sum all the numbers of base3 together
-            int j = base3.size();
+            int j = base3.size() - 1;
             for (int i = 0; i < base3.size(); ++i, --j)
             {
-                sum += stringToNumber<int>(base3.substr(i, 0)) * 10 * j;
+                int x = stringToNumber<int>(base3.substr(i, 1)) * pow(10.0, j);
+
+                if (sum.size() > i)
+                {
+                    int y = stringToNumber<int>(sum.substr(i, 1));
+
+                    if (x + y < 10 && y != 0)
+                    {
+                        string str = numbertoString<int>(x + y);
+                        sum.replace(i, i + str.size(), str);
+                    }
+                }
+                else
+                {
+                    sum = numbertoString<int>(x) + sum;
+                }
             }
         }
 
         // Take % 3 for every digit in sum.
-        string tmp = numbertoString<int>(sum);
         string res;
-        for (int i = 0; i < tmp.size(); ++i)
+        for (int i = 0; i < sum.size(); ++i)
         {
-            res = numbertoString<int>(stringToNumber<int>(tmp.substr(i, 0)) % 3) + res;
+            res = numbertoString<int>(stringToNumber<int>(sum.substr(i, 1)) % 3) + res;
         }
 
         // Convert res back to base 10;
+        int base10 = convertToBase10<int>(res);
 
+        return base10;
 
 
 
@@ -46,7 +63,7 @@ private:
         int j = str.size() - 1;
         for (int i = 0; i < str.size(); ++i, --j)
         {
-            res = stringToNumber<int>(str.substr(i, 0)) * 3 ^ j;
+            res = stringToNumber<int>(str.substr(i, 1)) * 3 ^ j;
         }
     }
 
@@ -56,7 +73,7 @@ private:
         string res;
         while (x > 0)
         {
-            res = numbertoString(x % 3) + res;
+            res = numbertoString<int>(x % 3) + res;
             x = x / 3;
         }
 
