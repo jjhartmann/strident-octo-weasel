@@ -8,8 +8,7 @@ public:
         int bitshift = 0;
         res = ~res;
 
-        int count = (n - m) + 1;
-        while (count)
+        while (m <= n && m >= 0)
         {
             res = res & m;
 
@@ -28,7 +27,6 @@ public:
             }
 
             ++m;
-            --count;
         }
 
         // reapply the bit shifting
@@ -46,6 +44,7 @@ int main()
     Solution sol;
 //    sol.rangeBitwiseAnd(600000000, 2147483645);
     sol.rangeBitwiseAnd(2147483647, 2147483647);
+//    sol.rangeBitwiseAnd(4, 6);
 
     return 0;
 }
