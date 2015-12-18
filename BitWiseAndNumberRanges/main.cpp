@@ -40,6 +40,22 @@ public:
     {
         return (m < n) ? (recursiveBitwiseAnd(m/2, n/2) << 1) : m;
     }
+
+    // Optimized
+    int optimizedBitwiseAnd(int m, int n)
+    {
+        int bitshift = 1;
+        while (m < n && m != 0)
+        {
+            m = m/2;
+            n = n/2;
+            bitshift *= 2;
+        }
+
+        m *= bitshift;
+
+        return m;
+    }
 };
 
 
@@ -51,7 +67,8 @@ int main()
 //    sol.rangeBitwiseAnd(600000000, 2147483645);
 //    sol.rangeBitwiseAnd(2147483647, 2147483647);
 //    sol.rangeBitwiseAnd(4, 6);
-    sol.recursiveBitwiseAnd(4, 6);
+//    sol.recursiveBitwiseAnd(4, 6);
+    sol.optomizedBitwiseAnd(4, 6);
 
     return 0;
 }
