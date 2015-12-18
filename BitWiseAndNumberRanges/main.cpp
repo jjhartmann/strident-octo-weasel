@@ -8,7 +8,7 @@ public:
         int bitshift = 0;
         res = ~res;
 
-        int count = (m - n) + 1;
+        int count = (n - m) + 1;
         while (count)
         {
             res = res & m;
