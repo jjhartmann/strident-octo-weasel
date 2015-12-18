@@ -34,6 +34,12 @@ public:
 
         return res;
     }
+
+    // Using recursion, we can get the same desired results as above.
+    int recursiveBitwiseAnd(int m, int n)
+    {
+        return (m < n) ? (recursiveBitwiseAnd(m/2, n/2) << 1) : m;
+    }
 };
 
 
@@ -43,8 +49,9 @@ int main()
     // Init
     Solution sol;
 //    sol.rangeBitwiseAnd(600000000, 2147483645);
-    sol.rangeBitwiseAnd(2147483647, 2147483647);
+//    sol.rangeBitwiseAnd(2147483647, 2147483647);
 //    sol.rangeBitwiseAnd(4, 6);
+    sol.recursiveBitwiseAnd(4, 6);
 
     return 0;
 }
