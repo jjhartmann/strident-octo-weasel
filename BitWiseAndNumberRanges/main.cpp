@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 class Solution {
@@ -45,6 +46,13 @@ public:
     int optimizedBitwiseAnd(int m, int n)
     {
         int bitshift = 1;
+
+        int mop = ~m & n;
+        if (mop > n)
+        {
+            return 0;
+        }
+
         while (m < n && m != 0)
         {
             m = m/2;
@@ -53,6 +61,24 @@ public:
         }
 
         m *= bitshift;
+
+        return m;
+    }
+
+
+    int optimizedBitwiseAnd2(int m, int n)
+    {
+        int xlog = static_cast<int>(floor(log2(m ^ n)));
+
+        // set the bits
+        int mask = 0;
+        while (xlog >= 0)
+        {
+            mask |= 1 << xlog;
+            --xlog;
+        }
+
+        m &= ~mask;
 
         return m;
     }
@@ -68,7 +94,8 @@ int main()
 //    sol.rangeBitwiseAnd(2147483647, 2147483647);
 //    sol.rangeBitwiseAnd(4, 6);
 //    sol.recursiveBitwiseAnd(4, 6);
-    sol.optomizedBitwiseAnd(4, 6);
+//    sol.optimizedBitwiseAnd(4, 6);
+    sol.optimizedBitwiseAnd2(49, 54);
 
     return 0;
 }
