@@ -5,7 +5,7 @@ class Solution {
 public:
     int rangeBitwiseAnd(int m, int n) {
         int res = 0;
-        int bitshit = 0;
+        int bitshift = 0;
         res = ~res;
 
         while (m <= n)
@@ -21,10 +21,14 @@ public:
             while (res % 2 == 0)
             {
                 res = res >> 1;
+                ++bitshift;
             }
 
             ++m;
         }
+
+        // reapply the bit shifting
+        res = res << bitshift;
 
         return res;
     }
