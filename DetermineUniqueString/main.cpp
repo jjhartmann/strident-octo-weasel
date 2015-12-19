@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <bitset>
 
 using namespace std;
 
@@ -8,7 +9,7 @@ class Solution
 public:
     bool isUnique(string str)
     {
-        vector<bool> charmap(256);
+        bitset<256> charmap;
         for (char c : str)
         {
             c = tolower(c);
