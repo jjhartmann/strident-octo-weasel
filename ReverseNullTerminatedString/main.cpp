@@ -8,17 +8,23 @@ class Solution
 public:
     void reverse(char *str)
     {
-        char *stringiter = str;
-        vector<char> strtemp;
-        while(*(stringiter))
+        char *enditer = str;
+        char tmp;
+        // Find end
+        while(*(enditer))
         {
-            strtemp.push_back(*stringiter);
-            stringiter++;
+            enditer++;
         }
+        --enditer;
 
-        for (int i = strtemp.size() - 1, j = 0; i >= 0; --i, ++j)
+        // Swap and reverse
+        while (str < enditer)
         {
-            str[j] = strtemp[i];
+            tmp = *str;
+            *str = *enditer;
+            *enditer = tmp;
+            ++str;
+            --enditer;
         }
     }
 };
