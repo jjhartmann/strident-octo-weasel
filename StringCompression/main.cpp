@@ -10,18 +10,15 @@ public:
     static string compress(string str)
     {
         string res;
-        char cprev = '\0';
+        char cprev = str[0];
         int count = 0;
 
         for (char c : str)
         {
             if (c != cprev)
             {
-                if (cprev != '\0')
-                {
-                    res += cprev;
-                    res += cito(count);
-                }
+                res += cprev;
+                res += cito(count);
 
                 cprev = c;
                 count = 0;
