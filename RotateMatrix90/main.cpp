@@ -31,9 +31,6 @@ public:
                 matrix[i][j] = tmp1;
             }
         }
-
-
-
     }
 };
 
