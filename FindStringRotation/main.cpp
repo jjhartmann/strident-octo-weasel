@@ -32,6 +32,14 @@ public:
 
         return false;
     }
+
+    static bool isRotation2(string s1, string s2)
+    {
+        if (s1.length() != s2.length() || s1.length() < 1) return false;
+
+        string s1s1 = s1 + s1;
+        return (s1s1.find(s2) != string::npos) ? true : false;
+    }
 };
 
 int main()
@@ -41,7 +49,7 @@ int main()
 //    string test2 = "cketmybu";
     string test1 = "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmybucket";
     string test2 = "mmmmmmmmmmmmmmmmmmmmmmmmmmmybucketmmmmmmmmmm";
-    Solution::isRotation(test1, test2);
-
+//    Solution::isRotation(test1, test2);
+    bool test = Solution::isRotation2(test1, test2);
     return 0;
 }
