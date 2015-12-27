@@ -2,6 +2,8 @@
 #include <cmath>
 #include <vector>
 #include <cstdlib>
+#include <set>
+#include <ctime>
 
 using namespace std;
 
@@ -30,6 +32,19 @@ public:
         next = n;
     }
 
+    void remove(Node<T> *prev)
+    {
+        if (prev != nullptr && next != nullptr)
+        {
+            prev->next = next;
+            delete this;
+        }
+        else
+        {
+            delete this;
+        }
+    }
+
     void appendToTail(T d)
     {
         Node<T> *end = new Node(d);
@@ -49,22 +64,54 @@ private:
 };
 
 
+template <class T>
+class Solution
+{
+public:
+    void removeDuplicateswithBuffer(Node<T> *head)
+    {
+        // Iterate through linked list and delete nodes.
+        Node<T> *n = head;
+        Node<T> *prev = nullptr;
+        pair< typename set<T>::iterator, bool > res;
+        while (n != nullptr)
+        {
+            res = buffer.insert(n->getData());
+            if (!res.second)
+            {
+                n->remove(prev);
+                n = prev;
+            }
+
+            //increment and set prev;
+            prev = n;
+            n = n->getNext();
+        }
+    }
+
+private:
+    set<T> buffer;
+};
+
+
 
 
 int main()
 {
     cout << "Remove duplicates from an unsorted linked list." << endl;
-
-    Node<int> *head = new Node<int>(rand());
+    srand(time(nullptr));
+    Node<int> *head = new Node<int>(rand() % 30);
 
     // Create a linked list
     for (int i = 0; i < 30; ++i)
     {
-        head->appendToTail(rand());
+        head->appendToTail(rand() % 30);
     }
 
 
-
+    // Remove duplicates using buffer
+    Solution<int> sol;
+    sol.removeDuplicateswithBuffer(head);
 
 
     // delete linked list
