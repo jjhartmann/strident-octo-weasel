@@ -22,6 +22,11 @@ public:
         return next;
     }
 
+    void setNext(Node<T> *node)
+    {
+        next = node;
+    }
+
     T getData()
     {
         return data;
@@ -89,7 +94,140 @@ public:
         }
     }
 
+    // Remove duplicates with sort
+    void removeDuplicatesSort(Node<T> *head)
+    {
+        // sort the linked list
+        head = merge_sort(head);
+
+        // Remove the duplicates
+        Node<T> *n = head;
+        while (n->getNext() != nullptr)
+        {
+            if (n->getData() == n->getNext()->getData())
+            {
+                Node<T> *dup = n->getNext();
+                dup->remove(n);
+            }
+
+            n = n->getNext();
+        }
+    }
+
+
 private:
+    Node<T>* merge_sort(Node<T> *n)
+    {
+        if (n == nullptr || n->getNext() == nullptr)
+        {
+            return n;
+        }
+
+        Node<T> *left = nullptr;
+        Node<T> *right = nullptr;
+        Node<T> *tmpl = nullptr;
+        Node<T> *tmpr = nullptr;
+
+        // init right and left
+        if (n != nullptr)
+        {
+            left = n;
+            n = n->getNext();
+            left->setNext(nullptr);
+            tmpl = left;
+        }
+
+
+        if (n != nullptr)
+        {
+            right = n;
+            n = n->getNext();
+            right->setNext(nullptr);
+            tmpr = right;
+        }
+
+        int i = 2;
+        while (n != nullptr)
+        {
+            // Split the linked list into half.
+            if (i % 2 == 0)
+            {
+                tmpl->setNext(n);
+                n = n->getNext();
+                tmpl = tmpl->getNext();
+                tmpl->setNext(nullptr);
+            }
+            else
+            {
+                tmpr->setNext(n);
+                n = n->getNext();
+                tmpr = tmpr->getNext();
+                tmpr->setNext(nullptr);
+            }
+            ++i;
+        }
+
+
+        left = merge_sort(left);
+        right = merge_sort(right);
+
+        return mergeList(left, right);
+    }
+
+
+    // Merge the list together
+    Node<T>* mergeList(Node<T> *left, Node<T> *right)
+    {
+        Node<T> *result = nullptr;
+        if (left->getData() < right->getData())
+        {
+            result = left;
+            left = left->getNext();
+        }
+        else
+        {
+            result = right;
+            right = right->getNext();
+        }
+
+        Node<T> *res = result;
+
+        // Merge the two linked lists
+        while (left != nullptr && right != nullptr)
+        {
+            if (left->getData() < right->getData())
+            {
+                res->setNext(left);
+                left = left->getNext();
+            }
+            else
+            {
+                res->setNext(right);
+                right = right->getNext();
+            }
+
+            res = res->getNext();
+        }
+
+        // Check whether either left or right have left over nodes.
+        while (left != nullptr)
+        {
+            res->setNext(left);
+            left = left->getNext();
+            res = res->getNext();
+        }
+
+        while (right != nullptr)
+        {
+            res->setNext(right);
+            right = right->getNext();
+            res = res->getNext();
+        }
+
+        return result;
+    }
+
+    // Buffer used in the buffer impl.
     set<T> buffer;
 };
 
@@ -111,8 +249,8 @@ int main()
 
     // Remove duplicates using buffer
     Solution<int> sol;
-    sol.removeDuplicateswithBuffer(head);
-
+//    sol.removeDuplicateswithBuffer(head);
+    sol.removeDuplicatesSort(head);
 
     // delete linked list
     Node<int> *n;
