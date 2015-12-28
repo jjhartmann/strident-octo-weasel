@@ -82,7 +82,9 @@ class Solution
 public:
     static void deleteMiddleNode(Node<T> *mid)
     {
-        
+        Node<T> *next = mid->getNext();
+        mid->setData(next->getData());
+        next->remove(mid);
     }
 };
 
@@ -92,10 +94,10 @@ int main()
 
     // Build new linked list
     srand(time(nullptr));
-    Node<int> *head = new Node<int>(rand() % 15);
+    Node<int> *head = new Node<int>(0);
     for (int i = 0; i < 15; ++i)
     {
-        head->appendToEnd(rand() % 15);
+        head->appendToEnd(i + 1);
     }
 
     // Delete middle node.
