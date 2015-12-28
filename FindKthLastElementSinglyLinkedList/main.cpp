@@ -133,7 +133,31 @@ public:
     }
 
 
-    
+    // Using duel pointers
+    static Node<T>* findKthToLastDuelPointers(Node<T> *head, int k)
+    {
+        Node<T> *p1 = head;
+        Node<T> *p2 = head;
+
+        // Go to kth element in p1.
+        for (int i = 0; i < k; ++i)
+        {
+            if(!p1) return nullptr;
+
+            p1 = p1->getNext();
+        }
+
+        // Iterate both pointers until p1 is nullptr. Return p2.
+        while (p1 != nullptr)
+        {
+            p1 = p1->getNext();
+            p2 = p2->getNext();
+        }
+
+        return p2;
+
+    }
+
 };
 
 
@@ -151,8 +175,10 @@ int main()
 
     // Find kth to last node.
 //   Node<int> *res = Solution<int>::findKthElementfromLast(head, 3);
-    int tmp = 0;
-    Node<int> *res = Solution<int>::findKthToLastRecursion(head, 3, tmp);
+//    int tmp = 0;
+//    Node<int> *res = Solution<int>::findKthToLastRecursion(head, 3, tmp);
+    Node<int> *res = Solution<int>::findKthToLastDuelPointers(head, 3);
+
 
     // Delete Nodes
     while (head != nullptr)
