@@ -129,6 +129,41 @@ public:
         lwiter->setNext(uphead);
         return head;
     }
+
+
+    // Different approach to partitioning linked list
+    static Node<T>* partitionList2(Node<T> *n, int x)
+    {
+        Node<T> *lwhead = nullptr;
+        Node<T> *uphead = nullptr;
+
+        while (n != nullptr)
+        {
+            Node<T> *next = n->getNext();
+            if (n->getData() <= x)
+            {
+                n->setNext(lwhead);
+                lwhead = n;
+            }
+            else
+            {
+                n->setNext(uphead);
+                uphead = n;
+            }
+
+            n = next;
+        }
+
+        // Find the end of lwhead and merge lists
+        Node<T> *head = lwhead;
+        while (lwhead->getNext() != nullptr)
+        {
+            lwhead = lwhead->getNext();
+        }
+
+        lwhead->setNext(uphead);
+        return head;
+    }
 };
 
 
@@ -143,7 +178,7 @@ int main()
     }
 
     // Partition linked list.
-    head = Solution<int>::partitionList(head, 50);
+    head = Solution<int>::partitionList2(head, 50);
 
     // Delete linked list
     while (head != nullptr)
