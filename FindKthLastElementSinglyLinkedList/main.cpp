@@ -111,6 +111,29 @@ public:
         return n;
 
     }
+
+
+    // Using Recursion
+    static Node<T>* findKthToLastRecursion(Node<T> *n, int k, int &i)
+    {
+        if (n == nullptr)
+        {
+            return nullptr;
+        }
+
+        Node<T> *tmp = findKthToLastRecursion(n->getNext(), k, i);
+        ++i;
+
+        if (k == i)
+        {
+            return n;
+        }
+
+        return tmp;
+    }
+
+
+    
 };
 
 
@@ -127,7 +150,9 @@ int main()
     }
 
     // Find kth to last node.
-   Node<int> *res = Solution<int>::findKthElementfromLast(head, 3);
+//   Node<int> *res = Solution<int>::findKthElementfromLast(head, 3);
+    int tmp = 0;
+    Node<int> *res = Solution<int>::findKthToLastRecursion(head, 3, tmp);
 
     // Delete Nodes
     while (head != nullptr)
