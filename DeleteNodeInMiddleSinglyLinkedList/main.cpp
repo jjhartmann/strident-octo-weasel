@@ -74,7 +74,17 @@ private:
     Node<T> *next;
 };
 
-
+///////////////////////////////////////////////////////////////////////////
+// Solution class
+template <class T>
+class Solution
+{
+public:
+    static void deleteMiddleNode(Node<T> *mid)
+    {
+        
+    }
+};
 
 int main()
 {
@@ -88,7 +98,15 @@ int main()
         head->appendToEnd(rand() % 15);
     }
 
-    // Delete middle node. 
+    // Delete middle node.
+    Node<int> *mid = head;
+    int nodeNum = (rand() % 5) + 7;
+    for (int i = 0; i < nodeNum; ++i)
+    {
+        mid = mid->getNext();
+    }
+
+    Solution<int>::deleteMiddleNode(mid);
 
 
     // delete all linked list nodes
