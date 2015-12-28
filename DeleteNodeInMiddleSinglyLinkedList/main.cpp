@@ -80,11 +80,19 @@ template <class T>
 class Solution
 {
 public:
-    static void deleteMiddleNode(Node<T> *mid)
+    static bool deleteMiddleNode(Node<T> *mid)
     {
         Node<T> *next = mid->getNext();
+        if (next == nullptr)
+        {
+            // can't delete node
+            return false;
+        }
+
         mid->setData(next->getData());
         next->remove(mid);
+
+        return true;
     }
 };
 
