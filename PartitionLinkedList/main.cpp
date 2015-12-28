@@ -75,6 +75,62 @@ private:
     Node<T> *next;
 };
 
+/////////////////////////////////////////////////////////////////
+// Solution Class
+template <class T>
+class Solution
+{
+public:
+    static Node<T>* partitionList(Node<T> *head, int x)
+    {
+        Node<T> *lwiter = nullptr;
+        Node<T> *n = head;
+        Node<T> *uphead = head;
+        Node<T> *upiter = nullptr;
+
+        while (n != nullptr)
+        {
+            if (n->getData() <= x)
+            {
+                // Add node to lower list.
+                if (lwiter == nullptr)
+                {
+                    lwiter = n;
+                    head = lwiter;
+                }
+                else
+                {
+                    lwiter->setNext(n);
+                    lwiter = lwiter->getNext();
+                }
+
+            }
+            else
+            {
+                // Upper Parition
+                if (upiter == nullptr)
+                {
+                    upiter = n;
+                    uphead = upiter;
+                }
+                else
+                {
+                    upiter->setNext(n);
+                    upiter = upiter->getNext();
+                }
+            }
+
+            n = n->getNext();
+            if (lwiter != nullptr) lwiter->setNext(nullptr);
+            if (upiter != nullptr) upiter->setNext(nullptr);
+        }
+
+        // Connect the lower and upper paritions
+        lwiter->setNext(uphead);
+        return head;
+    }
+};
+
 
 int main()
 {
@@ -87,6 +143,7 @@ int main()
     }
 
     // Partition linked list.
+    head = Solution<int>::partitionList(head, 50);
 
     // Delete linked list
     while (head != nullptr)
