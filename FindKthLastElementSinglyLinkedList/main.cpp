@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
 #include <cstdlib>
 #include <ctime>
 
@@ -74,6 +75,45 @@ private:
 
 
 
+template <class T>
+class Solution
+{
+public:
+    static Node<T>* findKthElementfromLast(Node<T> *head, int k)
+    {
+        vector<Node<T> *> buffer;
+        Node<T> *n = head;
+        int size = 0;
+
+        // Find size and store every 10th pointer in buffer.
+        while (n != nullptr)
+        {
+            if (size != 0 && size % 10 == 0)
+            {
+                buffer.push_back(n);
+            }
+
+            ++size;
+            n = n->getNext();
+        }
+
+        // determine distance from head
+        int distance = size - k;
+        int index = floor(distance / 10) - 1;
+        int delta = distance % 10;
+
+        n = buffer[index];
+        for (int i = 0; i < delta; ++i)
+        {
+            n = n->getNext();
+        }
+
+        return n;
+
+    }
+};
+
+
 int main()
 {
     cout << "Find the Kth to last element in a singly linked list." << endl;
@@ -87,7 +127,7 @@ int main()
     }
 
     // Find kth to last node.
-    
+   Node<int> *res = Solution<int>::findKthElementfromLast(head, 3);
 
     // Delete Nodes
     while (head != nullptr)

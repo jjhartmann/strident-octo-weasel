@@ -2,7 +2,7 @@
 #include <cmath>
 #include <vector>
 #include <cstdlib>
-#include <set>
+#include <unordered_set>
 #include <ctime>
 
 using namespace std;
@@ -39,15 +39,12 @@ public:
 
     void remove(Node<T> *prev)
     {
-        if (prev != nullptr && next != nullptr)
+        if (prev != nullptr)
         {
             prev->next = next;
-            delete this;
         }
-        else
-        {
-            delete this;
-        }
+
+        delete this;
     }
 
     void appendToTail(T d)
@@ -78,7 +75,7 @@ public:
         // Iterate through linked list and delete nodes.
         Node<T> *n = head;
         Node<T> *prev = nullptr;
-        pair< typename set<T>::iterator, bool > res;
+        pair< typename unordered_set<T>::iterator, bool > res;
         while (n != nullptr)
         {
             res = buffer.insert(n->getData());
@@ -228,7 +225,7 @@ private:
     }
 
     // Buffer used in the buffer impl.
-    set<T> buffer;
+    unordered_set<T> buffer;
 };
 
 
@@ -249,12 +246,12 @@ int main()
 
     // Remove duplicates using buffer
     Solution<int> sol;
-//    sol.removeDuplicateswithBuffer(head);
-    sol.removeDuplicatesSort(head);
+    sol.removeDuplicateswithBuffer(head);
+//    sol.removeDuplicatesSort(head);
 
     // delete linked list
     Node<int> *n;
-    while (n != nullptr)
+    while (head != nullptr)
     {
         n = head->getNext();
         delete head;
