@@ -59,7 +59,7 @@ template <class T>
 class Solution
 {
 public:
-    Node<T>* addLinkedListsReverseOrder(Node<T> *num1, Node<T> *num2) // Don't own
+    static Node<T>* addLinkedListsReverseOrder(Node<T> *num1, Node<T> *num2) // Don't own
     {
         // Get the first number
         int x = 0;
@@ -95,7 +95,7 @@ public:
             ret->appendToEnd(total % 10);
             total = total / 10;
         }
-        
+
         return ret;
     }
 };
@@ -131,6 +131,7 @@ int main()
 
 
     //Add to linked lists.
+    Node<int> *result = Solution<int>::addLinkedListsReverseOrder(num1, num2);
 
     // Delete the linked lists
     deleteLinkedList < int > (num1);
