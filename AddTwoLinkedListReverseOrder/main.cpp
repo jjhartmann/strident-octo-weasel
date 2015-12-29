@@ -52,6 +52,55 @@ private:
     Node<T> *next;
 };
 
+
+//////////////////////////////////////////////////////////
+// Solution Class
+template <class T>
+class Solution
+{
+public:
+    Node<T>* addLinkedListsReverseOrder(Node<T> *num1, Node<T> *num2) // Don't own
+    {
+        // Get the first number
+        int x = 0;
+        int multiplier = 1;
+        while (num1 != nullptr)
+        {
+            x = x + (num1->getData() * multiplier);
+            multiplier *= 10;
+
+            num1 = num1->getNext();
+        }
+
+        // Get the second number
+        int y = 0;
+        multiplier = 1;
+        while (num2 != nullptr)
+        {
+            y = y + (num2->getData() * multiplier);
+            multiplier *= 10;
+
+            num2 = num2->getNext();
+        }
+
+        // Add the two numbers
+        int total = x + y;
+
+        // Reconstruct new linked list with number
+        Node<T> *ret = new Node<T>(total % 10);
+        total = total/10;
+
+        while (total != 0)
+        {
+            ret->appendToEnd(total % 10);
+            total = total / 10;
+        }
+        
+        return ret;
+    }
+};
+
+
 template <typename T>
 void deleteLinkedList(Node<T> *head)
 {
@@ -80,6 +129,8 @@ int main()
     num2->appendToEnd(1);
     num2->appendToEnd(2);
 
+
+    //Add to linked lists.
 
     // Delete the linked lists
     deleteLinkedList < int > (num1);
