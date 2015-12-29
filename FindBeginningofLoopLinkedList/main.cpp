@@ -54,6 +54,50 @@ private:
 };
 
 
+////////////////////////////////////////////////////////////////////
+// Solution class
+template <class T>
+class Solution
+{
+public:
+    static Node<T>* findBeginningofLoop(Node<T> *head)
+    {
+        Node<T> *pt1 = head->getNext();
+        Node<T> *pt2 = (head->getNext()) != nullptr ? head->getNext()->getNext() : nullptr;
+
+        // Find the collision point
+        int count = 2;
+        while (pt1 != pt2)
+        {
+            if (pt1 == nullptr || pt2 == nullptr)
+            {
+                return nullptr;
+            }
+
+            if (count % 2 == 0)
+            {
+                pt1 = pt1->getNext();
+            }
+
+            pt2 = pt2->getNext();
+            ++count;
+        }
+
+
+        // Set pt1 to head and both iterate until collision
+        // Since now pt1 and pt2 are both k nodes away from the collision point.
+        pt1 = head;
+        while (pt1 != pt2)
+        {
+            pt1 = pt1->getNext();
+            pt2 = pt2->getNext();
+        }
+
+        return pt1;
+    }
+};
+
+
 int main()
 {
     cout << "Find the beginning of a loop in a linked list" << endl;
@@ -82,8 +126,8 @@ int main()
     lastNode->setNext(loopbegin);
 
 
-
-
+    // Solution to find the beginning of a loop.
+    Node<int> *res = Solution<int>::findBeginningofLoop(head);
 
     ////////////////////////////////////
     // Delete list
