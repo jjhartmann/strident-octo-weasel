@@ -85,6 +85,56 @@ public:
     }
 
 
+    // Determine if palindrom using reverse and no memory
+    static bool isPalindromeReverse(Node<T> *head)
+    {
+        Node<T> *pt1 = head;
+        Node<T> *pt2 = head;
+        int count = 0;
+        while (pt2 != nullptr)
+        {
+            if (count % 2 == 0)
+            {
+                pt1 = pt1->getNext();
+            }
+
+            pt2 = pt2->getNext();
+            ++count;
+        }
+
+        Node<T> *reverse = reverseList(pt1);
+        pt1 = head;
+        while (reverse != nullptr)
+        {
+            if (reverse->getData() != pt1->getData())
+            {
+                return false;
+            }
+
+            reverse = reverse->getNext();
+            pt1 = pt1->getNext();
+        }
+
+        return true;
+    }
+
+private:
+    static Node<T>* reverseList(Node<T> *head)
+    {
+        Node<T> *reverse = nullptr;
+        while (head != nullptr)
+        {
+            Node<T> *next = head->getNext();
+            head->setNext(reverse);
+            reverse = head;
+            head = next;
+        }
+
+        return reverse;
+
+    }
+
+
 };
 
 ////////////////////////////////////////////////////////////////
@@ -118,7 +168,8 @@ int main()
     evenhead->appendToEnd("a");
 
     // Check if it is palindrome
-    bool res = Solution<string>::isPalindromBuffer(oddhead);
+//    bool res = Solution<string>::isPalindromBuffer(oddhead);
+    bool res = Solution<string>::isPalindromeReverse(evenhead);
 
     // Delete the linked lists
     deleteList<string>(oddhead);
