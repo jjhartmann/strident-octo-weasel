@@ -98,6 +98,31 @@ public:
 
         return ret;
     }
+
+    static Node<T>* addLinkedListForwardOrder(Node<T> *num1, Node<T> *num2)
+    {
+        num1 = reverseList(num1);
+        num2 = reverseList(num2);
+
+        Node<T> *ret = addLinkedListsReverseOrder(num1, num2);
+        return reverseList(ret);
+
+    }
+
+private:
+    static Node<T>* reverseList(Node<T> *head)
+    {
+        Node<T> *reverse = nullptr;
+        while (head != nullptr)
+        {
+            Node<T> *next = head->getNext();
+            head->setNext(reverse);
+            reverse = head;
+            head = next;
+        }
+
+        return reverse;
+    }
 };
 
 
@@ -131,11 +156,14 @@ int main()
 
 
     //Add to linked lists.
-    Node<int> *result = Solution<int>::addLinkedListsReverseOrder(num1, num2);
+    Node<int> *res1 = Solution<int>::addLinkedListsReverseOrder(num1, num2);
+    Node<int> *res2 = Solution<int>::addLinkedListForwardOrder(num1, num2);
 
     // Delete the linked lists
     deleteLinkedList < int > (num1);
     deleteLinkedList < int > (num2);
+    deleteLinkedList < int > (res1);
+    deleteLinkedList < int > (res2);
 
     return 0;
 }
