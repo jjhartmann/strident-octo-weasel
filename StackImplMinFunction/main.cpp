@@ -3,6 +3,51 @@
 
 using namespace std;
 
+class Stack2
+{
+public:
+    void push(int d)
+    {
+        if (mMinStack.empty())
+        {
+            mMinStack.push(d);
+        }
+        else if (mMinStack.top() >= d)
+        {
+            mMinStack.push(d);
+        }
+
+        mStack.push(d);
+    }
+
+    int pop()
+    {
+        if (mStack.empty()) return 0;
+
+        int ret = mStack.top();
+        mStack.pop();
+
+        if (ret == mMinStack.top())
+        {
+            mMinStack.pop();
+        }
+
+        return ret;
+    }
+
+    int min()
+    {
+        if (mMinStack.empty()) return 0;
+        return mMinStack.top();
+    }
+
+private:
+    stack<int> mStack;
+    stack<int> mMinStack;
+};
+
+
+
 class Stack
 {
 public:
@@ -40,7 +85,7 @@ private:
 int main()
 {
     cout << "Implement a stack that has a min function." << endl;
-    Stack myStack;
+    Stack2 myStack;
     myStack.push(4);
     myStack.push(1);
     myStack.push(5);
