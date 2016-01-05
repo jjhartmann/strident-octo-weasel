@@ -133,6 +133,29 @@ public:
         return (mSize <= 0) ? true : false;
     }
 
+    // Method moves all data down by one
+    void rollOver(Stack<T> *in_stack)
+    {
+        if (in_stack != nullptr)
+        {
+            mCurr->setNext(in_stack->mHead);
+
+            // move in_stack head by 1
+            in_stack->mHead = in_stack->mHead->getNext();
+
+            if (in_stack->mHead != nullptr)
+                in_stack->mHead->setPrev(nullptr);
+
+            --(in_stack->mSize);
+
+            Node<T> *n = mCurr->getNext();
+            n->setPrev(mCurr);
+            n->setNext(nullptr);
+            mCurr = n;
+            ++mSize;
+        }
+    }
+
 private:
     int mSize;
     Node<T> *mHead;
@@ -160,6 +183,11 @@ public:
     // Push Data to stack
     void push(T d)
     {
+        if (mStacks.empty())
+        {
+            mStacks.push_back(new Stack<T>());
+        }
+
         if (mStacks.back()->size() < mLimit)
         {
             mStacks.back()->push(d);
@@ -173,22 +201,45 @@ public:
     // Pop the top of the current stack and return data
     T pop()
     {
+        T data = !mStacks.empty() ? mStacks.back()->pop() : 0;
+
         if (!mStacks.empty() && mStacks.back()->isEmpty())
         {
+            delete mStacks.back();
             mStacks.pop_back();
         }
 
-        return !mStacks.empty() ? mStacks.back()->pop() : 0;
+        return data;
     }
 
     // Pop a specific stack in container of stacks
     T popAt(int index)
     {
         if (index >= mStacks.size()) return 0;
+        T data = mStacks[index]->pop();
 
-        return mStacks[index]->pop();
+        rollOver(index);
+
+        return data;
     }
 private:
+    void rollOver(int index)
+    {
+        // Only iterate over stacks that are not full.
+        for (int i = index; i < mStacks.size() - 1; ++i)
+        {
+            mStacks[i]->rollOver(mStacks[i + 1]);
+        }
+
+        if (mStacks.back()->isEmpty())
+        {
+            delete mStacks.back();
+            mStacks.pop_back();
+        }
+
+    }
+
+    // Vars
     int mLimit;
     vector<Stack<T>*> mStacks;
 };
@@ -211,15 +262,26 @@ int main()
     int data = myStack.pop();
     data = myStack.pop();
     data = myStack.pop();
-    data = myStack.pop();
-    data = myStack.pop();
-    data = myStack.pop();
 
     data = myStack.popAt(0);
     data = myStack.popAt(0);
     data = myStack.popAt(0);
+    data = myStack.popAt(0);
+    data = myStack.popAt(0);
+    data = myStack.popAt(0);
+    data = myStack.popAt(0);
+    data = myStack.popAt(0);
+    data = myStack.popAt(0);
+    data = myStack.popAt(0);
+    data = myStack.popAt(0);
+    data = myStack.popAt(0);
+    data = myStack.popAt(0);
 
-
+    // Push data to the stack
+    for (int i = 0; i < 15; ++i)
+    {
+        myStack.push(i);
+    }
 
     return 0;
 }
