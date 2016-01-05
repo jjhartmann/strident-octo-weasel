@@ -167,16 +167,17 @@ class SetofStacks
 {
 public:
     SetofStacks(int stackLimit) :
-            mLimit(stackLimit)
+        mLimit(stackLimit)
     {
         mStacks.push_back(new Stack<T>());
     }
 
     ~SetofStacks()
     {
-        for (Stack<T> *stack : mStacks)
+        while (!mStacks.empty())
         {
-            delete stack;
+            delete mStacks.back();
+            mStacks.pop_back();
         }
     }
 
@@ -247,7 +248,7 @@ private:
 
 int main()
 {
-    cout << "Implment a stack where once an internal limit is exceeed, the stack creates a "
+    cout << "Implement a stack where, once an internal limit is exceeded, the stack creates a "
          << "new stack to hold all subsequent mData. (literal stack of plates)" << endl;
 
 
