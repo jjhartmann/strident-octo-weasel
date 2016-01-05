@@ -13,6 +13,13 @@ public:
         mPrev(nullptr)
     {}
 
+    ~Node()
+    {
+        mData = 0;
+        mNext = nullptr;
+        mPrev = nullptr;
+    }
+
     // Getter and setters
     T getData() { return mData; }
     void setData(T d) { mData = d; }
@@ -31,11 +38,21 @@ template <class T>
 class Stack
 {
 public:
+    // Create an isEmpty stack
     Stack() :
-        mSize(1),
+        mSize(0),
         mHead(nullptr),
         mCurr(nullptr)
     {}
+
+    // create stack and push new element
+    Stack(T d) :
+            mSize(0),
+            mHead(nullptr),
+            mCurr(nullptr)
+    {
+        push(d);
+    }
 
     ~Stack()
     {
@@ -110,6 +127,12 @@ public:
         return mSize;
     }
 
+    // Determine if isEmpty
+    bool isEmpty()
+    {
+        return (mSize <= 0) ? true : false;
+    }
+
 private:
     int mSize;
     Node<T> *mHead;
@@ -120,13 +143,54 @@ template <class T>
 class SetofStacks
 {
 public:
+    SetofStacks(int stackLimit) :
+            mLimit(stackLimit)
+    {
+        mStacks.push_back(new Stack<T>());
+    }
 
+    ~SetofStacks()
+    {
+        for (Stack<T> *stack : mStacks)
+        {
+            delete stack;
+        }
+    }
 
+    // Push Data to stack
+    void push(T d)
+    {
+        if (mStacks.back()->size() < mLimit)
+        {
+            mStacks.back()->push(d);
+        }
+        else
+        {
+            mStacks.push_back(new Stack<T>(d));
+        }
+    }
 
+    // Pop the top of the current stack and return data
+    T pop()
+    {
+        if (!mStacks.empty() && mStacks.back()->isEmpty())
+        {
+            mStacks.pop_back();
+        }
+
+        return !mStacks.empty() ? mStacks.back()->pop() : 0;
+    }
+
+    // Pop a specific stack in container of stacks
+    T popAt(int index)
+    {
+        if (index >= mStacks.size()) return 0;
+
+        return mStacks[index]->pop();
+    }
 private:
     int mLimit;
     vector<Stack<T>*> mStacks;
-
 };
 
 
@@ -134,5 +198,28 @@ int main()
 {
     cout << "Implment a stack where once an internal limit is exceeed, the stack creates a "
          << "new stack to hold all subsequent mData. (literal stack of plates)" << endl;
+
+
+    SetofStacks<int> myStack(4);
+
+    // Push data to the stack
+    for (int i = 0; i < 15; ++i)
+    {
+        myStack.push(i);
+    }
+
+    int data = myStack.pop();
+    data = myStack.pop();
+    data = myStack.pop();
+    data = myStack.pop();
+    data = myStack.pop();
+    data = myStack.pop();
+
+    data = myStack.popAt(0);
+    data = myStack.popAt(0);
+    data = myStack.popAt(0);
+
+
+
     return 0;
 }
