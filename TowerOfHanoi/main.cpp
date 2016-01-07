@@ -3,6 +3,8 @@
 #include <vector>
 
 using namespace std;
+typedef pair<string, stack<int> > TOWER_STACK;
+
 
 enum MOVE {
     AB = 3,
@@ -21,6 +23,7 @@ enum TOWER_TYPE
 class Solution
 {
 public:
+    // Iterative Solution to the tower of hanoi
     static int solveHanoi(int n)
     {
         vector< stack<int> > tower(3);
@@ -136,10 +139,48 @@ public:
 
     }
 
-private:
-    static MOVE moveType(TOWER_TYPE i, TOWER_TYPE k)
+
+    // Recursive solution to the tower of hanoi
+    static void solveHanoiRecursive(int n)
     {
-        return MOVE (i | k);
+        TOWER_STACK towerA("A", stack<int>());
+        TOWER_STACK towerB("B", stack<int>());
+        TOWER_STACK towerC("C", stack<int>());
+
+        int MAX = n + 1;
+        // Build the tower A.
+        for ( int i = n; i > 0; --i)
+        {
+            towerA.second.push(i);
+        }
+
+        hanoiRecursive(n, towerA, towerC, towerB);
+
+        cout << "FINISH" << endl;
+    }
+
+private:
+    static void hanoiRecursive(int n, TOWER_STACK &towerA, TOWER_STACK &towerC, TOWER_STACK &towerB)
+    {
+        // Base case
+        if (n <= 0) return;
+
+        // Move the n-1 disk from towerA to towerB
+        hanoiRecursive(n - 1, towerA, towerB, towerC);
+
+        //Move top of A to C
+        moveTop(towerA, towerC);
+
+        // move n-1 disk from towerB to towerC
+        hanoiRecursive(n - 1, towerB, towerC, towerA);
+    }
+
+    static void moveTop(TOWER_STACK &origin, TOWER_STACK &dest)
+    {
+        dest.second.push(origin.second.top());
+        origin.second.pop();
+
+        cout << "MOVE: " << origin.first << " --> " << dest.first << endl;
     }
 
     // Vars
@@ -155,7 +196,9 @@ int main()
 {
     cout << "Solve the tower of Hanoi by using 3 stacks." << endl;
 
-    int res = Solution::solveHanoi(5);
-    cout << "TOTAL STEPS: " << res << endl;
+    Solution::solveHanoiRecursive(4);
+
+//    int res = Solution::solveHanoi(5);
+//    cout << "TOTAL STEPS: " << res << endl;
     return 0;
 }
