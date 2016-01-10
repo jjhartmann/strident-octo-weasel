@@ -3,6 +3,9 @@
 
 using namespace std;
 
+
+// Uses two stacks, one for the main int and one for the min values
+// Uses less space then have pairs of stacks.
 class Stack2
 {
 public:
@@ -47,7 +50,9 @@ private:
 };
 
 
-
+// Stack that uses a pair.
+// Pair <value, minValue>
+// Would have 2 times the space requirements as a regular stack. 
 class Stack
 {
 public:
