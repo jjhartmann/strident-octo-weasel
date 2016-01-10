@@ -52,7 +52,7 @@ private:
 
 // Stack that uses a pair.
 // Pair <value, minValue>
-// Would have 2 times the space requirements as a regular stack. 
+// Would have 2 times the space requirements as a regular stack.
 class Stack
 {
 public:
