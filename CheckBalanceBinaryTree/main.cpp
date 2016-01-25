@@ -122,14 +122,46 @@ Node<int>* CreateRandTree()
 
 
 //////////////////////////////////
+// Solution Class
+class Solution
+{
+public:
+    template< typename T>
+    static bool CheckIfBinaryTreeIsBalanced(Node<T> *root)
+    {
+        int max = ~0;
+        int min = INT32_MAX;
+        IsBalanced(root, min, max, 0);
+
+        return (max - min) <= 1;
+    }
+
+private:
+    template< typename T>
+    static void IsBalanced(Node<T> *n, int &min, int &max, int count)
+    {
+        if (!n) 
+        {
+            if (count > max) max = count;
+            if (count < min) min = count;
+            return;
+        }
+
+        ++count;
+        IsBalanced(n->getLeft(), min, max, count);
+        IsBalanced(n->getRight(), min, max, count);
+    }
+
+};
+
+//////////////////////////////////
 // Main
 int main()
 {
     cout << "Check to see if a binary tree is balanced" << endl;
 
     Node<int> *root = CreateRandTree();
-
-
+    bool res = Solution::CheckIfBinaryTreeIsBalanced<int>(root);
 
     DeleteTree<int>(root);
 
