@@ -34,6 +34,54 @@
 
 @end
 
+
+///////////////////////////////////////////////////////////////////
+/// Solution Class
+@interface Solution : NSObject
+
+// Class Method (static)
++(BOOL) checkForBalancedTree: (Node*) root;
+@end
+
+@implementation Solution
+// Use recursion to find depth and compare min and max levels.
++(void) checkForBalanceRecursion:(Node*)n minInt:(int*)min maxInt:(int*)max countInt:(int)count
+{
+    if (!n)
+    {
+        if (count > *max) *max = count;
+        if (count < *min) *min = count;
+        
+        return;
+    }
+    
+    ++count;
+    
+    if (![n left] || ![n right])
+    {
+        if (count > *max) *max = count;
+        if (count < *min) *min = count;
+    }
+    
+    [self checkForBalanceRecursion:[n left] minInt:min maxInt:max countInt:count];
+    [self checkForBalanceRecursion:[n right] minInt:min maxInt:max countInt:count];
+}
+
+// Check if a tree is balanced
++(BOOL)checkForBalancedTree:(Node *)root
+{
+    int min = INT32_MAX;
+    int max = INT32_MIN;
+    int count = 0;
+    
+    [self checkForBalanceRecursion:root minInt:&min maxInt:&max countInt:count];
+    
+    return (max - min <= 1) ? YES : NO;
+}
+
+
+@end
+
 ///////////////////////////////////////////////////////////////////
 /// Build Random Tree
 Node* BuildRandomTree()
@@ -88,6 +136,9 @@ int main(int argc, const char * argv[]) {
         
         // Build the array
         Node *root = BuildRandomTree();
+        
+        BOOL res = [Solution checkForBalancedTree:root];
+        NSLog(@"The result is: %i \nFor the tree: %@", res, root);
         
     }
     return 0;
