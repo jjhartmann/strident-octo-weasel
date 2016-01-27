@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 
+using namespace std;
+
 template< class T >
 class Node
 {
@@ -34,12 +36,14 @@ private:
 
 class Solution
 {
-    template <typename T>
+public:
+    
+    template< typename T >
     static Node<T>* BuildBTSFromSortedArray(const vector<T> &in_vec)
     {
 
 
-
+        ;
 
 
     }
