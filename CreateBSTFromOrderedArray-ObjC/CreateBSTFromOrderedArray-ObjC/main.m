@@ -14,15 +14,15 @@
 
 @property Node* left;
 @property Node* right;
-@property int data;
+@property NSInteger data;
 
--(id) initWithData:(int) d;
+-(id) initWithData:(NSInteger) d;
 
 @end
 
 @implementation Node
 
--(id)initWithData:(int)d
+-(id)initWithData:(NSInteger)d
 {
     self = [super init];
     if (self)
@@ -52,13 +52,13 @@
     return nil;
 }
 
-+(Node*) buildBSTR:(Node*) n beginInt:(int) b endInt:(int) e inArray:(NSInteger*) elements
++(Node*) buildBSTR:(Node*) n beginInt:(NSInteger) b endInt:(NSInteger) e inArray:(NSInteger*) elements
 {
     if (e - b <= 0) return nil;
     
     
     int index = b + ceil((e - b)/2);
-    n = [[Node alloc] initWithData: (int) elements[index]];
+    n = [[Node alloc] initWithData: elements[index]];
     
     
     return nil;
