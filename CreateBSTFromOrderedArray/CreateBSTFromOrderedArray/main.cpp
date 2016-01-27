@@ -68,6 +68,21 @@ public:
         return root;
     }
 
+
+    template <typename T>
+    static void DestroyTree(Node<T> *root)
+    {
+        if (!root) return;
+
+        DestroyTree<T>(root->getLeft());
+        DestroyTree<T>(root->getRight());
+
+        root->setLeft(nullptr);
+        root->setRight(nullptr);
+        delete root;
+        root = nullptr;
+    }
+
 private:
     template< typename T>
     static void buildRec(Node<T> *n, int b, int e, const vector<T> &v)
@@ -98,5 +113,7 @@ int main()
 {
     vector<int> test = { 0,1,2,3,4,5,6,7 };
     Node<int>* res = Solution::BuildBTSFromSortedArray<int>(test);
+
+    Solution::DestroyTree<int>(res);
     return 0; 
 }
