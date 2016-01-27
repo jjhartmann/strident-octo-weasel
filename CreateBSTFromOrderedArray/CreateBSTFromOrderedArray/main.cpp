@@ -51,7 +51,7 @@ public:
     static Node<T>* BuildBTSFromSortedArray(const vector<T> &in_vec)
     {
 
-        int index = ceil(in_vec.size() / 2);
+        int index = ceil(double(in_vec.size()) / 2);
         int b = 0;
         int e = in_vec.size() - 1;
 
@@ -96,7 +96,7 @@ private:
 
 int main()
 {
-    vector<int> test = { 1,2,3,4,5,6,7,8,9,10,11,12,13,15 };
-    Solution::BuildBTSFromSortedArray<int>(test);
+    vector<int> test = { 0,1,2,3,4,5,6,7 };
+    Node<int>* res = Solution::BuildBTSFromSortedArray<int>(test);
     return 0; 
 }
