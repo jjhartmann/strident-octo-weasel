@@ -41,27 +41,35 @@
 /// Solution Class
 @interface Solution : NSObject
 
-+ (Node*) buildBST: (NSInteger*) elements;
++ (Node*) buildBST: (NSInteger*) elements arraySize:(NSInteger)size;
 
 @end
 
 @implementation Solution
 
-+(Node *)buildBST:(NSInteger *)elements
++(Node *)buildBST:(NSInteger *)elements arraySize:(NSInteger)size
 {
-    return nil;
+    NSInteger begin = 0;
+    NSInteger end = size - 1;
+    
+    Node *root = nil;
+    root = [self buildBSTR:root beginInt:begin endInt:end inArray:elements];
+    
+    return root;
 }
 
 +(Node*) buildBSTR:(Node*) n beginInt:(NSInteger) b endInt:(NSInteger) e inArray:(NSInteger*) elements
 {
-    if (e - b <= 0) return nil;
+    if (e - b < 0) return nil;
     
     
-    int index = b + ceil((e - b)/2);
+    int index = b + ceil(((double)e - (double)b)/2);
     n = [[Node alloc] initWithData: elements[index]];
     
+    [n setLeft:[self buildBSTR:[n left] beginInt:b endInt:index - 1 inArray:elements]];
+    [n setRight: [self buildBSTR:[n right] beginInt:index + 1 endInt:e inArray:elements]];
     
-    return nil;
+    return n;
 }
 
          
@@ -73,8 +81,13 @@ int main(int argc, const char * argv[]) {
         // insert code here...
         NSLog(@"Create a binary search tree from ordered array.");
         
+        // Test Array
+        NSInteger intArray[] = {0,1,2,3,4,5,6,7};
+        NSInteger size = 8;
+        Node *res = [Solution buildBST:intArray arraySize:size];
         
         
+        NSLog(@"FINSIH");
         
     }
     return 0;
