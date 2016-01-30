@@ -188,8 +188,32 @@ public:
     {
         stack<Node<T>*> buffer;
 
+        buffer.push(sNode);
+        while (!buffer.empty())
+        {
+            Node<T> *n = buffer.top();
+            buffer.pop();
 
+            if (n->getData() == d)
+            {
+                return true;
+            }
 
+            n->setVisited();
+            n->resetItr();
+            while (n->isChildValid())
+            {
+                Node<T> *child = n->getCurrentChild();
+                if (!child->isVisited())
+                {
+                    child->setVisited();
+                    buffer.push(child);
+                }
+                n->nextChild();
+            }
+        }
+
+        return false;
     }
 
 private:
@@ -221,7 +245,9 @@ int main()
 
     Node<int> *sNode = BuildRandomGraph(15, 15);
 
-    bool res = Solution::FindNodeDFSR<int>(sNode, 10);
+    bool res;
+    res = Solution::FindNodeDFSR<int>(sNode, 10);
+    res = Solution::FindNodeDFS<int>(sNode, 10);
 
     DeleteGraph<int>(sNode);
     return 0;
