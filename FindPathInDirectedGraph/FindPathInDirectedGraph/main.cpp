@@ -107,12 +107,10 @@ private:
 
 /////////////////////////////////////////////////////////////////////////
 // Build random Graph
-Node<int>* BuildRandomGraph(int in_size)
+Node<int>* BuildRandomGraph(int in_size, int in_max)
 {
     srand(time(nullptr));
-    int MAX = 50;
-
-    Node<int> *sNode = new Node<int>(rand() % MAX);
+    Node<int> *sNode = new Node<int>(rand() % in_max);
 
     vector<Node<int>*> buffer;
     buffer.push_back(sNode);
@@ -120,7 +118,7 @@ Node<int>* BuildRandomGraph(int in_size)
     for (int i = 0; i < in_size; ++i)
     {
         int bSize = buffer.size();
-        Node<int> *tmp = new Node<int>(rand() % MAX);
+        Node<int> *tmp = new Node<int>(rand() % in_max);
 
         Node<int> *cNode = buffer[rand() % bSize];
         if (cNode)
@@ -152,13 +150,50 @@ void DeleteGraph(Node<T> *root)
 }
 
 
+
+///////////////////////////////////////////////////////////////////////////
+// Solution Class
+class Solution
+{
+public:
+    template<typename T>
+    static bool FindNodeDFSR(Node<T> *sNode, T d)
+    {
+        bool found = false;
+        DFSRHelper(sNode, d, found);
+        return found;
+    }
+
+private:
+    template<typename T>
+    static void DFSRHelper(Node<T> *n, T d, bool &found)
+    {
+        if (!n || found) return;
+
+
+        if (d == n->getData())
+        {
+            found = true;
+            return;
+        }
+
+        n->resetItr();
+        while (n->isChildValid() && !found)
+        {
+            DFSRHelper(n->getCurrentChild(), d, found);
+            n->nextChild();
+        }
+    }
+};
+
+
 int main()
 {
     cout << "Find a route between two nodes in directed graph." << endl;
 
-    Node<int> *sNode = BuildRandomGraph(10);
+    Node<int> *sNode = BuildRandomGraph(15, 15);
 
-
+    bool res = Solution::FindNodeDFSR<int>(sNode, 10);
 
     DeleteGraph<int>(sNode);
     return 0;
