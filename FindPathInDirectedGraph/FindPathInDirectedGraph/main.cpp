@@ -2,6 +2,8 @@
 // Main
 #include <iostream>
 #include <vector>
+#include <stack>
+#include <queue>
 #include <unordered_map>
 #include <ctime>
 #include <cstdlib>
@@ -15,7 +17,8 @@ class Node
 public:
     Node(T d) :
         mData(d),
-        mItr(mEdge.begin())
+        mItr(mEdge.begin()),
+        mVistied(false)
     {}
 
     // Data Get and Set
@@ -99,10 +102,23 @@ public:
         return mItr->second;
     }  
 
+    // Check if node has been visited
+    bool isVisited()
+    {
+        return mVistied;
+    }
+
+    // Set As Visited
+    void setVisited()
+    {
+        mVistied = true;
+    }
+
 private:
     T mData;
     unordered_map<T, Node<T>*> mEdge;
     typename unordered_map<T, Node<T>*>::iterator mItr;
+    bool mVistied;
 };
 
 /////////////////////////////////////////////////////////////////////////
@@ -156,12 +172,24 @@ void DeleteGraph(Node<T> *root)
 class Solution
 {
 public:
+    // Recursive Method
     template<typename T>
     static bool FindNodeDFSR(Node<T> *sNode, T d)
     {
         bool found = false;
         DFSRHelper(sNode, d, found);
         return found;
+    }
+
+
+    // Iterative Solution
+    template<typename T>
+    static bool FindNodeDFS(Node<T> *sNode, T d)
+    {
+        stack<Node<T>*> buffer;
+
+
+
     }
 
 private:
