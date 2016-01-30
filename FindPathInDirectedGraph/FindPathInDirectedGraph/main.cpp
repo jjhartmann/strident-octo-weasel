@@ -34,6 +34,12 @@ public:
         return mEdge.size();
     }
 
+    // Checks if the Node has children
+    bool hasChild()
+    {
+        return mEdge.size() > 0;
+    }
+
     // Remove edge based on Node<T>
     void removeEdge(T d)
     {
@@ -69,7 +75,7 @@ public:
     }
 
     // Get next object. Return true if valid, else false. 
-    bool next()
+    bool nextChild()
     {
         mItr++;
         if (mItr == mEdge.end())
@@ -78,14 +84,21 @@ public:
         return true;
     }
 
+    // Test to see if iter is valid
+    bool isChildValid()
+    {
+        return mItr != mEdge.end();
+    }
+
     // get current node
-    Node<T>* getCurrent()
+    Node<T>* getCurrentChild()
     {
         if (mItr == mEdge.end())
             return nullptr;
 
-        return *mItr;
-    }   
+        return mItr->second;
+    }  
+
 private:
     T mData;
     unordered_map<T, Node<T>*> mEdge;
@@ -123,16 +136,30 @@ Node<int>* BuildRandomGraph(int in_size)
 
 
 ///////////////////////////////////////////////////////////////////////////
+// Deallocate Directed Graph (DFS)
+template<typename T>
+void DeleteGraph(Node<T> *root)
+{
+    root->resetItr();
+    
+    while (root->isChildValid())
+    {
+        DeleteGraph(root->getCurrentChild());
+        root->nextChild();
+    }
 
+    delete root;
+}
 
 
 int main()
 {
     cout << "Find a route between two nodes in directed graph." << endl;
 
+    Node<int> *sNode = BuildRandomGraph(10);
 
 
 
-
-
+    DeleteGraph<int>(sNode);
+    return 0;
 }
