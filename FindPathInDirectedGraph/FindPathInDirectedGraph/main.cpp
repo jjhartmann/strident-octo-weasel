@@ -3,6 +3,9 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include <ctime>
+#include <cstdlib>
+
 using namespace std;
 
 
@@ -22,7 +25,7 @@ public:
     // Add edge
     void addEdge(Node<T> *edge)
     {
-        mEdge.insert(edge);
+        mEdge.insert(pair<T, Node<T>*>(edge->getData(), edge));
     }
 
     // Get Number of edges
@@ -89,10 +92,47 @@ private:
     typename unordered_map<T, Node<T>*>::iterator mItr;
 };
 
+/////////////////////////////////////////////////////////////////////////
+// Build random Graph
+Node<int>* BuildRandomGraph(int in_size)
+{
+    srand(time(nullptr));
+    int MAX = 50;
+
+    Node<int> *sNode = new Node<int>(rand() % MAX);
+
+    vector<Node<int>*> buffer;
+    buffer.push_back(sNode);
+
+    for (int i = 0; i < in_size; ++i)
+    {
+        int bSize = buffer.size();
+        Node<int> *tmp = new Node<int>(rand() % MAX);
+
+        Node<int> *cNode = buffer[rand() % bSize];
+        if (cNode)
+        {
+            cNode->addEdge(tmp);
+            buffer.push_back(tmp);
+        }
+    }
+
+
+    return sNode;
+}
+
+
+///////////////////////////////////////////////////////////////////////////
+
+
 
 int main()
 {
     cout << "Find a route between two nodes in directed graph." << endl;
+
+
+
+
 
 
 }
