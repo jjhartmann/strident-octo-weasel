@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <queue>
 #include <ctime>
 #include <stdlib.h>
 
@@ -60,7 +61,7 @@ class LNode
 public:
     LNode(T d) :
         mData(d),
-        mNext(nullptr),
+        mNext(nullptr)
     {}
 
     // Get and set
@@ -86,7 +87,7 @@ public:
 
         LNode<T> *tmp = mNext;
 
-        while (!tmp->getNext())
+        while (tmp->getNext())
         {
             tmp = tmp->getNext();
         }
@@ -188,7 +189,48 @@ public:
     template <typename T>
     static void BuildLinkedListFromDepths(TNode<T> *root, vector<LNode<T>*> &v)
     {
+        queue<TNode<T>*> buffer;
+        buffer.push(root);
 
+        int depth = 0;
+        int nodesatDepth = 0;
+        while (!buffer.empty())
+        {
+            TNode<T> *n = buffer.front();
+            buffer.pop();
+
+            LNode<int> *ln = new LNode<int>(n->getData());
+            if (depth < v.size())
+            {
+                v[depth]->appendToEnd(ln);
+            }
+            else
+            {
+                v.push_back(ln);
+            }
+
+            // Add children to buffer;
+            if (n->getChild(LEFT))
+                buffer.push(n->getChild(LEFT));
+
+            // Add children to buffer;
+            if (n->getChild(RIGHT))
+                buffer.push(n->getChild(RIGHT));
+            
+
+            // Check if this is last node at depth
+            // If it is, set the nodes at depth equal to the size of the queue.
+            if (nodesatDepth == 0)
+            {
+                ++depth;
+                nodesatDepth = buffer.size() - 1;
+            }
+            else
+            {
+                --nodesatDepth;
+            }
+
+        }
     }
 };
 
@@ -199,6 +241,9 @@ int main()
     cout << "Create a vector linked lists for each depth of a binary tree" << endl;
 
     TNode<int> *root = GenerateRandomBTree(10, 10);
+    vector<LNode<int>*> v;
+
+    Solution::BuildLinkedListFromDepths(root, v);
 
 
     return 0;
