@@ -245,6 +245,7 @@ int main()
 
     Solution::BuildLinkedListFromDepths(root, v);
 
-
+    DeleteLList(v);
+    DeleteTree(root);
     return 0;
 }
