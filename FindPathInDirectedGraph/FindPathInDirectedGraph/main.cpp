@@ -175,7 +175,7 @@ Node<int>* BuildRandomGraph(int in_size, int in_max)
 template<typename T>
 void DeleteGraph(Node<T> *root)
 {
-    if (!root->isVisited()) return;
+    if (root->isVisited()) return;
 
     root->resetItr();
     root->setVisited();
@@ -230,9 +230,46 @@ public:
                 Node<T> *child = n->getCurrentChild();
                 if (!child->isVisited())
                 {
+                    buffer.push(child);
+                }
+                n->nextChild();
+            }
+        }
+
+        return false;
+    }
+
+
+
+    //////////////////////////////////
+    // BFS Solution
+    template<typename T>
+    static bool FindNodeBFS(Node<T> *n, T d)
+    {
+        if (n->getData() == d) return true;
+        queue<Node<T>*> buffer;
+
+        buffer.push(n);
+        while (!buffer.empty())
+        {
+            Node<T> *n = buffer.front();
+            buffer.pop();
+
+            n->resetItr();
+            while (n->isChildValid())
+            {
+                Node<T> *child = n->getCurrentChild();
+                if (n->getData() == d)
+                {
+                    return true;
+                }
+
+                if (!child->isVisited())
+                {
                     child->setVisited();
                     buffer.push(child);
                 }
+
                 n->nextChild();
             }
         }
@@ -274,6 +311,9 @@ int main()
     sNode->resetVisited();
 
     res = Solution::FindNodeDFS<int>(sNode, 10);
+    sNode->resetVisited();
+
+    res = Solution::FindNodeBFS<int>(sNode, 10);
     sNode->resetVisited();
 
     DeleteGraph<int>(sNode);
