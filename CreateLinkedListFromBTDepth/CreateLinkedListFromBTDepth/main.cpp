@@ -2,6 +2,7 @@
 // Main
 
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -47,6 +48,7 @@ private:
     TNode<T> *mLeft;
     TNode<T> *mRight;
 };
+
 
 ////////////////////////////////////////////////////////////////
 // Linked List Node
@@ -94,6 +96,20 @@ private:
     T mData;
     LNode<T> *mNext;
 };
+
+
+///////////////////////////////////////////////////////////////
+// Solution Class
+class Solution
+{
+public:
+    template <typename T>
+    static void BuildLinkedListFromDepths(TNode<T> *root, vector<LNode<T>*> &v)
+    {
+
+    }
+};
+
 
 int main()
 {
