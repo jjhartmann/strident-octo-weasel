@@ -143,6 +143,41 @@ TNode<int>* GenerateRandomBTree(int size, int in_max)
 
 }
 
+// Delete Tree
+template<typename T>
+void DeleteTree(TNode<T> *root)
+{
+    if (!root) return;
+
+    DeleteTree(root->getChild(LEFT));
+    DeleteTree(root->getChild(RIGHT));
+    
+    delete root;
+    root = nullptr;
+}
+
+// Delete vector of linked lists
+template<typename T>
+void DeleteLList(LNode<T> *n)
+{
+    if (!n) return;
+
+    DeleteLList(n->getNext());
+    delete n;
+    n = nullptr;
+}
+
+template<typename T>
+void DeleteLList(vector<LNode<T> *> &v)
+{
+    for (LNode<T> *n : v)
+    {
+        DeleteLList(n);
+    }
+}
+
+
+
 
 
 ///////////////////////////////////////////////////////////////
