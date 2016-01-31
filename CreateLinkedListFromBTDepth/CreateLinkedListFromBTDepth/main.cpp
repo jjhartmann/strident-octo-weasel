@@ -48,7 +48,52 @@ private:
     TNode<T> *mRight;
 };
 
+////////////////////////////////////////////////////////////////
+// Linked List Node
+template<class T>
+class LNode
+{
+public:
+    LNode(T d) :
+        mData(d),
+        mNext(nullptr),
+    {}
 
+    // Get and set
+    T getData() { return mData; }
+    void setData(T d) { mData = d; }
+    LNode<T>* getNext()
+    {
+        return mNext;
+    }
+
+    void setNext(LNode<T> *n)
+    {
+        mNext = n;
+    }
+
+    void appendToEnd(LNode<T> *n)
+    {
+        if (!mNext)
+        {
+            mNext = n;
+            return;
+        }
+
+        LNode<T> *tmp = mNext;
+
+        while (!tmp->getNext())
+        {
+            tmp = tmp->getNext();
+        }
+
+        tmp->setNext(n);
+    }
+
+private:
+    T mData;
+    LNode<T> *mNext;
+};
 
 int main()
 {
