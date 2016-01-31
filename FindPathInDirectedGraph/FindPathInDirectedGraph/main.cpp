@@ -114,6 +114,24 @@ public:
         mVistied = true;
     }
 
+    // Reset all Visited
+    void resetVisited()
+    {
+        mVistied = false;
+
+        unordered_map<T, Node<T>*>::iterator itr = mEdge.begin();
+        while (itr != mEdge.end())
+        {
+            if (itr->second->isVisited())
+            {
+                itr->second->resetVisited();
+            }
+
+            itr++;
+        }
+
+    }
+
 private:
     T mData;
     unordered_map<T, Node<T>*> mEdge;
@@ -134,9 +152,12 @@ Node<int>* BuildRandomGraph(int in_size, int in_max)
     for (int i = 0; i < in_size; ++i)
     {
         int bSize = buffer.size();
-        Node<int> *tmp = new Node<int>(rand() % in_max);
 
         Node<int> *cNode = buffer[rand() % bSize];
+        Node<int> *tmp = cNode;
+        while (tmp == cNode)
+            tmp = (!(rand() % 3)) ? new Node<int>(rand() % in_max) : buffer[rand() % bSize];
+
         if (cNode)
         {
             cNode->addEdge(tmp);
@@ -154,8 +175,10 @@ Node<int>* BuildRandomGraph(int in_size, int in_max)
 template<typename T>
 void DeleteGraph(Node<T> *root)
 {
+    if (!root->isVisited()) return;
+
     root->resetItr();
-    
+    root->setVisited();
     while (root->isChildValid())
     {
         DeleteGraph(root->getCurrentChild());
@@ -163,6 +186,7 @@ void DeleteGraph(Node<T> *root)
     }
 
     delete root;
+    root = nullptr;
 }
 
 
@@ -220,9 +244,9 @@ private:
     template<typename T>
     static void DFSRHelper(Node<T> *n, T d, bool &found)
     {
-        if (!n || found) return;
+        if (!n || found || n->isVisited()) return;
 
-
+        n->setVisited();
         if (d == n->getData())
         {
             found = true;
@@ -247,7 +271,10 @@ int main()
 
     bool res;
     res = Solution::FindNodeDFSR<int>(sNode, 10);
+    sNode->resetVisited();
+
     res = Solution::FindNodeDFS<int>(sNode, 10);
+    sNode->resetVisited();
 
     DeleteGraph<int>(sNode);
     return 0;
