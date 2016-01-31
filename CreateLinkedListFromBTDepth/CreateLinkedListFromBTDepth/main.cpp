@@ -232,6 +232,34 @@ public:
 
         }
     }
+
+
+    template <typename T>
+    static void BuildLinkedListFromDepthsR(TNode<T> *root, vector<LNode<T>*> &v)
+    {
+        BuildLinkedListFromDepthsRHelper(root, v, 0);
+    }
+
+
+private:
+    template<typename T>
+    static void BuildLinkedListFromDepthsRHelper(TNode<T> *n, vector<LNode<T>*> &v, int depth)
+    {
+        if (!n) return;
+
+        LNode<T> *tmp = new LNode<T>(n->getData());
+        if (depth < v.size())
+        {
+            v[depth]->appendToEnd(tmp);
+        }
+        else
+        {
+            v.push_back(tmp);
+        }
+
+        BuildLinkedListFromDepthsRHelper(n->getChild(LEFT), v, depth + 1);
+        BuildLinkedListFromDepthsRHelper(n->getChild(RIGHT), v, depth + 1);
+    }
 };
 
 
@@ -242,10 +270,13 @@ int main()
 
     TNode<int> *root = GenerateRandomBTree(10, 10);
     vector<LNode<int>*> v;
-
     Solution::BuildLinkedListFromDepths(root, v);
 
+    vector<LNode<int>*> v2;
+    Solution::BuildLinkedListFromDepthsR(root, v2);
+
     DeleteLList(v);
+    DeleteLList(v2);
     DeleteTree(root);
     return 0;
 }
