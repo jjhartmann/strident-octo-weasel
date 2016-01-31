@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <vector>
+#include <queue>
 #include <ctime>
 #include <cstdlib>
 
@@ -113,33 +114,28 @@ TNode<int>* GenerateRandomBSearchTree(int size, int in_max)
     srand(time(nullptr));
     TNode<int> *root = new TNode<int>(rand() % in_max);
 
-    vector<TNode<int>*> buffer;
-    buffer.push_back(root);
     for (int i = 0; i < size; ++i)
     {
-        int bSize = buffer.size();
-        int bIndex = rand() % bSize;
-
-        TNode<int> *n = buffer[bIndex];
         TNode<int> *tmp = new TNode<int>(rand() % in_max);
+        TNode<int> *n = root;
+        bool inserted = false;
 
-        if (n->getData() >= tmp->getData())
+        while (!inserted)
         {
-            n->setChild(LEFT, tmp);
-        }
-        else
-        {
-            n->setChild(RIGHT, tmp);
+            NODE_ID id;
+            id = (n->getData() >= tmp->getData()) ? LEFT : RIGHT;
+
+            if (!n->getChild(id))
+            {
+                n->setChild(id, tmp);
+                inserted = true;
+            }
+            else
+            {
+                n = n->getChild(id);
+            }
         }
 
-        if (n->getChild(LEFT) && n->getChild(RIGHT))
-        {
-            buffer[bIndex] = tmp;
-        }
-        else
-        {
-            buffer.push_back(tmp);
-        }
     }
 
     return root;
@@ -161,10 +157,61 @@ void DeleteTree(TNode<T> *root)
 }
 
 
+////////////////////////////////////////////////////////////////////////////
+// Solution class
+class Solution
+{
+public:
+    template <typename T>
+    static bool CheckTreeBST(TNode<T> *root)
+    {
+        queue<TNode<T>*> buffer;
+        buffer.push(root);
+
+        while (!buffer.empty())
+        {
+            TNode<T> *parent = buffer.front();
+            buffer.pop();
+
+            TNode<T> *lchild = parent->getChild(LEFT);
+            TNode<T> *rchild = parent->getChild(RIGHT);
+
+            // Check if BST equality holds
+            if (lchild && lchild->getData() > parent->getData())
+                return false;
+
+            if (rchild && rchild->getData() <= parent->getData())
+                return false;
+
+            // Add children to buffer. 
+            if (lchild)
+                buffer.push(lchild);
+            if (rchild)
+                buffer.push(rchild);
+        }
+
+        return true;
+    }
+
+private:
+
+};
+
+
 
 int main()
 {
     cout << "Check to see if a binary tree is in fact a binary search tree." << endl;
+    TNode<int> *bTree = GenerateRandomBTree(10, 10);
+    TNode<int> *bSTree = GenerateRandomBSearchTree(10, 100);
+
+    bool res;
+    res = Solution::CheckTreeBST<int>(bTree);
+    res = Solution::CheckTreeBST<int>(bSTree);
+
+
+    DeleteTree(bTree);
+    DeleteTree(bSTree);
 
     return 0;
 }
