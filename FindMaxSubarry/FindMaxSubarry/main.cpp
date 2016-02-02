@@ -9,7 +9,7 @@ using namespace std;
 int main()
 {
 
-    cout << "Find the maximum subarray in a given array."
+    cout << "Find the maximum subarray in a given array." << endl;
 
 
     return 0;
