@@ -5,6 +5,9 @@
 
 using namespace std;
 
+
+////////////////////////////////////////////////////////////////
+// BST Nodes. 
 enum BRANCH {
     LEFT = 0,
     RIGHT = 1,
@@ -50,6 +53,23 @@ private:
     Node<T> *mRight;
 
 };
+
+
+////////////////////////////////////////////////////////////////
+// Solution Class
+class Solution
+{
+public:
+    template<typename T>
+    static Node<T>* GetNextNodeInOrder(Node<T> *curr)
+    {
+
+
+
+
+    }
+};
+
 
 
 
