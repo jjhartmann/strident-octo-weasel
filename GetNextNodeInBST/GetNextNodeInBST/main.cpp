@@ -2,6 +2,8 @@
 // Main
 
 #include <iostream>
+#include <ctime>
+#include <cmath>
 
 using namespace std;
 
@@ -53,6 +55,41 @@ private:
     Node<T> *mRight;
 
 };
+
+
+// Create Binary Search Tree
+Node<int>* GenerateRandomBSearchTree(int size, int in_max)
+{
+    srand(time(nullptr));
+    Node<int> *root = new Node<int>(rand() % in_max);
+
+    for (int i = 0; i < size; ++i)
+    {
+        Node<int> *tmp = new Node<int>(rand() % in_max);
+        Node<int> *n = root;
+        bool inserted = false;
+
+        while (!inserted)
+        {
+            BRANCH id;
+            id = (n->getData() >= tmp->getData()) ? LEFT : RIGHT;
+
+            if (!n->getChild(id))
+            {
+                n->setChild(id, tmp);
+                inserted = true;
+            }
+            else
+            {
+                n = n->getChild(id);
+            }
+        }
+
+    }
+
+    return root;
+
+}
 
 
 ////////////////////////////////////////////////////////////////
