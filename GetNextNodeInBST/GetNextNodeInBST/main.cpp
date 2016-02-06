@@ -102,25 +102,35 @@ Node<T>* FindNode(Node<T> *root, int NodeNumber)
     queue<Node<T>*> buffer;
     buffer.push(root);
 
-    int i = 0;
+    int i = 1;
     while (!buffer.empty())
     {
         Node<T> *n = buffer.front();
         buffer.pop();
 
         // Check nodes
-        if (NodeNumber == i + 1)
+        Node<int> *cleft = n->getChild(LEFT);
+        Node<int> *cright = n->getChild(RIGHT);
+        if (NodeNumber == i && cleft)
         {
-            return root->getChild(LEFT);
+            return cleft;
         }
-        else
+        else if (NodeNumber == i + 1 && cright)
         {
-            return root->getChild(RIGHT);
+            return cright;
         }
         
-
-        buffer.push(root->getChild(LEFT));
-        buffer.push(root->getChild(RIGHT));
+        if (cleft)
+        {
+            buffer.push(cleft);
+            ++i;
+        }
+        
+        if (cright)
+        {
+            buffer.push(cright);
+            ++i;
+        }
     }
     
     return root;
