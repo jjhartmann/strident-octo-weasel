@@ -168,6 +168,32 @@ public:
     template<typename T>
     static Node<T>* GetNextNodeInOrder(Node<T> *curr)
     {
+        if (curr->getNode(RIGHT))
+        {
+            Node<T> *n = curr->getNode(RIGHT);
+
+            // Try to go to leftmost leaf. 
+            while (n->getNode(LEFT))
+            {
+                n = n->getNode(LEFT);
+            }
+
+            return n;
+        }
+
+        // Right side = nullptr. 
+        Node<T> *n = curr;
+        while (n->getNode(PARENT))
+        {
+            Node<T> *p = n->getNode(PARENT);
+
+            if (p->getNode(LEFT) == n)
+                return p;
+
+            n = n->getNode(PARENT);
+        }
+
+
 
     }
 };
@@ -182,7 +208,7 @@ int main()
     Node<int> *node = FindNode(root, 7); // Don't own
 
     // Find next in-order node. 
-
+    Node<int> *nextN = Solution::GetNextNodeInOrder<int>(node);
 
 
     DeallocateBT(root);
