@@ -14,6 +14,7 @@ using namespace std;
 enum BRANCH {
     LEFT = 0,
     RIGHT = 1,
+    PARENT,
 };
 
 template<class T>
@@ -23,7 +24,8 @@ public:
     Node(T d) :
         mData(d),
         mLeft(nullptr),
-        mRight(nullptr)
+        mRight(nullptr),
+        mParent(nullptr)
     {}
 
     T getData() { return mData; }
@@ -31,21 +33,27 @@ public:
     
      
     // Retrieve child
-    Node<T>* getChild(BRANCH id)
+    Node<T>* getNode(BRANCH id)
     {
+        if (id == PARENT) return mParent;
+
         return (id == LEFT) ? mLeft : mRight;
     }
 
     // Set Child
-    void setChild(BRANCH id, Node<T> *n)
+    void setNode(BRANCH id, Node<T> *n)
     {
         if (id == LEFT)
         {
             mLeft = n;
         }
-        else
+        else if (id == RIGHT)
         {
             mRight = n;
+        }
+        else
+        {
+            mParent = n;
         }
     }
 
@@ -54,6 +62,7 @@ private:
     T mData;
     Node<T> *mLeft;
     Node<T> *mRight;
+    Node<T> *mParent;
 
 };
 
@@ -63,7 +72,6 @@ Node<int>* GenerateRandomBSearchTree(int size, int in_max)
 {
     srand(time(nullptr));
     Node<int> *root = new Node<int>(rand() % in_max);
-
     for (int i = 0; i < size; ++i)
     {
         Node<int> *tmp = new Node<int>(rand() % in_max);
@@ -75,14 +83,16 @@ Node<int>* GenerateRandomBSearchTree(int size, int in_max)
             BRANCH id;
             id = (n->getData() >= tmp->getData()) ? LEFT : RIGHT;
 
-            if (!n->getChild(id))
+            if (!n->getNode(id))
             {
-                n->setChild(id, tmp);
+                n->setNode(id, tmp);
+                tmp->setNode(PARENT, n);
+
                 inserted = true;
             }
             else
             {
-                n = n->getChild(id);
+                n = n->getNode(id);
             }
         }
 
@@ -109,8 +119,8 @@ Node<T>* FindNode(Node<T> *root, int NodeNumber)
         buffer.pop();
 
         // Check nodes
-        Node<int> *cleft = n->getChild(LEFT);
-        Node<int> *cright = n->getChild(RIGHT);
+        Node<int> *cleft = n->getNode(LEFT);
+        Node<int> *cright = n->getNode(RIGHT);
         if (NodeNumber == i && cleft)
         {
             return cleft;
@@ -142,8 +152,8 @@ void DeallocateBT(Node<T> *n)
 {
     if (!n) return;
 
-    DeallocateBT(n->getChild(LEFT));
-    DeallocateBT(n->getChild(RIGHT));
+    DeallocateBT(n->getNode(LEFT));
+    DeallocateBT(n->getNode(RIGHT));
 
     delete n;
     n = nullptr;
@@ -159,9 +169,6 @@ public:
     static Node<T>* GetNextNodeInOrder(Node<T> *curr)
     {
 
-
-
-
     }
 };
 
@@ -172,10 +179,9 @@ int main()
 {
     cout << "An algorithm to determine the next node given a node in a BST (in-order)" << endl;
     Node<int> *root = GenerateRandomBSearchTree(15, 50);
-
-
     Node<int> *node = FindNode(root, 7); // Don't own
 
+    // Find next in-order node. 
 
 
 
