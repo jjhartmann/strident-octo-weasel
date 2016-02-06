@@ -2,6 +2,7 @@
 // Main - Find common ancestor
 #include <iostream>
 #include <vector>
+#include <queue>
 #include <ctime>
 #include <cmath>
 
@@ -126,7 +127,56 @@ Node<int>* GenerateRandomBTree(int size, int MAX_VAL)
 
 
 
+// Get Random Node In BTree
+template<typename T>
+Node<T>* GetRandNode(Node<T> *root, int Tsize)
+{
+    srand(time(NULL));
+    int index = rand() % Tsize;
 
+
+    if (index == 0 || !root)
+    {
+        return root;
+    }
+
+    queue<Node<T>*> buffer;
+    buffer.push(root);
+
+    // Simple BFS
+    int i = 1;
+    while (!buffer.empty())
+    {
+        Node<T> *p = buffer.front();
+        buffer.pop();
+
+        Node<T> *cLeft = p->getNode(LEFT);
+        Node<T> *cRight = p->getNode(RIGHT);
+
+        if (i == index && cLeft)
+        {
+            return cLeft;
+        }
+        if (i == index + 1 && cRight)
+        {
+            return cRight;
+        }
+
+        if (cLeft)
+        {
+            buffer.push(cLeft);
+            ++i;
+        }
+     
+        if (cRight)
+        {
+            buffer.push(cRight);
+            ++i;
+        }
+    }
+
+    return root;
+}
 
 // Deallocate BTree
 template<typename T>
@@ -176,11 +226,11 @@ public:
 
         while (deltaDist--)
         {
-            tmp = tmp->getNode(PARENT);
+            nfar = nfar->getNode(PARENT);
         }
 
         // 3) Traverse both nodes simultaneously to ancestor
-        while (nfar != nnear && far && nnear)
+        while (nfar != nnear && nfar && nnear)
         {
             nfar = nfar->getNode(PARENT);
             nnear = nnear->getNode(PARENT);
@@ -198,9 +248,13 @@ int main()
 {
     cout << "Given two nodes, find the common ancestor in a binary tree" << endl;
 
-    Node<int> *root = GenerateRandomBTree(15, 50);
+    Node<int> *root = GenerateRandomBTree(50, 50);
 
-    Node<int> *ancestor = Solution::FindCommonAncestor<int>();
+    // Get two random nodes
+    Node<int> *n1 = GetRandNode<int>(root, 25);
+    Node<int> *n2 = GetRandNode<int>(root, 25);
+
+    Node<int> *ancestor = Solution::FindCommonAncestor<int>(n1, n2);
 
 
     DeallocateBTree<int>(root);
