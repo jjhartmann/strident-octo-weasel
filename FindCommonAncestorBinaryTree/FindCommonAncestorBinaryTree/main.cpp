@@ -148,6 +148,24 @@ public:
     template<typename T>
     static Node<T>* FindCommonAncestor(Node<T>* node1, Node<T>* node2)
     {
+        // 1) Determine the distance to the root
+        Node<T>* tmp = node1;
+        int dist1 = 0;
+        while (tmp->getNode(PARENT))
+        {
+            ++dist1;
+            tmp = tmp->getNode(PARENT);
+        }
+
+        // Node 2
+        tmp = node2;
+        int dist2 = 0;
+        while (tmp->getNode(PARENT))
+        {
+            ++dist2;
+            tmp = tmp->getNode(PARENT);
+        }
+
 
     }
 };
