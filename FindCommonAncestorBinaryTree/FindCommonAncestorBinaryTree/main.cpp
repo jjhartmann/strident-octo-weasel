@@ -60,8 +60,83 @@ private:
 };
 
 
+// Build Random Binary Tree
+Node<int>* GenerateRandomBTree(int size, int MAX_VAL)
+{
+    srand(time(NULL));
+
+    Node<int> *root = new Node<int>(rand() % MAX_VAL);
+    vector<Node<int>*> buffer;
+    buffer.push_back(root);
+
+    for (int i = 0; i < size; ++i)
+    {
+        int bsize = buffer.size();
+        int bindex = rand() % bsize;
+        Node<int> *p = buffer[bindex];
+        Node<int> *tmp = new Node<int>(rand() % MAX_VAL);
+
+        bool isLeft = (p->getNode(LEFT)) ? true : false;
+        bool isRight = (p->getNode(RIGHT)) ? true : false;
+        if (rand() % 2)
+        {
+            // Try left
+            if (!isLeft)
+            {
+                p->setNode(LEFT, tmp);
+            }
+            else if (!isRight)
+            {
+                p->setNode(RIGHT, tmp);
+                isRight = true;
+            }
+        }
+        else
+        {
+            // Try left
+            if (!isRight)
+            {
+                p->setNode(RIGHT, tmp);
+            }
+            else if(!isLeft)
+            {
+                p->setNode(LEFT, tmp);
+                isLeft = true;
+            }
+
+        }
+
+        // Set Parent
+        tmp->setNode(PARENT, p);
 
 
+        if (isLeft && isRight)
+        {
+            buffer[bindex] = tmp;
+        }
+        else
+        {
+            buffer.push_back(tmp);
+        }
+    }
+
+
+    return root;
+}
+
+
+// Deallocate BTree
+template<typename T>
+void DeallocateBTree(Node<T> *root)
+{
+    if (!root) return;
+
+    DeallocateBTree(root->getNode(LEFT));
+    DeallocateBTree(root->getNode(RIGHT));
+
+    delete root;
+    root = nullptr;
+}
 
 
 
@@ -69,9 +144,12 @@ int main()
 {
     cout << "Given two nodes, find the common ancestor in a binary tree" << endl;
 
+    Node<int> *root = GenerateRandomBTree(15, 50);
 
 
 
+
+    DeallocateBTree<int>(root);
 
     return 0;
 }
