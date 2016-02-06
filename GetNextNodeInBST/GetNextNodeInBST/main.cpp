@@ -102,7 +102,7 @@ Node<T>* FindNode(Node<T> *root, int NodeNumber)
     queue<Node<T>*> buffer;
     buffer.push(root);
 
-    int i = 0
+    int i = 0;
     while (!buffer.empty())
     {
         Node<T> *n = buffer.front();
@@ -162,6 +162,9 @@ int main()
 {
     cout << "An algorithm to determine the next node given a node in a BST (in-order)" << endl;
     Node<int> *root = GenerateRandomBSearchTree(15, 50);
+
+
+    Node<int> *node = FindNode(root, 7); // Don't own
 
 
 
