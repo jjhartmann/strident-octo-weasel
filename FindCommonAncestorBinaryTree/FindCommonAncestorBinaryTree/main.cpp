@@ -139,6 +139,20 @@ void DeallocateBTree(Node<T> *root)
 }
 
 
+///////////////////////////////////////////////////////////////////
+// Solution Class
+class Solution
+{
+public:
+    // Find and return common ancestor node
+    template<typename T>
+    static Node<T>* FindCommonAncestor(Node<T>* node1, Node<T>* node2)
+    {
+
+    }
+};
+
+
 
 int main()
 {
