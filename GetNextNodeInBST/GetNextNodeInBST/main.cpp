@@ -193,8 +193,8 @@ public:
             n = n->getNode(PARENT);
         }
 
-
-
+        // If no subtrees,then return nullptr for end. 
+        return nullptr;
     }
 };
 
