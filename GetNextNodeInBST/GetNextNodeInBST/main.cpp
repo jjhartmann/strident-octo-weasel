@@ -4,6 +4,7 @@
 #include <iostream>
 #include <ctime>
 #include <cmath>
+#include <queue>
 
 using namespace std;
 
@@ -28,7 +29,7 @@ public:
     T getData() { return mData; }
     void setData(T d) { mData = d;  }
     
-
+     
     // Retrieve child
     Node<T>* getChild(BRANCH id)
     {
@@ -92,6 +93,53 @@ Node<int>* GenerateRandomBSearchTree(int size, int in_max)
 }
 
 
+// BFS and find nth node
+template<typename T>
+Node<T>* FindNode(Node<T> *root, int NodeNumber)
+{
+    if (NodeNumber == 0 || !root) return root;
+
+    queue<Node<T>*> buffer;
+    buffer.push(root);
+
+    int i = 0
+    while (!buffer.empty())
+    {
+        Node<T> *n = buffer.front();
+        buffer.pop();
+
+        // Check nodes
+        if (NodeNumber == i + 1)
+        {
+            return root->getChild(LEFT);
+        }
+        else
+        {
+            return root->getChild(RIGHT);
+        }
+        
+
+        buffer.push(root->getChild(LEFT));
+        buffer.push(root->getChild(RIGHT));
+    }
+    
+    return root;
+}
+
+// Delete binary serach tree.
+template<typename T>
+void DeallocateBT(Node<T> *n)
+{
+    if (!n) return;
+
+    DeallocateBT(n->getChild(LEFT));
+    DeallocateBT(n->getChild(RIGHT));
+
+    delete n;
+    n = nullptr;
+
+}
+
 ////////////////////////////////////////////////////////////////
 // Solution Class
 class Solution
@@ -113,7 +161,11 @@ public:
 int main()
 {
     cout << "An algorithm to determine the next node given a node in a BST (in-order)" << endl;
+    Node<int> *root = GenerateRandomBSearchTree(15, 50);
 
 
+
+
+    DeallocateBT(root);
     return 0;
 }
