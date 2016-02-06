@@ -125,6 +125,9 @@ Node<int>* GenerateRandomBTree(int size, int MAX_VAL)
 }
 
 
+
+
+
 // Deallocate BTree
 template<typename T>
 void DeallocateBTree(Node<T> *root)
@@ -166,7 +169,26 @@ public:
             tmp = tmp->getNode(PARENT);
         }
 
+        // 2) Determine greater distance and travers to other nodes level. 
+        Node<T> * nfar = (dist1 > dist2) ? node1 : node2;
+        Node<T> *nnear = (dist2 <= dist1) ? node2 : node1;
+        int deltaDist = abs(dist1 - dist2);
 
+        while (deltaDist--)
+        {
+            tmp = tmp->getNode(PARENT);
+        }
+
+        // 3) Traverse both nodes simultaneously to ancestor
+        while (nfar != nnear && far && nnear)
+        {
+            nfar = nfar->getNode(PARENT);
+            nnear = nnear->getNode(PARENT);
+        }
+
+
+        // Ancestor is both near or far
+        return nnear;
     }
 };
 
@@ -178,7 +200,7 @@ int main()
 
     Node<int> *root = GenerateRandomBTree(15, 50);
 
-
+    Node<int> *ancestor = Solution::FindCommonAncestor<int>();
 
 
     DeallocateBTree<int>(root);
