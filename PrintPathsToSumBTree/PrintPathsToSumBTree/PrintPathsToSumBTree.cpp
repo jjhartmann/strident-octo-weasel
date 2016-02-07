@@ -142,6 +142,28 @@ void DeallocateBTree(Node<T> *root)
     root = nullptr;
 }
 
+//////////////////////////////////////////////////////////////////////
+// Solution Class
+class Solution
+{
+public:
+    template<typename T>
+    static void PrintAllPathsToSum(Node<T> *n, string path, const int val, int sum)
+    {
+
+
+
+
+
+
+    }
+
+
+private:
+
+
+};
+
 
 int main()
 {
