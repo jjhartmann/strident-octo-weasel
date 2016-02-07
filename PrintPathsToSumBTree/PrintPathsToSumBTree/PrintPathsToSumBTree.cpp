@@ -173,7 +173,7 @@ public:
         if (sum == val)
         {
             std::printf("%s_(%i)->END \n", path.c_str(),d);
-            // Let the recursion continue in case next nodes contain '0'
+            // Let the recursion continue in case next nodes contain '<0'
         }
 
         // Recurse
@@ -181,9 +181,45 @@ public:
         PrintAllPathsToSumFromRoot(n->getNode(RIGHT), path + "_(" + to_string(d) + ")->RGHT", val, sum);
     }
 
+    //////////////////////////////////////////////////////
+    // Find any path in tree that satisfies val. 
+    static void PrintAnyAllPaths(Node<int> *n, vector<pair<string, int>> path, const int val)
+    {
+        if (!n) return;
+
+        int d = n->getData();
+
+        // Check all paths form n to root
+        int sum = 0;
+        for (int i = path.size() - 1; i >= 0; --i)
+        {
+            sum += path[i].second;
+            if (sum == val)
+            {
+                PrintPath(path, i, path.size());
+            }
+        }
+
+        // Recurse
+        path.push_back(pair<string, int>("LEFT", d));
+        PrintAnyAllPaths(n->getNode(LEFT), path, val);
+        path.pop_back();
+
+        path.push_back(pair<string, int>("RGHT", d));
+        PrintAnyAllPaths(n->getNode(RIGHT), path, val);
+        path.pop_back();
+    }
 
 private:
-
+    static void PrintPath(vector<pair<string, int>> &path, int instart, int inend)
+    {
+        cout << "START->";
+        for (int i = instart; i < inend; ++i)
+        {
+            cout << path[i].first << "[" << i <<"]" << "_(" << path[i].second << ")->";
+        }
+        cout << "END" << endl;
+    }
 
 };
 
@@ -192,11 +228,14 @@ int main()
 {
     cout << "Print all paths that sum to a certain value in BTree" << endl;
 
-    Node<int> *root = GenerateRandomBTree(100000, 20);
+    Node<int> *root = GenerateRandomBTree(1000, 20);
 
-    string path = "ROOT";
-    Solution::PrintAllPathsToSumFromRoot(root, path, 45, 0);
+    //string path = "ROOT";
+    //Solution::PrintAllPathsToSumFromRoot(root, path, 45, 0);
 
+    vector<pair<string, int>> vectorA;
+    vectorA.push_back(pair<string, int>("ROOT", root->getData()));
+    Solution::PrintAnyAllPaths(root, vectorA, 14);
 
     DeallocateBTree(root);
     return 0;
