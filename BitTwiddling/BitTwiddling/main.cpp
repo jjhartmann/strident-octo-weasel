@@ -6,6 +6,7 @@
 #include <cmath>
 
 using namespace std;
+typedef unsigned int UINT;
 
 /////////////////////////////////////////////////////////////
 // Given two 32 bit ints, and two value range. Merge the integers. 
@@ -108,6 +109,27 @@ void PrintLowHigh(unsigned int num)
     cout << "LOW: " << low << "\nHIGH: " << high << endl;
 }
 
+/////////////////////////////////////////////////////////////////
+// Given a positive integer, print the NEXT lowest and highest
+// integer with the same number of 1 bits. 
+bool getBit(UINT num, int index)
+{
+    return (num & (1 << index)) != 0;
+}
+
+UINT setBit(UINT num, int index, UINT v)
+{
+    UINT mmask = (v << index);
+    num = num & ~mmask;
+    return num | mmask;
+}
+
+void PrintNextLowHigh(unsigned int num)
+{
+   
+
+
+}
 
 
 int main()
@@ -116,7 +138,8 @@ int main()
     
     //int res = MergeInt(23, 11, 2, 6);
     //DecimalFracToBinAlt(0.625);
-    PrintLowHigh((unsigned int)88);
+    //PrintLowHigh((unsigned int)88);
+    PrintNextLowHigh((UINT)39);
 
     return 0;
 }
