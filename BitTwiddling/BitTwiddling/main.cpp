@@ -51,13 +51,45 @@ void DecimalFracToBin(double num)
 }
 
 
+/////////////////////////////////////////////////////////
+// Print Binary from Decimal Fraction alternative
+void DecimalFracToBinAlt(double num)
+{
+    string buffer = "0.";
+    int i = 0;
+    double mfrac = 0.5;
+    while (num != 0)
+    {
+        if (i >= 32)
+        {
+            buffer = "ERROR";
+            break;
+        }
+
+        if (num >= mfrac)
+        {
+            buffer += "1";
+            num = num - mfrac;
+        }
+        else
+        {
+            buffer += "0";
+        }
+
+        mfrac = mfrac / 2;
+        ++i;
+    }
+
+    cout << buffer;
+}
+
 
 int main()
 {
     cout << "Collection of Bit Twiddling Hacks" << endl;
     
     //int res = MergeInt(23, 11, 2, 6);
-    DecimalFracToBin(0.625);
+    DecimalFracToBinAlt(0.625);
 
     return 0;
 }
