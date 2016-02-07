@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include <iostream>
+#include <string>
 #include <ctime>
 #include <cmath>
 #include <vector>
@@ -147,15 +148,25 @@ void DeallocateBTree(Node<T> *root)
 class Solution
 {
 public:
-    template<typename T>
-    static void PrintAllPathsToSum(Node<T> *n, string path, const int val, int sum)
+    static void PrintAllPathsToSum(Node<int> *n, string path, const int val, int sum)
     {
+        if (!n) return;
 
+        // Return if subtree is greater then sum.
+        int d = n->getData();
+        sum += d;
+        if (sum > val) return;
 
+        // When we have a match, print path. 
+        if (sum == val)
+        {
+            std::printf("%s_(%i)->END \n", path.c_str(),d);
+            // Let the recursion continue in case next nodes contain '0'
+        }
 
-
-
-
+        // Recurse
+        PrintAllPathsToSum(n->getNode(LEFT), path + "_(" + to_string(d) + ")->LEFT", val, sum);
+        PrintAllPathsToSum(n->getNode(RIGHT), path + "_(" + to_string(d) + ")->RGHT", val, sum);
     }
 
 
@@ -168,6 +179,14 @@ private:
 int main()
 {
     cout << "Print all paths that sum to a certain value in BTree" << endl;
+
+    Node<int> *root = GenerateRandomBTree(100000, 10);
+
+    string path = "ROOT";
+    Solution::PrintAllPathsToSum(root, path, 45, 0);
+
+
+    DeallocateBTree(root);
     return 0;
 }
 
