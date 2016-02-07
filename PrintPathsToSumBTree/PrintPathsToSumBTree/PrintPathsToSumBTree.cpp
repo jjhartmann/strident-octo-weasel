@@ -70,7 +70,7 @@ Node<int>* GenerateRandomBTree(int size, int MAX_VAL)
 {
     srand(time(NULL));
 
-    Node<int> *root = new Node<int>(rand() % MAX_VAL);
+    Node<int> *root = new Node<int>(rand() % MAX_VAL - (MAX_VAL/2));
     vector<Node<int>*> buffer;
     buffer.push_back(root);
 
@@ -79,7 +79,7 @@ Node<int>* GenerateRandomBTree(int size, int MAX_VAL)
         int bsize = buffer.size();
         int bindex = rand() % bsize;
         Node<int> *p = buffer[bindex];
-        Node<int> *tmp = new Node<int>(rand() % MAX_VAL);
+        Node<int> *tmp = new Node<int>(rand() % MAX_VAL - (MAX_VAL / 2));
 
         bool isLeft = (p->getNode(LEFT)) ? true : false;
         bool isRight = (p->getNode(RIGHT)) ? true : false;
@@ -161,14 +161,13 @@ void DeallocateBTree(Node<T> *root)
 class Solution
 {
 public:
-    static void PrintAllPathsToSum(Node<int> *n, string path, const int val, int sum)
+    static void PrintAllPathsToSumFromRoot(Node<int> *n, string path, const int val, int sum)
     {
         if (!n) return;
 
         // Return if subtree is greater then sum.
         int d = n->getData();
         sum += d;
-        if (sum > val) return;
 
         // When we have a match, print path. 
         if (sum == val)
@@ -178,8 +177,8 @@ public:
         }
 
         // Recurse
-        PrintAllPathsToSum(n->getNode(LEFT), path + "_(" + to_string(d) + ")->LEFT", val, sum);
-        PrintAllPathsToSum(n->getNode(RIGHT), path + "_(" + to_string(d) + ")->RGHT", val, sum);
+        PrintAllPathsToSumFromRoot(n->getNode(LEFT), path + "_(" + to_string(d) + ")->LEFT", val, sum);
+        PrintAllPathsToSumFromRoot(n->getNode(RIGHT), path + "_(" + to_string(d) + ")->RGHT", val, sum);
     }
 
 
@@ -193,10 +192,10 @@ int main()
 {
     cout << "Print all paths that sum to a certain value in BTree" << endl;
 
-    Node<int> *root = GenerateRandomBTree(100000, 10);
+    Node<int> *root = GenerateRandomBTree(100000, 20);
 
     string path = "ROOT";
-    Solution::PrintAllPathsToSum(root, path, 45, 0);
+    Solution::PrintAllPathsToSumFromRoot(root, path, 45, 0);
 
 
     DeallocateBTree(root);
