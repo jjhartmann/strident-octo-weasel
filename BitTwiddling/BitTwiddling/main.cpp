@@ -84,12 +84,39 @@ void DecimalFracToBinAlt(double num)
 }
 
 
+
+/////////////////////////////////////////////////////////////////
+// Given a positive integer, print the lowest and highest possible
+// integer with the same number of 1 bits. 
+void PrintLowHigh(unsigned int num)
+{
+    int bits = 0;
+    while (num)
+    {
+        if (num % 2)
+        {
+            ++bits;
+        }
+
+        num = num >> 1;
+    }
+
+    unsigned int low = (1 << bits) - 1;
+    unsigned int high = (low << 32 - bits);
+
+
+    cout << "LOW: " << low << "\nHIGH: " << high << endl;
+}
+
+
+
 int main()
 {
     cout << "Collection of Bit Twiddling Hacks" << endl;
     
     //int res = MergeInt(23, 11, 2, 6);
-    DecimalFracToBinAlt(0.625);
+    //DecimalFracToBinAlt(0.625);
+    PrintLowHigh((unsigned int)88);
 
     return 0;
 }
