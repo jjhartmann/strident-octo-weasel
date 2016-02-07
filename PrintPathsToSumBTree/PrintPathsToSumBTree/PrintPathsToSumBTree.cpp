@@ -83,17 +83,21 @@ Node<int>* GenerateRandomBTree(int size, int MAX_VAL)
 
         bool isLeft = (p->getNode(LEFT)) ? true : false;
         bool isRight = (p->getNode(RIGHT)) ? true : false;
+        bool inserted = false;
         if (rand() % 2)
         {
             // Try left
             if (!isLeft)
             {
                 p->setNode(LEFT, tmp);
+                inserted = true;
+                isLeft = true;
             }
             else if (!isRight)
             {
                 p->setNode(RIGHT, tmp);
                 isRight = true;
+                inserted = true;
             }
         }
         else
@@ -102,26 +106,35 @@ Node<int>* GenerateRandomBTree(int size, int MAX_VAL)
             if (!isRight)
             {
                 p->setNode(RIGHT, tmp);
+                inserted = true;
+                isRight = true;
             }
             else if (!isLeft)
             {
                 p->setNode(LEFT, tmp);
                 isLeft = true;
+                inserted = true;
             }
 
         }
 
         // Set Parent
-        tmp->setNode(PARENT, p);
+        if(inserted)
+            tmp->setNode(PARENT, p);
 
 
-        if (isLeft && isRight)
+        if (isLeft && isRight && inserted)
         {
             buffer[bindex] = tmp;
         }
-        else
+        else if (inserted)
         {
             buffer.push_back(tmp);
+        }
+        else
+        {
+            buffer.erase(buffer.begin() + bindex);
+            delete tmp;
         }
     }
 
