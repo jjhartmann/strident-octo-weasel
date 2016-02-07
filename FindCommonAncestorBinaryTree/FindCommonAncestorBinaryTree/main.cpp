@@ -54,10 +54,10 @@ public:
 
 
 private:
+    T mData;
     Node<T> *mLeft; // Don't Own
     Node<T> *mRight; // Don't Own
     Node<T> *mParent; // Don't Own
-    T mData;
 };
 
 
@@ -248,7 +248,7 @@ int main()
 {
     cout << "Given two nodes, find the common ancestor in a binary tree" << endl;
 
-    Node<int> *root = GenerateRandomBTree(50, 50);
+    Node<int> *root = GenerateRandomBTree(1000000, 50);
 
     // Get two random nodes
     Node<int> *n1 = GetRandNode<int>(root, 25);
