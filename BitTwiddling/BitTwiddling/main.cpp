@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <vector>
 
 using namespace std;
 typedef unsigned int UINT;
@@ -344,6 +345,60 @@ int SwapOddEvenPairs(UINT n)
 
 
 
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+// Find missing number from array with only access to the bits. 
+UINT findmissingNumber(vector<UINT> vec, int col)
+{
+    if (col >= 32)
+    {
+        return 0; // Length of integer exceeded. 
+    }
+
+    // Make vector for onebits and zerobits
+    vector<UINT> onebit;
+    vector<UINT> zerobit;
+
+    // partition array by bits at col. 
+    for (UINT i : vec)
+    {
+        if (getBit(i, col))
+        {
+            onebit.push_back(i);
+        }
+        else
+        {
+            zerobit.push_back(i);
+        }
+    }
+
+    // Check size, smaller signifies the missing bit. 
+    if (zerobit.size() <= onebit.size())
+    {
+        UINT n = findmissingNumber(zerobit, col + 1);
+        return (n << 1);
+    }
+    else
+    {
+        UINT n = findmissingNumber(onebit, col + 1);
+        return (n << 1) | 1;
+    }
+}
+
+// start
+UINT findmissingNumber(vector<UINT> vec)
+{
+    return findmissingNumber(vec, 0);
+}
+
+
 int main()
 {
     cout << "Collection of Bit Twiddling Hacks" << endl;
@@ -357,6 +412,11 @@ int main()
     //int res3 = getPrev((UINT)3815);
     //int res4 = getPrevArith((UINT)3815);
     //int res5 = GetNumberofDifferingBits(3806, 3385);
-    int res6 = SwapOddEvenPairs(999);
+    //int res6 = SwapOddEvenPairs(999);
+
+    // Missing 11.
+    vector<UINT> test = { 0,1,2,3,4,5,6,7,8,9,10,12,13,14,15,16,17,18,19,20,21,22,23 };
+    int res7 = findmissingNumber(test);
+
     return 0;
  }
