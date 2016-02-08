@@ -181,7 +181,7 @@ UINT getNext(UINT n)
 
 }
 
-// get the next lowest integer wiht same amount of one bits
+// get the next lowest integer with same amount of one bits
 UINT getPrev(UINT n)
 {
     int num = n;
@@ -222,6 +222,33 @@ UINT getPrev(UINT n)
 }
 
 
+// Get Next highest Arithmetic hack
+UINT getNextAirth(UINT n)
+{
+    int num = n;
+    int count0 = 0;
+    int count1 = 0;
+
+    // Count zeros
+    while (!(num & 1) && num)
+    {
+        ++count0;
+        num >>= 1;
+    }
+
+    // count 1s
+    while ((num & 1) && num)
+    {
+        ++count1;
+        num >>= 1;
+    }
+
+    return ((n + (pow(2, count0) - 1)) + 1) + (pow(2, count1 - 1) - 1);
+}
+
+
+
+
 int main()
 {
     cout << "Collection of Bit Twiddling Hacks" << endl;
@@ -230,7 +257,8 @@ int main()
     //DecimalFracToBinAlt(0.625);
     //PrintLowHigh((unsigned int)88);
     //getNext((UINT)3815);
-    getPrev((UINT)3815);
+    int res1 = getNext((UINT)3804);
+    int res2 = getNextAirth((UINT)3804);
 
     return 0;
  }
