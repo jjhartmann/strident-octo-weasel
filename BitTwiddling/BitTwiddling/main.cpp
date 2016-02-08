@@ -222,13 +222,6 @@ UINT getPrev(UINT n)
 }
 
 
-void PrintNextLowHigh(UINT num)
-{
-
-
-}
-
-
 int main()
 {
     cout << "Collection of Bit Twiddling Hacks" << endl;
