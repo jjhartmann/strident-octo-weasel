@@ -307,7 +307,18 @@ UINT getPrevArith(UINT n)
 // Determine the number of bits differing between two numbers
 int GetNumberofDifferingBits(UINT n, UINT m)
 {
+    // Use xor and then count bits. 
+    int delta = n ^ m; 
+    
+    int i = 0;
+    while (delta)
+    {
+        delta = delta & (delta - 1);
+        ++i;
+    }
 
+
+    return i;
 }
 
 int main()
@@ -318,10 +329,10 @@ int main()
     //DecimalFracToBinAlt(0.625);
     //PrintLowHigh((unsigned int)88);
     //getNext((UINT)3815);
-    int res1 = getNext((UINT)3804);
-    int res2 = getNextAirth((UINT)3804);
-    int res3 = getPrev((UINT)3815);
-    int res4 = getPrevArith((UINT)3815);
-
+    //int res1 = getNext((UINT)3804);
+    //int res2 = getNextAirth((UINT)3804);
+    //int res3 = getPrev((UINT)3815);
+    //int res4 = getPrevArith((UINT)3815);
+    int res5 = GetNumberofDifferingBits(3806, 3385);
     return 0;
  }
