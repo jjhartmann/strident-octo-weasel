@@ -32,13 +32,13 @@ public:
         while (mPrimes.back() < sqrt(mMax))
         {
             // Filter all multiples of prime
-           
+            filterPrimes();
 
-
-
-
-
+            // Add the next prime to vector. 
+            findNextPrime();
         }
+
+        return mPrimes;
     }
 
 private:
@@ -49,6 +49,7 @@ private:
     vector<int> mPrimes;
 
     // Methods
+    // Filter all primes in array and set to -1. 
     void filterPrimes()
     {
         int prime = mPrimes.back();
@@ -56,6 +57,19 @@ private:
         {
             mNumberArray[i] = -1;
         }
+    }
+
+    // Find the next prime and add to mPrimes array. 
+    void findNextPrime()
+    {
+        int prime = mPrimes.back();
+        int i = prime + 1;
+        while (mNumberArray[i] < 0)
+        {
+            ++i;
+        }
+
+        mPrimes.push_back(mNumberArray[i]);
     }
 };
 
