@@ -16,21 +16,16 @@ class SieveofE
 {
 public:
     SieveofE(int nMax) :
-        mMax(nMax)
-    {
-        // Build Initial list of numbers
-        for (int i = 0; i <= nMax; ++i)
-        {
-            mNumberArray.push_back(i);
-        }
-        
+        mMax(nMax),
+        mNumberArray(nMax, true)
+    {    
         mPrimes.push_back(2);
 
         // Init and make primes
         GetAllPrimes();
     }
     
-    // Retrun prime vector
+    // Return prime vector
     vector<int> getPrimes()
     {
         return mPrimes;
@@ -41,7 +36,7 @@ private:
 
     // Var
     int mMax;
-    vector<int> mNumberArray;
+    vector<bool> mNumberArray;
     vector<int> mPrimes;
 
     // Methods
@@ -60,7 +55,7 @@ private:
         // Get rest of primes in array
         for (int i = mPrimes.back() + 1; i < mMax; ++i)
         {
-            if (mNumberArray[i] > 0)
+            if (mNumberArray[i])
             {
                 mPrimes.push_back(i);
             }
@@ -73,7 +68,7 @@ private:
         int prime = mPrimes.back();
         for (int i = prime*prime; i < mMax; i += prime)
         {
-            mNumberArray[i] = -1;
+            mNumberArray[i] = false;
         }
     }
 
@@ -82,12 +77,12 @@ private:
     {
         int prime = mPrimes.back();
         int i = prime + 1;
-        while (mNumberArray[i] < 0)
+        while (!mNumberArray[i])
         {
             ++i;
         }
 
-        mPrimes.push_back(mNumberArray[i]);
+        mPrimes.push_back(i);
     }
 };
 
