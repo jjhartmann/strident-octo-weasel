@@ -25,21 +25,17 @@ public:
         }
         
         mPrimes.push_back(2);
+
+        // Init and make primes
+        GetAllPrimes();
     }
     
-    vector<int> GetAllPrimes()
+    // Retrun prime vector
+    vector<int> getPrimes()
     {
-        while (mPrimes.back() < sqrt(mMax))
-        {
-            // Filter all multiples of prime
-            filterPrimes();
-
-            // Add the next prime to vector. 
-            findNextPrime();
-        }
-
         return mPrimes;
     }
+
 
 private:
 
@@ -49,6 +45,19 @@ private:
     vector<int> mPrimes;
 
     // Methods
+    // Build Prime array
+    void GetAllPrimes()
+    {
+        while (mPrimes.back() < sqrt(mMax))
+        {
+            // Filter all multiples of prime
+            filterPrimes();
+
+            // Add the next prime to vector. 
+            findNextPrime();
+        }
+    }
+
     // Filter all primes in array and set to -1. 
     void filterPrimes()
     {
