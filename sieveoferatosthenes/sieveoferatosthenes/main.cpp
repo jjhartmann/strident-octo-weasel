@@ -19,7 +19,7 @@ public:
         mMax(nMax)
     {
         // Build Initial list of numbers
-        for (int i = 2; i <= nMax; ++i)
+        for (int i = 0; i <= nMax; ++i)
         {
             mNumberArray.push_back(i);
         }
@@ -56,6 +56,15 @@ private:
             // Add the next prime to vector. 
             findNextPrime();
         }
+
+        // Get rest of primes in array
+        for (int i = mPrimes.back() + 1; i < mMax; ++i)
+        {
+            if (mNumberArray[i] > 0)
+            {
+                mPrimes.push_back(i);
+            }
+        }
     }
 
     // Filter all primes in array and set to -1. 
@@ -86,7 +95,8 @@ int main()
 {
     cout << "Sieve of Eratosthenes implementation for finding all primes." << endl;
 
-
+    SieveofE prime100(100);
+    vector<int> primes = prime100.getPrimes();
 
     return 0;
 }
