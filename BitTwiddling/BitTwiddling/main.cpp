@@ -181,6 +181,46 @@ UINT getNext(UINT n)
 
 }
 
+// get the next lowest integer wiht same amount of one bits
+UINT getPrev(UINT n)
+{
+    int num = n;
+    int count0 = 0;
+    int count1 = 0;
+
+    // count 1s
+    while ((num & 1) && num)
+    {
+        ++count1;
+        num >>= 1;
+    }
+
+    // Count zeros
+    while (!(num & 1) && num)
+    {
+        ++count0;
+        num >>= 1;
+    }
+
+    if (count1 + count0 == 31) return -1;
+
+
+    int pos = count1 + count0;
+    // swap the count1 and count1 + 1 bits
+    n = swapBits(n, pos, pos - 1);
+
+    // Clear bits from count1 down to 0. 
+    UINT mmask = ~((1 << (pos - 1)) - 1);
+    n &= mmask;
+
+    // create LSB 
+    UINT ones = (1 << count1) - 1;
+    n |= (ones << (count0 -1));
+
+
+    return n;
+}
+
 
 void PrintNextLowHigh(UINT num)
 {
@@ -196,7 +236,8 @@ int main()
     //int res = MergeInt(23, 11, 2, 6);
     //DecimalFracToBinAlt(0.625);
     //PrintLowHigh((unsigned int)88);
-    getNext((UINT)3832);
+    //getNext((UINT)3815);
+    getPrev((UINT)3815);
 
     return 0;
  }
