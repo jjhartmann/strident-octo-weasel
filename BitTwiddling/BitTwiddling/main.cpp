@@ -103,7 +103,7 @@ void PrintLowHigh(unsigned int num)
     }
 
     unsigned int low = (1 << bits) - 1;
-    unsigned int high = (low << 32 - bits);
+    unsigned int high = (low << (32 - bits));
 
 
     cout << "LOW: " << low << "\nHIGH: " << high << endl;
@@ -119,14 +119,71 @@ bool getBit(UINT num, int index)
 
 UINT setBit(UINT num, int index, UINT v)
 {
-    UINT mmask = (v << index);
+    UINT mmask = (1 << index);
     num = num & ~mmask;
-    return num | mmask;
+    return num | (v << index);
 }
 
-void PrintNextLowHigh(unsigned int num)
+// Swap the values of i and j
+UINT swapBits(UINT num, int i, int j)
 {
-   
+
+    UINT maski = (1 << i);
+    UINT maskj = (1 << j);
+
+    int ibit = (int) getBit(num, i);
+    int jbit = (int) getBit(num, j);
+
+    num = setBit(num, i, jbit);
+    num = setBit(num, j, ibit);
+
+    return num;
+
+}
+
+UINT getNext(UINT n)
+{
+    int num = n;
+    int count0 = 0;
+    int count1 = 0;
+
+    // Count zeros
+    while (!(num & 1) && num)
+    {
+        ++count0;
+        num >>= 1;
+    }
+
+    // count 1s
+    while ((num & 1) && num)
+    {
+        ++count1;
+        num >>= 1;
+    }
+
+    if (count1 + count0 == 31) return -1;
+
+
+    int pos = count1 + count0;
+    // swap the count1 and count1 + 1 bits
+    n = swapBits(n, pos, pos - 1);
+
+    // Clear bits from count1 down to 0. 
+    UINT mmask = ~((1 << pos) - 1);
+    n &= mmask;
+
+    // create LSB 
+    UINT ones = (1 << (count1 - 1)) - 1;
+    n |= ones;
+
+
+    return n;
+
+}
+
+
+void PrintNextLowHigh(UINT num)
+{
 
 
 }
@@ -139,7 +196,7 @@ int main()
     //int res = MergeInt(23, 11, 2, 6);
     //DecimalFracToBinAlt(0.625);
     //PrintLowHigh((unsigned int)88);
-    PrintNextLowHigh((UINT)39);
+    getNext((UINT)3832);
 
     return 0;
-}
+ }
