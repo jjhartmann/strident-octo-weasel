@@ -247,6 +247,32 @@ UINT getNextAirth(UINT n)
 }
 
 
+// Find the next smallest with arithmetic hack
+UINT getPrevArith(UINT n)
+{
+    int num = n;
+    int count0 = 0;
+    int count1 = 0;
+
+
+    // count 1s
+    while ((num & 1) && num)
+    {
+        ++count1;
+        num >>= 1;
+    }
+
+    // Count zeros
+    while (!(num & 1) && num)
+    {
+        ++count0;
+        num >>= 1;
+    }
+
+    // Opposite of larger hack.
+    return ((n - (pow(2, count1) - 1)) - 1) - (pow(2, count0 - 1) - 1);
+}
+
 
 
 int main()
@@ -259,6 +285,8 @@ int main()
     //getNext((UINT)3815);
     int res1 = getNext((UINT)3804);
     int res2 = getNextAirth((UINT)3804);
+    int res3 = getPrev((UINT)3815);
+    int res4 = getPrevArith((UINT)3815);
 
     return 0;
  }
