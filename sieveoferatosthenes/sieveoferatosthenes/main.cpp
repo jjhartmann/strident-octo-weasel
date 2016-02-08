@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -22,17 +23,40 @@ public:
         {
             mNumberArray.push_back(i);
         }
+        
+        mPrimes.push_back(2);
     }
     
-    vector<int> GetAllPrimes(int nMax)
+    vector<int> GetAllPrimes()
     {
+        while (mPrimes.back() < sqrt(mMax))
+        {
+            // Filter all multiples of prime
+           
 
+
+
+
+
+        }
     }
 
 private:
+
+    // Var
     int mMax;
     vector<int> mNumberArray;
     vector<int> mPrimes;
+
+    // Methods
+    void filterPrimes()
+    {
+        int prime = mPrimes.back();
+        for (int i = prime*prime; i < mMax; i += prime)
+        {
+            mNumberArray[i] = -1;
+        }
+    }
 };
 
 int main()
