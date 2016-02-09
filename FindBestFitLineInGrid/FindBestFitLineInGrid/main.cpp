@@ -92,17 +92,14 @@ public:
         {
             // Check for groups
             int degree = radToDeg(itr.first);
-            if ((itr.second).size() < numberofPoints)
+            // Check each bin size in interior map
+            for (auto &itr : itr.second)
             {
-                // Check each bin size in interior map
-                for (auto &itr : itr.second)
+                int bin = itr.second;
+                if (bin > mThreshold)
                 {
-                    int bin = itr.second;
-                    if (bin > mThreshold)
-                    {
-                        double r = itr.first;
-                        mCandiates[bin].push_back(pair<double, int>(r, degree));
-                    }
+                    double r = itr.first;
+                    mCandiates[bin].push_back(pair<double, int>(r, degree));
                 }
             }
         }
@@ -127,10 +124,11 @@ private:
         for (int i = 0; i < 360; ++i)
         {
             // Round to nearst tenth
-            double rad = round(10 * degToRad(i)) / 10;
+            double rad = degToRad(i);
             double r = x * cos(rad) + y * sin(rad);
 
             r = roundR(r);
+            rad = roundR(rad);
             mAccumulator[rad][r]++;
         }
     }
@@ -185,7 +183,7 @@ int main()
 {
 
     cout << "Find Best Fit Line in a Grid of Data Points" << endl;
-    Graph myGrid({ 0,1,2,3,4,5,6,7,8,9}, { 0,1,2,3,4,5,6,7,8,9}, 10, 10);
+    Graph myGrid({ 0,1,2,3,4,5,6,7,8,9}, { 0,2,1,2,3,5,4,6,5,7}, 10, 10);
     myGrid.PrintGrid();
 
     // Hough
