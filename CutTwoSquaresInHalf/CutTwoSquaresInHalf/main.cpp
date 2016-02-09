@@ -2,6 +2,7 @@
 // Cut two squares in Half
 
 #include <iostream>
+#include <limits>
 
 using namespace std;
 
@@ -15,8 +16,17 @@ public:
     {
         pair<float, float> line;
 
+        // If the centers have the same x val. 
+        if (sq1.mCenter.first == sq2.mCenter.first)
+        {
+            line.first = numeric_limits<float>::infinity();
+            line.second = sq2.mCenter.second;
+
+            return line;
+        }
+
         // Compute slope
-        line.first = (sq1.mCenter.first - sq2.mCenter.first) / (sq1.mCenter.second - sq2.mCenter.second);
+        line.first = (sq1.mCenter.second - sq2.mCenter.second) / (sq1.mCenter.first - sq2.mCenter.first);
         
         // Compute y-intercept
         line.second = sq1.mLuxy.second - (line.first * sq1.mLuxy.first);
