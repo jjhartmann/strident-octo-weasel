@@ -9,6 +9,23 @@ using namespace std;
 class Square
 {
 public:
+    // Static Functions: cut square in half with another
+    // Return: Pair< m, b> ==> mx + b
+    static pair<float, float> CutSquaresInHalf(Square sq1, Square sq2)
+    {
+        pair<float, float> line;
+
+        // Compute slope
+        line.first = (sq1.mCenter.first - sq2.mCenter.first) / (sq1.mCenter.second - sq2.mCenter.second);
+        
+        // Compute y-intercept
+        line.second = sq1.mLuxy.second - (line.first * sq1.mLuxy.first);
+
+        return line;
+
+    }
+
+public:
     Square(int leftUpperX, int leftUpperY, int rightBottomX, int rightBottomY) :
         mLuxy(leftUpperX, leftUpperY),
         mRbxy(rightBottomX, rightBottomY)
@@ -37,6 +54,8 @@ private:
     int mArea; // in cm^2
 };
 
+// 
+
 
 
 int main()
@@ -45,7 +64,7 @@ int main()
     cout << "Cut Two Squares In Half with One Line" << endl;
     Square sq1(1, 7, 5, 4);
     Square sq2(4, 5, 8, 0);
-
+    pair<float, float> line = Square::CutSquaresInHalf(sq1, sq2);
 
 
     return 0;
