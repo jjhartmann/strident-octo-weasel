@@ -44,25 +44,34 @@ public:
     // Divide x / y
     static int Divide(int x, int y)
     {
+        bool yNeg = false, xNeg = false;
+
+        if (x < 0)
+            xNeg = true;
+        if (y < 0)
+            yNeg = true;
+
+        x = abs(x);
+        y = abs(y);
+
         int res = 0;
         for (int i = 0; i < x; i += y)
         {
             ++res;
         }
 
+        if (xNeg && !yNeg || !xNeg && yNeg)
+        {
+            return Negate(res);
+        }
+        
         return res;
     }
 
     // Subtract x - y
     static int Subtract(int x, int y)
     {
-        int res = 0;
-        for (int i = y; i < x; ++i)
-        {
-            ++res;
-        }
-
-        return res;
+        return x + Negate(y);
     }
 
     // Negate numbers
@@ -90,8 +99,8 @@ int main()
 
     int results = 0;
     results = MathOpsWithAdd::Mutliple(3, -4);
-    results = MathOpsWithAdd::Divide(32, 8);
-    results = MathOpsWithAdd::Subtract(7, -3);
+    results = MathOpsWithAdd::Divide(32, -8);
+    results = MathOpsWithAdd::Subtract(-7, -3);
 
 
     return 0;
