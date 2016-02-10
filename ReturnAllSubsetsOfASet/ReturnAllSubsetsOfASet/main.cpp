@@ -6,6 +6,12 @@
 using namespace std;
 
 
+class Solution
+{
+public:
+
+};
+
 int main()
 {
     cout << "Return all subsets of a set" << endl;
