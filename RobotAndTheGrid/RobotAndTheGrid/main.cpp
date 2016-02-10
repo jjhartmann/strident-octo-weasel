@@ -21,7 +21,7 @@ public:
         mY(y)
     {
         mRestircted.push_back(first);
-        Grid(rest...);
+        Grid(mRestircted, rest...);
     }
 
 
@@ -33,13 +33,13 @@ private:
 
     // Variadic overloads
     template<typename ... T>
-    Grid(Point first, T ... rest)
+    Grid(vector<Point> &vec, Point first, T ... rest)
     {
-        mRestircted.push_back(first);
-        Grid(rest...);
+        vec.push_back(first);
+        Grid(vec, rest...);
     }
 
-    Grid()
+    Grid(vector<Point> &vec)
     {
         return;
     }
@@ -52,7 +52,7 @@ private:
 int main()
 {
     cout << "How many ways can a robot travel on a grid" << endl;
-    Grid myGrid(10, 10, Point(2, 4), Point(2, 5));
+    Grid myGrid(10, 10, Point(2, 4), Point(2, 5), Point(3,9));
 
 
     return 0;
