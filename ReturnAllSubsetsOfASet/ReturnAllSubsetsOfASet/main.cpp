@@ -10,8 +10,9 @@ using namespace std;
 class Solution
 {
 public:
+    // Contingent subsets. 
     template<typename T>
-    static  vector< vector<T> >* ReturnAllSubsets(vector<T> &vec)
+    static  vector< vector<T> >* ReturnAllContingentSubsets(vector<T> &vec)
     {
         vector<vector<T>> *MetaArray = new vector<vector<T>>(); // Don't Own
 
@@ -31,6 +32,50 @@ public:
 
         return MetaArray;
     }
+
+    // All Possible subsets. 
+    template<typename T>
+    static  vector< vector<T> >* ReturnAllSubsets(vector<T> &vec)
+    {
+        vector<vector<T>> *MetaArray = new vector<vector<T>>(); // Don't Own
+        return allSubsetsHelper(vec, MetaArray, vec.size()-1);
+    }
+
+
+private:
+    template<typename T>
+    static vector< vector<T> >* allSubsetsHelper(vector<T> &vec, vector< vector<T> > *mArray, int pos)
+    {
+        // Create empty set
+        if (pos < 0)
+        {
+            vector<T> tmp;
+            mArray->push_back(tmp);
+            return mArray;
+        }
+
+        // Retrieve P_(N-1)
+        mArray = allSubsetsHelper(vec, mArray, pos - 1);
+
+        // Create new subsets and add to mArray
+        T element = vec[pos];
+        int MaxSize = mArray->size();
+        for (int i = 0; i < MaxSize; ++i)
+        {
+            // Copy array
+            vector<T> tmp = mArray->at(i);
+
+            // Add new element
+            tmp.push_back(element);
+
+
+            // Add to P_N
+            mArray->push_back(tmp);
+        }
+
+        return mArray;
+    }
+
 };
 
 int main()
