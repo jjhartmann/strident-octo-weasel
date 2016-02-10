@@ -42,7 +42,40 @@ public:
     }
 
 
+    // All Possible Subsets Iterative
+    template <typename T>
+    static vector< vector <int> >* ReturnAllSubsetsItr(vector<T> &vec)
+    {
+        vector<vector<T>> *MetaArray = new vector<vector<T>>(); // Don't Own
+
+        // Get the number of sets = 2^n
+        int numberofSets = pow(2, vec.size());
+
+        for (int i = 0; i < numberofSets; ++i)
+        {
+            MetaArray->push_back(convertBinToSet(vec, i));
+        }
+
+    }
+
+
 private:
+    // convert binary string to subset
+    template <typename T>
+    static vector<T> convertBinToSet(vector<int> &vec, int bin)
+    {
+        vector<T> tmp;
+        for (int i = 0; i < vec.size(); ++i)
+        {
+            if (bin % 2)
+            {
+                tmp.push_back(vec[i]);
+            }
+        }
+
+        return tmp;
+    }
+
     template<typename T>
     static vector< vector<T> >* allSubsetsHelper(vector<T> &vec, vector< vector<T> > *mArray, int pos)
     {
@@ -83,11 +116,13 @@ int main()
     cout << "Return all subsets of a set" << endl;
     vector<int> test = { 1,2,3,4,5 };
     vector<vector<int>> *MySubsets = Solution::ReturnAllSubsets(test);
+    vector<vector<int>> *MySubsets2 = Solution::ReturnAllSubsets(test);
 
 
 
 
 
     delete MySubsets;
+    delete MySubsets2;
     return 0;
 }
