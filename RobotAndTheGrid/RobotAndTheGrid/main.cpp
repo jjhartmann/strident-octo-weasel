@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 
 using namespace std;
 typedef pair<int, int> Point;
@@ -36,9 +37,18 @@ public:
     }
 
 
+    // Find a path, avoiding restricted points. 
+    bool findPath(vector<Point> &path)
+    {
+        unordered_map<int, bool> DP;
+        return findPathHelper(mX, mY, path, DP);
+    }
+
+
 private:
     vector<Point> mRestircted;
     vector<int> DPBuffer;
+
     int mX;
     int mY;
 
@@ -54,6 +64,13 @@ private:
     {
         return;
     }
+
+    // Find Path Helper
+    bool findPathHelper(int x, int y, vector<Point> path, unordered_map<int, bool> DP)
+    {
+
+    }
+
 
     // Get all paths helper
     int allPathsHelper(int x, int y, vector<int> &DP)
