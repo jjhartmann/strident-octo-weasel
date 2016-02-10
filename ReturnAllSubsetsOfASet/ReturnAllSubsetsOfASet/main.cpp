@@ -17,14 +17,16 @@ public:
 
         for (int i = 0; i < vec.size(); ++i)
         {
-            vector<T> tmp;
-            for (int j = 0; j <= i; ++j)
+            for (int j = i; j < vec.size(); ++j)
             {
-                tmp.pop_back(vec[j]);
-            }
+                vector<T> tmp;
 
-            // push back into meta
-            MetaArray->push_back(tmp);
+                for (int k = i; k <= j; ++k)
+                    tmp.push_back(vec[k]);
+    
+                // push back into meta
+                MetaArray->push_back(tmp);
+            }
         }
 
         return MetaArray;
@@ -34,12 +36,13 @@ public:
 int main()
 {
     cout << "Return all subsets of a set" << endl;
+    vector<int> test = { 1,2,3,4,5 };
+    vector<vector<int>> *MySubsets = Solution::ReturnAllSubsets(test);
 
 
 
 
 
-
-
+    delete MySubsets;
     return 0;
 }
