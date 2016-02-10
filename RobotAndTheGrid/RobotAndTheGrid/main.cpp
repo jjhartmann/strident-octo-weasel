@@ -66,9 +66,53 @@ private:
     }
 
     // Find Path Helper
-    bool findPathHelper(int x, int y, vector<Point> path, unordered_map<int, bool> DP)
+    bool findPathHelper(int x, int y, vector<Point> &path, unordered_map<int, bool> &DP)
     {
 
+        Point p(x, y);
+
+        // Check it point is cached
+        if (DP.find(y*mX + x) != DP.end())
+        {
+            return DP[y*mX + x];
+        }
+
+        // Check if end coordinates
+        if (x == 1 && y == 1) return true;
+
+        bool success = false;
+        if (x >= 1 && isOK(x - 1, y))
+        {
+            success = findPathHelper(x - 1, y, path, DP);
+        }
+
+        if (!success && y >= 1 && isOK(x, y - 1))
+        {
+            success = findPathHelper(x, y - 1, path, DP);
+        }
+
+        if (success)
+        {
+            path.push_back(p);
+        }
+
+        DP[y*mY + x] = success;
+        return success;
+
+    }
+
+    // Check if nodes is ok
+    bool isOK(int x, int y)
+    {
+        if (x > mX || y > mY || x < 0 || y < 0) return false;
+
+        for (auto ip : mRestircted)
+        {
+            if (x == ip.first && y == ip.second)
+                return false;
+        }
+
+        return true;
     }
 
 
@@ -111,8 +155,11 @@ private:
 int main()
 {
     cout << "How many ways can a robot travel on a grid" << endl;
-    Grid myGrid(20, 20, Point(2, 4));
+    Grid myGrid(10, 10, Point(2, 4), Point(5, 3), Point(8, 6), Point(3, 6), Point(9, 7), Point(8, 8), Point(1, 2), Point(10, 4));
     int ans = myGrid.getAllPossiblePathsNoRestrict();
+
+    vector<Point> myPath;
+    bool success = myGrid.findPath(myPath);
 
     return 0;
 }
