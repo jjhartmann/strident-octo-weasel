@@ -14,7 +14,7 @@ class ChessBoard
 public:
     ChessBoard(int n) :
         mDim(n),
-        mBoard(n*n, false)
+        mBoard(n*n, "-")
     {
         ;
     }
@@ -24,11 +24,11 @@ public:
         return mDim;
     }
 
-    void mark(Point p)
+    void mark(Point p, string id = "+")
     {
         if (p.first >= mDim || p.second >= mDim) return;
 
-        mBoard[p.second * mDim + p.first] = true;
+        mBoard[p.second * mDim + p.first] = id;
     }
 
     void printBoard()
@@ -37,7 +37,8 @@ public:
         {
             for (int j = 0; j < mDim; ++j)
             {
-                cout << mBoard[i * mDim + j] << " ";
+                string tmp = mBoard[i * mDim + j] + " ";
+                cout << tmp.c_str();
             }
             cout << endl;
         }
@@ -48,7 +49,7 @@ public:
     }
 
 private:
-    vector<bool> mBoard;
+    vector<string> mBoard;
     int mDim;
 };
 
@@ -123,6 +124,11 @@ public:
 
 
         }
+
+        // Mark Queen
+        string id = "X";
+        b.mark(mPlacement, id);
+
     }
 
 
