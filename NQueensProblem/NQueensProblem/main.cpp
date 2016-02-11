@@ -58,6 +58,15 @@ public:
         return p.first < mDim && p.second < mDim;
     }
 
+    // Reset the board;
+    void reset()
+    {
+        for (int i = 0; i < mBoard.size(); ++i)
+        {
+            mBoard[i] = "-";
+        }
+    }
+
 private:
     vector<string> mBoard;
     int mDim;
@@ -73,7 +82,7 @@ public:
     {}
     bool isPlaced()
     {
-        if (mPlacement.first > 0)
+        if (mPlacement.first >= 0)
             return true;
 
         return false;
@@ -139,6 +148,14 @@ public:
     }
 
 
+    // Reset placement
+    void reset()
+    {
+        mPlacement.first = -1;
+        mPlacement.second = -1;
+    }
+
+
 private:
     Point mPlacement;
 
@@ -168,33 +185,86 @@ public:
         int qIndex = 0;
         while (mBoard.isInRange(start))
         {
-            
-            for (int i = 0; i < mQueen.size(); ++i)
+           
+            while (mBoard.isInRange(start))
             {
-                Point p(0, 0);
-                bool placed = false;
-                while(mBoard.isInRange(p) && !placed)
+                // Place first Queen
+                mQueen[0].place(start, mBoard);
+
+                // Try all queens
+                for (int i = 1; i < mQueen.size(); ++i)
                 {
-                    // Set col to 0
-                    p.first = 0;
+                    Point p(0,0);
+                    bool placed = false;
                     while (mBoard.isInRange(p) && !placed)
                     {
-                        if (mBoard.isFree(p))
+                        
+                        while (mBoard.isInRange(p) && !placed)
                         {
-                            mQueen[i].place(p, mBoard);
+                            if (mBoard.isFree(p))
+                            {
+                                mQueen[i].place(p, mBoard);
+                                placed = true;
+                            }
+
+                            // INcrement col
+                            p.first++;
                         }
 
-                        // INcrement col
-                        p.first++;
+                        // Set col to 0
+                        p.first = 0;
+
+                        // Increment row
+                        p.second++;
                     }
 
-                    // Increment row
-                    p.second++;
                 }
 
+                // Print Board
+                mBoard.printBoard();
+
+                // Check for all queens passsing. 
+                bool allPassed = true;
+                for (int i = 0; i < mQueen.size(); ++i)
+                {
+                    if (!mQueen[i].isPlaced())
+                        allPassed = false;
+                }
+
+                if (allPassed)
+                    return true;
+
+                
+                // Reset queens
+                Reset();
+
+                start.first++;
             }
 
+            start.first = 0;
+            start.second++;
         }
+
+        return false;
+    }
+
+    // Print game Board;
+    void print()
+    {
+        mBoard.printBoard();
+    }
+
+    // Reset Queens
+    void Reset()
+    {
+        // Pick up all queens
+        for (int i = 0; i < mQueen.size(); ++i)
+        {
+            mQueen[i].reset();
+        }
+
+        // Reset the board;
+        mBoard.reset();
     }
 
 
@@ -215,6 +285,12 @@ int main()
     firstQ.place(Point(10, 3), b);
     b.printBoard();
 
+    // Game
+    Game game(8, 8);
+    game.print();
+
+    game.Process();
+    game.print();
 
     return 0;
 }
