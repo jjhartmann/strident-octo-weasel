@@ -115,10 +115,15 @@ int main()
     img.printToScreen();
 
     // Fill in from (4, 4)
-    img.fill(Point(4, 4), 88);
-
+    img.fill(Point(4, 4), 888);
     img.printToScreen();
 
+    // Fill in from (8, 4)
+    img.fill(Point(8, 4), 101);
+    img.printToScreen();
+
+    img.fill(Point(9, 9), 111);
+    img.printToScreen();
 
     return 0;
 }
