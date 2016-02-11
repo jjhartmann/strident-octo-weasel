@@ -278,18 +278,26 @@ private:
 int main()
 {
     cout << "The N-Queens Problem" << endl;
-    ChessBoard b(20);
-    b.printBoard();
+    //ChessBoard b(20);
+    //b.printBoard();
 
-    Queen firstQ;
-    firstQ.place(Point(10, 3), b);
-    b.printBoard();
+    //Queen firstQ;
+    //firstQ.place(Point(10, 3), b);
+    //b.printBoard();
 
     // Game
-    Game game(8, 8);
+    Game game(10,10);
     game.print();
 
-    game.Process();
+    bool res = game.Process();
+
+    if (res) {
+        cout << "SOLUTION:" << endl;
+    }
+    else
+    {
+        cout << "NO SOLUTION:" << endl;
+    }
     game.print();
 
     return 0;
