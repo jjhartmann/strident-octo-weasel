@@ -137,6 +137,37 @@ private:
 
 };
 
+/////////////////////////////////////////////////////////////
+// Game: 
+class Game
+{
+public:
+    Game(int mDim, int nQueens) :
+        mQueen(nQueens),
+        mBoard(mDim)
+    {
+
+    }
+
+    ~Game()
+    {
+
+    }
+
+    // Find Configurations for n Queens
+    bool Process()
+    {
+
+    }
+
+
+
+private:
+    vector<Queen> mQueen;
+    ChessBoard mBoard;
+
+};
+
 int main()
 {
     cout << "The N-Queens Problem" << endl;
