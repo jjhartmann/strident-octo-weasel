@@ -43,9 +43,13 @@ public:
             cout << endl;
         }
         cout << endl;
+    }
 
+    bool isFree(Point p)
+    {
+        if (p.first >= mDim || p.second >= mDim) return false;
 
-
+        return mBoard[p.second * mDim + p.first] == "-";
     }
 
 private:
