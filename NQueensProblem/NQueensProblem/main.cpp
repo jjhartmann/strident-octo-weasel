@@ -117,7 +117,6 @@ public:
                 diag1.second++;
             }
 
-
             // Diagonal two
             if (diag2.first< dim && diag2.second >= 0)
             {
@@ -125,8 +124,6 @@ public:
                 diag2.first++;
                 diag2.second--;
             }
-
-
         }
 
         // Mark Queen
