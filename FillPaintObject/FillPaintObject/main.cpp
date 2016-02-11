@@ -29,6 +29,22 @@ public:
         }
     }
 
+    // Print the image to screen
+    void printToScreen()
+    {
+
+        for (int i = 0; i < mYdim; ++i)
+        {
+            for (int j = 0; j < mXdim; ++j)
+            {
+                cout << mGrid[i*mXdim + j] << " ";
+            }
+            cout << endl;
+        }
+
+
+    }
+
 private:
     vector<int> mGrid;
     int mXdim;
@@ -50,6 +66,10 @@ int main()
         { 55,55,55,55,55,55,55,55,11,11 },
         { 55,55,55,55,55,55,55,55,11,11 },
     };
+
+
+    // Print to screen 
+    img.printToScreen();
 
 
     return 0;
