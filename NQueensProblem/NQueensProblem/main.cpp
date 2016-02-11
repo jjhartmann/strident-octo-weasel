@@ -52,6 +52,12 @@ public:
         return mBoard[p.second * mDim + p.first] == "-";
     }
 
+    // Is in range
+    bool isInRange(Point p)
+    {
+        return p.first < mDim && p.second < mDim;
+    }
+
 private:
     vector<string> mBoard;
     int mDim;
@@ -147,18 +153,48 @@ public:
         mQueen(nQueens),
         mBoard(mDim)
     {
-
+        ;
     }
 
     ~Game()
     {
-
+        ;
     }
 
     // Find Configurations for n Queens
     bool Process()
     {
+        Point start(0, 0);
+        int qIndex = 0;
+        while (mBoard.isInRange(start))
+        {
+            
+            for (int i = 0; i < mQueen.size(); ++i)
+            {
+                Point p(0, 0);
+                bool placed = false;
+                while(mBoard.isInRange(p) && !placed)
+                {
+                    // Set col to 0
+                    p.first = 0;
+                    while (mBoard.isInRange(p) && !placed)
+                    {
+                        if (mBoard.isFree(p))
+                        {
+                            mQueen[i].place(p, mBoard);
+                        }
 
+                        // INcrement col
+                        p.first++;
+                    }
+
+                    // Increment row
+                    p.second++;
+                }
+
+            }
+
+        }
     }
 
 
