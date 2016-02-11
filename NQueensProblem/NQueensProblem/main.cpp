@@ -31,6 +31,22 @@ public:
         mBoard[p.second * mDim + p.first] = true;
     }
 
+    void printBoard()
+    {
+        for (int i = 0; i < mDim; ++i)
+        {
+            for (int j = 0; j < mDim; ++j)
+            {
+                cout << mBoard[i * mDim + j] << " ";
+            }
+            cout << endl;
+        }
+        cout << endl;
+
+
+
+    }
+
 private:
     vector<bool> mBoard;
     int mDim;
@@ -53,11 +69,22 @@ public:
     }
 
     // Place and mark chess board
-    void place(Point p, ChessBoard b)
+    void place(Point p, ChessBoard &b)
     {
         mPlacement = p;
 
         int dim = b.getDimensions();
+
+
+        Point diag1(p.first, p.second);
+        for (int i = 0; i < dim; i++)
+        {
+            if (diag1.first - 1 < 0 || diag1.second - 1 < 0)
+                break;
+
+            diag1.first--;
+            diag1.second--;
+        }
 
         Point diag2(p.first, p.second);
         for (int i = 0; i < dim; i++)
@@ -78,17 +105,16 @@ public:
             b.mark(Point(i, p.second));
 
             // Diagonal one
-            int orientation = p.first < p.second;
-            int dx = (p.first + i) % dim;
-            int dy = (p.second + i) % dim;
-            if (orientation == dx < dy);
+            if (diag1.first < dim && diag1.second < dim);
             {
-                b.mark(Point(dx, dy));
+                b.mark(diag1);
+                diag1.first++;
+                diag1.second++;
             }
 
 
             // Diagonal two
-            if (diag2.first + 1 < dim && diag2.second >= 0)
+            if (diag2.first< dim && diag2.second >= 0)
             {
                 b.mark(diag2);
                 diag2.first++;
@@ -97,8 +123,6 @@ public:
 
 
         }
-
-
     }
 
 
@@ -110,8 +134,12 @@ private:
 int main()
 {
     cout << "The N-Queens Problem" << endl;
+    ChessBoard b(20);
+    b.printBoard();
 
-
+    Queen firstQ;
+    firstQ.place(Point(10, 3), b);
+    b.printBoard();
 
 
     return 0;
