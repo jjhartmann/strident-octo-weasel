@@ -132,14 +132,20 @@
                         rowAjMin:(NSInteger)A_Minj
                         rowAjMax:(NSInteger)A_Maxj
 {
-    NSInteger dim = B_Maxi - B_Mini;
-    Matrix *tmp = [[Matrix alloc] initWithPower2: dim inMax:1]; // Don't Own
+    NSInteger dimB = B_Maxi - B_Mini + 1;
+    NSInteger dimA = A_Maxi - A_Mini + 1;
     
-    for (NSInteger i = B_Mini; i < B_Maxi; ++i)
+    // Verify same dimensions
+    if (dimA != dimB || A_Maxi >= _mDim || A_Maxj >= _mDim) return nil;
+    
+    // Create new zero matrix with given dimensions.
+    Matrix *tmp = [[Matrix alloc] initWithPower2: dimA inMax:1]; // Don't Own
+    
+    for (NSInteger i = 0; i < dimA; ++i)
     {
-        for (NSInteger j = B_Minj; j < B_Maxj; ++j)
+        for (NSInteger j = 0; j < dimA; ++j)
         {
-            [tmp setAt:_mMatrix[i * dim + j] + inB.mMatrix[i * dim + j] pos_i:(i - B_Mini) pos_j:(j - B_Minj)];
+            [tmp setAt:_mMatrix[(i + A_Mini) * _mDim + (j + A_Minj)] + inB.mMatrix[(i + B_Mini) * [inB mDim] + (j + B_Minj)] pos_i:i pos_j:j];
         }
     }
     
@@ -174,10 +180,15 @@
 
 ///////////////////////////////////////////////////////////////////
 /// Strassen Algorithm
-NSInteger* strassenMatrixMultiplication(NSInteger *A, NSInteger *B)
+NSInteger* strassenMatrixMultiplication(Matrix *A, Matrix *B)
 {
+    // Get dimensions
+    NSInteger begin = 0;
+    NSInteger mid = [A mDim]/2;
+    NSInteger end = [A mDim];
     
-    
+    // Add A_11 to B_11
+//    Matrix *S1 =
     
     
     
@@ -199,7 +210,7 @@ int main(int argc, const char * argv[]) {
         [matA printMatrix];
         [matB printMatrix];
         
-        Matrix *matC = [matA addMatrixInRange:matB rowBiMin:0 rowBiMax:4 rowBjMin:0 rowBjMax:4 rowAiMin:0 rowAiMax:4 rowAjMin:0 rowAjMax:4];
+        Matrix *matC = [matA addMatrixInRange:matB rowBiMin:2 rowBiMax:3 rowBjMin:2 rowBjMax:3 rowAiMin:2 rowAiMax:3 rowAjMin:2 rowAjMax:3];
         [matC printMatrix];
     }
     return 0;
