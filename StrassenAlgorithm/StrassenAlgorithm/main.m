@@ -14,8 +14,10 @@
 @interface P2Matrix : NSObject
 
 @property NSInteger *mMatrix;
+@property NSInteger mDim;
 
 - (id) initWithPower2: (NSInteger) n inMax:(NSInteger) max;
+- (NSInteger) at: (NSInteger) pos_i jPos: (NSInteger) pos_j;
 
 @end
 
@@ -38,6 +40,9 @@
         NSInteger pw2 = ceil(log2(n));
         NSInteger pwN = pow(2, pw2);
         BOOL pad = (pwN == n) ? NO : YES;
+        
+        // Set Dimension
+        _mDim = pwN;
         
         // Create matrix buffer
         _mMatrix = (NSInteger*) malloc(sizeof(NSInteger) * pwN * pwN);
@@ -64,7 +69,22 @@
     return self;
 }
 
+
+- (NSInteger) at:(NSInteger)pos_i jPos:(NSInteger)pos_j
+{
+    if (pos_i >= _mDim || pos_j >= _mDim)
+    {
+        // Out of bounds
+        return -1;
+    }
+    
+    return _mMatrix[pos_i * _mDim + pos_j];
+}
+
 @end
+
+
+
 
 
 int main(int argc, const char * argv[]) {
