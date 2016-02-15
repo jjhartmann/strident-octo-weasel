@@ -11,7 +11,7 @@
 
 ////////////////////////////////////////////////////////////////
 /// Matrix Class
-@interface P2Matrix : NSObject
+@interface Matrix : NSObject
 
 @property NSInteger *mMatrix;
 @property NSInteger mDim;
@@ -22,7 +22,7 @@
 
 @end
 
-@implementation P2Matrix
+@implementation Matrix
 
 ///////////////////////////////////////////////////////////////////
 /// Deallocate the NSInterger array.
@@ -119,6 +119,9 @@ NSInteger* strassenMatrixMultiplication(NSInteger *A, NSInteger *B)
     
     
     
+    
+    
+    
     return nil;
 }
 
@@ -128,8 +131,8 @@ int main(int argc, const char * argv[]) {
         // insert code here...
         NSLog(@"Simple Implementation of Strassen's Algorithm");
         
-        P2Matrix *matA = [[P2Matrix alloc] initWithPower2:3 inMax:50];
-        P2Matrix *matB = [[P2Matrix alloc] initWithPower2:3 inMax:50];
+        Matrix *matA = [[Matrix alloc] initWithPower2:3 inMax:50];
+        Matrix *matB = [[Matrix alloc] initWithPower2:3 inMax:50];
         
         // Print matrices.
         [matA printMatrix];
