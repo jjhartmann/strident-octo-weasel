@@ -18,6 +18,7 @@
 
 - (id) initWithPower2: (NSInteger) n inMax:(NSInteger) max;
 - (NSInteger) at: (NSInteger) pos_i jPos: (NSInteger) pos_j;
+- (void) printMatrix;
 
 @end
 
@@ -87,6 +88,26 @@
     return _mMatrix[pos_i * _mDim + pos_j];
 }
 
+///////////////////////////////////////////////////////////////////
+/// Print Matrix to terminal
+- (void) printMatrix
+{
+    NSMutableString *str = [[NSMutableString alloc] initWithString:@"\n"];
+    for (NSInteger i = 0; i < _mDim; ++i)
+    {
+        for (NSInteger j = 0; j < _mDim; ++j)
+        {
+            [str appendString: [@(_mMatrix[i * _mDim + j]) stringValue]];
+            [str appendString: @" "];
+
+        }
+        
+        [str appendString: @"\n"];
+    }
+    
+    NSLog(@"%@", str);
+}
+
 @end
 
 
@@ -109,6 +130,10 @@ int main(int argc, const char * argv[]) {
         
         P2Matrix *matA = [[P2Matrix alloc] initWithPower2:3 inMax:50];
         P2Matrix *matB = [[P2Matrix alloc] initWithPower2:3 inMax:50];
+        
+        // Print matrices.
+        [matA printMatrix];
+        [matB printMatrix];
         
     }
     return 0;
