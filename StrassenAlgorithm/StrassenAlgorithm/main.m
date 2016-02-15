@@ -19,6 +19,18 @@
 - (id) initWithPower2: (NSInteger) n inMax:(NSInteger) max;
 - (NSInteger) at: (NSInteger) pos_i jPos: (NSInteger) pos_j;
 - (void) printMatrix;
+- (Matrix*) addMatrixInRange:(Matrix *)inB
+                       rowBiMin:(NSInteger)B_Mini
+                       rowBiMax:(NSInteger)B_Maxi
+                       rowBjMin:(NSInteger)B_Minj
+                       rowBjMax:(NSInteger)B_Maxj
+                       rowAiMin:(NSInteger)A_Mini
+                       rowAiMax:(NSInteger)A_Maxi
+                       rowAjMin:(NSInteger)A_Minj
+                       rowAjMax:(NSInteger)A_Maxj;
+- (void) setAt:(NSInteger) inData pos_i:(NSInteger) i pos_j:(NSInteger) j;
+- (NSInteger) getAt:(NSInteger) i pos_j:(NSInteger) j;
+
 
 @end
 
@@ -108,6 +120,55 @@
     NSLog(@"%@", str);
 }
 
+///////////////////////////////////////////////////////////////////
+/// Add Matrix to this matrix.
+- (Matrix*) addMatrixInRange:(Matrix *)inB
+                        rowBiMin:(NSInteger)B_Mini
+                        rowBiMax:(NSInteger)B_Maxi
+                        rowBjMin:(NSInteger)B_Minj
+                        rowBjMax:(NSInteger)B_Maxj
+                        rowAiMin:(NSInteger)A_Mini
+                        rowAiMax:(NSInteger)A_Maxi
+                        rowAjMin:(NSInteger)A_Minj
+                        rowAjMax:(NSInteger)A_Maxj
+{
+    NSInteger dim = B_Maxi - B_Mini;
+    Matrix *tmp = [[Matrix alloc] initWithPower2: dim inMax:1]; // Don't Own
+    
+    for (NSInteger i = B_Mini; i < B_Maxi; ++i)
+    {
+        for (NSInteger j = B_Minj; j < B_Maxj; ++j)
+        {
+            [tmp setAt:_mMatrix[i * dim + j] + inB.mMatrix[i * dim + j] pos_i:(i - B_Mini) pos_j:(j - B_Minj)];
+        }
+    }
+    
+    return tmp;
+}
+
+///////////////////////////////////////////////////////////////////
+/// Replace data point at i and j
+- (void) setAt:(NSInteger) inData pos_i:(NSInteger) i pos_j:(NSInteger) j
+{
+    if (i >= _mDim || j >= _mDim)
+    {
+        // Invalid dimension.
+        return;
+    }
+    
+    _mMatrix[i * _mDim + j] = inData;
+}
+
+///////////////////////////////////////////////////////////////////
+/// Get data at row i and column j
+- (NSInteger) getAt:(NSInteger)i pos_j:(NSInteger)j
+{
+    // Check bounds.
+    if (i >= _mDim || i < 0 || j >= _mDim || j < 0) return -1;
+    
+    return _mMatrix[i * _mDim + j];
+}
+
 @end
 
 
@@ -138,6 +199,8 @@ int main(int argc, const char * argv[]) {
         [matA printMatrix];
         [matB printMatrix];
         
+        Matrix *matC = [matA addMatrixInRange:matB rowBiMin:0 rowBiMax:4 rowBjMin:0 rowBjMax:4 rowAiMin:0 rowAiMax:4 rowAjMin:0 rowAjMax:4];
+        [matC printMatrix];
     }
     return 0;
 }
