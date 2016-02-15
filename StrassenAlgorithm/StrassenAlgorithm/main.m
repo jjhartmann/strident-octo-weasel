@@ -23,6 +23,8 @@
 
 @implementation P2Matrix
 
+///////////////////////////////////////////////////////////////////
+/// Deallocate the NSInterger array.
 - (void) dealloc {
     if (_mMatrix != nil)
     {
@@ -31,6 +33,8 @@
     }
 }
 
+///////////////////////////////////////////////////////////////////
+/// Create a matrix that is a power of 2.
 - (id) initWithPower2:(NSInteger)n inMax:(NSInteger) max
 {
     self = [super init];
@@ -70,6 +74,8 @@
 }
 
 
+///////////////////////////////////////////////////////////////////
+/// Get position i and j from Matrix
 - (NSInteger) at:(NSInteger)pos_i jPos:(NSInteger)pos_j
 {
     if (pos_i >= _mDim || pos_j >= _mDim)
