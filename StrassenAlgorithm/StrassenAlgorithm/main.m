@@ -29,6 +29,15 @@
                     rowAiMax:(NSInteger)A_Maxi
                     rowAjMin:(NSInteger)A_Minj
                     rowAjMax:(NSInteger)A_Maxj;
+- (Matrix*) subtractMatrixInRange:(Matrix *)inB
+                    rowBiMin:(NSInteger)B_Mini
+                    rowBiMax:(NSInteger)B_Maxi
+                    rowBjMin:(NSInteger)B_Minj
+                    rowBjMax:(NSInteger)B_Maxj
+                    rowAiMin:(NSInteger)A_Mini
+                    rowAiMax:(NSInteger)A_Maxi
+                    rowAjMin:(NSInteger)A_Minj
+                    rowAjMax:(NSInteger)A_Maxj;
 - (void) setAt:(NSInteger) inData pos_i:(NSInteger) i pos_j:(NSInteger) j;
 - (NSInteger) getAt:(NSInteger) i pos_j:(NSInteger) j;
 - (Matrix*) getSubmatrix:(NSInteger)min_i
@@ -179,6 +188,38 @@
         for (NSInteger j = 0; j < dimA; ++j)
         {
             [tmp setAt:_mMatrix[(i + A_Mini) * _mDim + (j + A_Minj)] + inB.mMatrix[(i + B_Mini) * [inB mDim] + (j + B_Minj)] pos_i:i pos_j:j];
+        }
+    }
+    
+    return tmp;
+}
+
+///////////////////////////////////////////////////////////////////
+/// Subtract Matrix against self
+- (Matrix*) subtractMatrixInRange:(Matrix *)inB
+                    rowBiMin:(NSInteger)B_Mini
+                    rowBiMax:(NSInteger)B_Maxi
+                    rowBjMin:(NSInteger)B_Minj
+                    rowBjMax:(NSInteger)B_Maxj
+                    rowAiMin:(NSInteger)A_Mini
+                    rowAiMax:(NSInteger)A_Maxi
+                    rowAjMin:(NSInteger)A_Minj
+                    rowAjMax:(NSInteger)A_Maxj
+{
+    NSInteger dimB = B_Maxi - B_Mini;
+    NSInteger dimA = A_Maxi - A_Mini;
+    
+    // Verify same dimensions
+    if (dimA != dimB || A_Maxi > _mDim || A_Maxj > _mDim) return nil;
+    
+    // Create new zero matrix with given dimensions.
+    Matrix *tmp = [[Matrix alloc] initWithInt: dimA inMax:1]; // Don't Own
+    
+    for (NSInteger i = 0; i < dimA; ++i)
+    {
+        for (NSInteger j = 0; j < dimA; ++j)
+        {
+            [tmp setAt:(_mMatrix[(i + B_Mini) * _mDim + (j + B_Minj)] - inB.mMatrix[(i + A_Mini) * [inB mDim] + (j + A_Minj)]) pos_i:i pos_j:j];
         }
     }
     
@@ -377,7 +418,7 @@ Matrix* strassenMatrixMultiplication(Matrix *A, Matrix *B)
                             rowAjMin:mid
                             rowAjMax:end];
     
-    Matrix *S4 = [B addMatrixInRange:B
+    Matrix *S4 = [B subtractMatrixInRange:B
                             rowBiMin:begin
                             rowBiMax:mid
                             rowBjMin:mid
@@ -387,7 +428,7 @@ Matrix* strassenMatrixMultiplication(Matrix *A, Matrix *B)
                             rowAjMin:mid
                             rowAjMax:end];
     
-    Matrix *S5 = [B addMatrixInRange:B
+    Matrix *S5 = [B subtractMatrixInRange:B
                             rowBiMin:mid
                             rowBiMax:end
                             rowBjMin:begin
@@ -407,7 +448,7 @@ Matrix* strassenMatrixMultiplication(Matrix *A, Matrix *B)
                             rowAjMin:mid
                             rowAjMax:end];
     
-    Matrix *S7 = [A addMatrixInRange:A
+    Matrix *S7 = [A subtractMatrixInRange:A
                             rowBiMin:mid
                             rowBiMax:end
                             rowBjMin:begin
@@ -427,7 +468,7 @@ Matrix* strassenMatrixMultiplication(Matrix *A, Matrix *B)
                             rowAjMin:mid
                             rowAjMax:end];
     
-    Matrix *S9 = [A addMatrixInRange:A
+    Matrix *S9 = [A subtractMatrixInRange:A
                             rowBiMin:begin
                             rowBiMax:mid
                             rowBjMin:mid
@@ -459,14 +500,14 @@ Matrix* strassenMatrixMultiplication(Matrix *A, Matrix *B)
     Matrix *M3 = strassenMatrixMultiplication(A11, S4);
     Matrix *M4 = strassenMatrixMultiplication(A22, S5);
     Matrix *M5 = strassenMatrixMultiplication(S6, B22);
-    Matrix *m6 = strassenMatrixMultiplication(S7, S8);
-    Matrix *m7 = strassenMatrixMultiplication(S9, S10);
+    Matrix *M6 = strassenMatrixMultiplication(S7, S8);
+    Matrix *M7 = strassenMatrixMultiplication(S9, S10);
     
     // Merge Stage: M1..M7 and build components C11..C22
-    Matrix *C11 = [M1 addMatrix:[M4 subtractMatrix:[M5 addMatrix:m7]]];
+    Matrix *C11 = [M1 addMatrix:[M4 addMatrix:[M7 subtractMatrix:M5]]];
     Matrix *C12 = [M3 addMatrix:M5];
     Matrix *C21 = [M2 addMatrix:M4];
-    Matrix *C22 = [M1 subtractMatrix:[M2 addMatrix:[M3 addMatrix:m6]]];
+    Matrix *C22 = [M1 addMatrix:[M3 addMatrix:[M6 subtractMatrix:M2]]];
     
     // Merge C11..C22 into larger matrix.
     Matrix *C = Merge(C11, C12, C21, C22);
@@ -479,10 +520,10 @@ int main(int argc, const char * argv[]) {
         // insert code here...
         NSLog(@"Simple Implementation of Strassen's Algorithm");
         
-        Matrix *matA = [[Matrix alloc] initWithPower2:2 inMax:10];
-        Matrix *matB = [[Matrix alloc] initWithPower2:2 inMax:10];
-        Matrix *matF = [[Matrix alloc] initWithPower2:2 inMax:10];
-        Matrix *matG = [[Matrix alloc] initWithPower2:2 inMax:10];
+        Matrix *matA = [[Matrix alloc] initWithPower2:3 inMax:10];
+        Matrix *matB = [[Matrix alloc] initWithPower2:3 inMax:10];
+        Matrix *matF = [[Matrix alloc] initWithPower2:3 inMax:10];
+        Matrix *matG = [[Matrix alloc] initWithPower2:3 inMax:10];
         
         // Print matrices.
         [matA printMatrix];
@@ -490,17 +531,17 @@ int main(int argc, const char * argv[]) {
         [matF printMatrix];
         [matG printMatrix];
         
-        Matrix *matC = [matA addMatrixInRange:matA rowBiMin:0 rowBiMax:2 rowBjMin:0 rowBjMax:2 rowAiMin:0 rowAiMax:2 rowAjMin:0 rowAjMax:2];
-        [matC printMatrix];
-
-        Matrix *matD = [matA getSubmatrix:0 rowMaxi:1 colMinj:1 colMaxj:2];
-        [matD printMatrix];
-        
-        Matrix *matE = [matA subtractMatrix:matB];
-        [matE printMatrix];
-        
-        Matrix *matH = Merge(matA, matB, matF, matG);
-        [matH printMatrix];
+//        Matrix *matC = [matA addMatrixInRange:matA rowBiMin:0 rowBiMax:2 rowBjMin:0 rowBjMax:2 rowAiMin:0 rowAiMax:2 rowAjMin:0 rowAjMax:2];
+//        [matC printMatrix];
+//
+//        Matrix *matD = [matA getSubmatrix:0 rowMaxi:1 colMinj:1 colMaxj:2];
+//        [matD printMatrix];
+//        
+//        Matrix *matE = [matA subtractMatrix:matB];
+//        [matE printMatrix];
+//        
+//        Matrix *matH = Merge(matA, matB, matF, matG);
+//        [matH printMatrix];
         
         Matrix *Result = strassenMatrixMultiplication(matA, matB);
         [Result printMatrix];
