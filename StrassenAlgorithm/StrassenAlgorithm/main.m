@@ -251,12 +251,39 @@
 
 @end
 
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+/// Merge 4 Matrices into 1;
+Matrix* Merge(Matrix* C1, Matrix* C2, Matrix* C3, Matrix* C4)
+{
+    int dim = [C1 mDim];
+    
+    // Create zero matrix
+    Matrix *tmp = [[Matrix alloc] initWithPower2:2*dim inMax:1];
+    
+    for (int i = 0; i < 2*dim; ++i)
+    {
+        for (int j = 0; j < 2*dim; ++j)
+        {
+            // Merge the matrices here.
+        }
+    }
+    
+    
+    return tmp;
+}
 
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 /// Strassen Algorithm
 Matrix* strassenMatrixMultiplication(Matrix *A, Matrix *B)
 {
+    // Base case
+    if ([A mDim] <=1)
+    {
+        
+    }
+    
     // Get dimensions
     NSInteger begin = 0;
     NSInteger mid = [A mDim]/2;
@@ -384,6 +411,7 @@ Matrix* strassenMatrixMultiplication(Matrix *A, Matrix *B)
     Matrix *C21 = [M2 addMatrix:M4];
     Matrix *C22 = [M1 subtractMatrix:[M2 addMatrix:[M3 addMatrix:m6]]];
     
+    // Merge C11..C22 into larger matrix.
     
     
     // Add A_11 to B_11
