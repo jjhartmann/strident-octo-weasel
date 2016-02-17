@@ -379,7 +379,10 @@ Matrix* strassenMatrixMultiplication(Matrix *A, Matrix *B)
     Matrix *m7 = strassenMatrixMultiplication(S9, S10);
     
     // Merge Stage: M1..M7 and build components C11..C22
-    
+    Matrix *C11 = [M1 addMatrix:[M4 subtractMatrix:[M5 addMatrix:m7]]];
+    Matrix *C12 = [M3 addMatrix:M5];
+    Matrix *C21 = [M2 addMatrix:M4];
+    Matrix *C22 = [M1 subtractMatrix:[M2 addMatrix:[M3 addMatrix:m6]]];
     
     
     
