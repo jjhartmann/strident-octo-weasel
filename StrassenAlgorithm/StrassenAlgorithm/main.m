@@ -17,6 +17,7 @@
 @property NSInteger mDim;
 
 - (id) initWithPower2: (NSInteger) n inMax:(NSInteger) max;
+- (id) initWithInt: (NSInteger) n inMax:(NSInteger) max;
 - (NSInteger) at: (NSInteger) pos_i jPos: (NSInteger) pos_j;
 - (void) printMatrix;
 - (Matrix*) addMatrixInRange:(Matrix *)inB
@@ -92,6 +93,32 @@
     return self;
 }
 
+///////////////////////////////////////////////////////////////////
+/// Create a matrix based on dimensions
+- (id) initWithInt:(NSInteger)n inMax:(NSInteger) max
+{
+    self = [super init];
+    if (self)
+    {
+        // Set Dimension
+        _mDim = n;
+        
+        // Create matrix buffer
+        _mMatrix = (NSInteger*) malloc(sizeof(NSInteger) * n * n);
+        
+        // Build matrix
+        for (NSInteger i = 0; i < n; ++i)
+        {
+            for (NSInteger j = 0; j < n; ++j)
+            {
+                NSInteger tmp = random() % max;;
+                _mMatrix[i * n + j] = tmp;
+            }
+        }
+    }
+    
+    return self;
+}
 
 ///////////////////////////////////////////////////////////////////
 /// Get position i and j from Matrix
@@ -138,14 +165,14 @@
                         rowAjMin:(NSInteger)A_Minj
                         rowAjMax:(NSInteger)A_Maxj
 {
-    NSInteger dimB = B_Maxi - B_Mini + 1;
-    NSInteger dimA = A_Maxi - A_Mini + 1;
+    NSInteger dimB = B_Maxi - B_Mini;
+    NSInteger dimA = A_Maxi - A_Mini;
     
     // Verify same dimensions
-    if (dimA != dimB || A_Maxi >= _mDim || A_Maxj >= _mDim) return nil;
+    if (dimA != dimB || A_Maxi > _mDim || A_Maxj > _mDim) return nil;
     
     // Create new zero matrix with given dimensions.
-    Matrix *tmp = [[Matrix alloc] initWithPower2: dimA inMax:1]; // Don't Own
+    Matrix *tmp = [[Matrix alloc] initWithInt: dimA inMax:1]; // Don't Own
     
     for (NSInteger i = 0; i < dimA; ++i)
     {
@@ -185,11 +212,11 @@
 /// Get a submatrix from self.
 - (Matrix*) getSubmatrix:(NSInteger)min_i rowMaxi:(NSInteger)max_i colMinj:(NSInteger)min_j colMaxj:(NSInteger)max_j
 {
-    NSInteger rowDim = max_i - min_i + 1;
-    NSInteger colDim = max_j - min_j + 1;
+    NSInteger rowDim = max_i - min_i;
+    NSInteger colDim = max_j - min_j;
     if (rowDim != colDim) return nil;
     
-    Matrix *tmp = [[Matrix alloc] initWithPower2:rowDim inMax:1]; // Don't Own
+    Matrix *tmp = [[Matrix alloc] initWithInt:rowDim inMax:1]; // Don't Own
     
     for (int i = 0; i < rowDim; ++i)
     {
@@ -211,7 +238,7 @@
     if (_mDim != [inB mDim]) return nil;
     
     
-    Matrix *tmp = [[Matrix alloc] initWithPower2:_mDim inMax:1];
+    Matrix *tmp = [[Matrix alloc] initWithInt:_mDim inMax:1];
     
     for (int i = 0; i < _mDim; ++i)
     {
@@ -234,7 +261,7 @@
     if (_mDim != [inB mDim]) return nil;
     
     
-    Matrix *tmp = [[Matrix alloc] initWithPower2:_mDim inMax:1];
+    Matrix *tmp = [[Matrix alloc] initWithInt:_mDim inMax:1];
     
     for (int i = 0; i < _mDim; ++i)
     {
@@ -259,7 +286,7 @@ Matrix* Merge(Matrix* C11, Matrix* C12, Matrix* C21, Matrix* C22)
     int dim = [C11 mDim];
     
     // Create zero matrix
-    Matrix *tmp = [[Matrix alloc] initWithPower2:2*dim inMax:1];
+    Matrix *tmp = [[Matrix alloc] initWithInt:2*dim inMax:1];
     
     for (int i = 0; i < 2*dim; ++i)
     {
@@ -306,7 +333,12 @@ Matrix* strassenMatrixMultiplication(Matrix *A, Matrix *B)
     // Base case
     if ([A mDim] <=1)
     {
+        NSInteger a = [A getAt:0 pos_j:0];
+        NSInteger b = [B getAt:0 pos_j:0];
+        NSInteger res = a * b;
         
+        [A setAt:res pos_i:0 pos_j:0];
+        return A;
     }
     
     // Get dimensions
@@ -438,15 +470,7 @@ Matrix* strassenMatrixMultiplication(Matrix *A, Matrix *B)
     
     // Merge C11..C22 into larger matrix.
     Matrix *C = Merge(C11, C12, C21, C22);
-    
-    // Add A_11 to B_11
-//    Matrix *S1 =
-    
-    
-    
-    
-    
-    return nil;
+    return C;
 }
 
 
@@ -466,17 +490,20 @@ int main(int argc, const char * argv[]) {
         [matF printMatrix];
         [matG printMatrix];
         
-//        Matrix *matC = [matA addMatrixInRange:matA rowBiMin:2 rowBiMax:3 rowBjMin:2 rowBjMax:3 rowAiMin:2 rowAiMax:3 rowAjMin:2 rowAjMax:3];
-//        [matC printMatrix];
-//        
-//        Matrix *matD = [matA getSubmatrix:1 rowMaxi:2 colMinj:1 colMaxj:2];
-//        [matD printMatrix];
-//        
-//        Matrix *matE = [matA subtractMatrix:matB];
-//        [matE printMatrix];
+        Matrix *matC = [matA addMatrixInRange:matA rowBiMin:0 rowBiMax:2 rowBjMin:0 rowBjMax:2 rowAiMin:0 rowAiMax:2 rowAjMin:0 rowAjMax:2];
+        [matC printMatrix];
+
+        Matrix *matD = [matA getSubmatrix:0 rowMaxi:1 colMinj:1 colMaxj:2];
+        [matD printMatrix];
+        
+        Matrix *matE = [matA subtractMatrix:matB];
+        [matE printMatrix];
         
         Matrix *matH = Merge(matA, matB, matF, matG);
         [matH printMatrix];
+        
+        Matrix *Result = strassenMatrixMultiplication(matA, matB);
+        [Result printMatrix];
     }
     return 0;
 }
