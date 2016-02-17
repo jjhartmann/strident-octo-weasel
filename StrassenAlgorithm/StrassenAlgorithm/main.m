@@ -20,16 +20,20 @@
 - (NSInteger) at: (NSInteger) pos_i jPos: (NSInteger) pos_j;
 - (void) printMatrix;
 - (Matrix*) addMatrixInRange:(Matrix *)inB
-                       rowBiMin:(NSInteger)B_Mini
-                       rowBiMax:(NSInteger)B_Maxi
-                       rowBjMin:(NSInteger)B_Minj
-                       rowBjMax:(NSInteger)B_Maxj
-                       rowAiMin:(NSInteger)A_Mini
-                       rowAiMax:(NSInteger)A_Maxi
-                       rowAjMin:(NSInteger)A_Minj
-                       rowAjMax:(NSInteger)A_Maxj;
+                    rowBiMin:(NSInteger)B_Mini
+                    rowBiMax:(NSInteger)B_Maxi
+                    rowBjMin:(NSInteger)B_Minj
+                    rowBjMax:(NSInteger)B_Maxj
+                    rowAiMin:(NSInteger)A_Mini
+                    rowAiMax:(NSInteger)A_Maxi
+                    rowAjMin:(NSInteger)A_Minj
+                    rowAjMax:(NSInteger)A_Maxj;
 - (void) setAt:(NSInteger) inData pos_i:(NSInteger) i pos_j:(NSInteger) j;
 - (NSInteger) getAt:(NSInteger) i pos_j:(NSInteger) j;
+- (Matrix*) getSubmatrix:(NSInteger)min_i
+                 rowMaxi:(NSInteger)max_i
+                 colMinj:(NSInteger)min_j
+                 colMaxj:(NSInteger) max_j;
 
 
 @end
@@ -175,12 +179,35 @@
     return _mMatrix[i * _mDim + j];
 }
 
+///////////////////////////////////////////////////////////////////
+/// Get a submatrix from self.
+- (Matrix*) getSubmatrix:(NSInteger)min_i rowMaxi:(NSInteger)max_i colMinj:(NSInteger)min_j colMaxj:(NSInteger)max_j
+{
+    NSInteger rowDim = max_i - min_i + 1;
+    NSInteger colDim = max_j - min_j + 1;
+    if (rowDim != colDim) return nil;
+    
+    Matrix *tmp = [[Matrix alloc] initWithPower2:rowDim inMax:1]; // Don't Own
+    
+    for (int i = 0; i < rowDim; ++i)
+    {
+        for (int j = 0; j < colDim; ++j)
+        {
+            NSInteger val = _mMatrix[(i + min_i) * _mDim + (j + min_j)];
+            [tmp setAt:val pos_i:i pos_j:j];
+        }
+    }
+    
+    return tmp;
+}
+
 @end
 
 
 ///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
 /// Strassen Algorithm
-NSInteger* strassenMatrixMultiplication(Matrix *A, Matrix *B)
+Matrix* strassenMatrixMultiplication(Matrix *A, Matrix *B)
 {
     // Get dimensions
     NSInteger begin = 0;
@@ -289,7 +316,9 @@ NSInteger* strassenMatrixMultiplication(Matrix *A, Matrix *B)
                              rowAjMax:end];
     
     
-    
+    // Conquer and on S1..S10
+    Matrix *M1 = strassenMatrixMultiplication(S1, S2);
+//    Matrix *M2 = strassenMatrixMultiplication(S3, <#Matrix *B#>)
     
     
     
@@ -310,8 +339,8 @@ int main(int argc, const char * argv[]) {
         // insert code here...
         NSLog(@"Simple Implementation of Strassen's Algorithm");
         
-        Matrix *matA = [[Matrix alloc] initWithPower2:3 inMax:50];
-        Matrix *matB = [[Matrix alloc] initWithPower2:3 inMax:50];
+        Matrix *matA = [[Matrix alloc] initWithPower2:3 inMax:10];
+        Matrix *matB = [[Matrix alloc] initWithPower2:3 inMax:10];
         
         // Print matrices.
         [matA printMatrix];
@@ -319,6 +348,9 @@ int main(int argc, const char * argv[]) {
         
         Matrix *matC = [matA addMatrixInRange:matA rowBiMin:2 rowBiMax:3 rowBjMin:2 rowBjMax:3 rowAiMin:2 rowAiMax:3 rowAjMin:2 rowAjMax:3];
         [matC printMatrix];
+        
+        Matrix *matD = [matA getSubmatrix:1 rowMaxi:2 colMinj:1 colMaxj:2];
+        [matD printMatrix];
     }
     return 0;
 }
