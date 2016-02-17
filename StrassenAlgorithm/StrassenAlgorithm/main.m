@@ -187,6 +187,113 @@ NSInteger* strassenMatrixMultiplication(Matrix *A, Matrix *B)
     NSInteger mid = [A mDim]/2;
     NSInteger end = [A mDim];
     
+    // Build S1 .. S10
+    Matrix *S1 = [A addMatrixInRange:A
+                           rowBiMin:begin
+                           rowBiMax:mid
+                           rowBjMin:begin
+                           rowBjMax:mid
+                           rowAiMin:mid
+                           rowAiMax:end
+                           rowAjMin:mid
+                           rowAjMax:end];
+    
+    Matrix *S2 = [B addMatrixInRange:B
+                            rowBiMin:mid
+                            rowBiMax:end
+                            rowBjMin:mid
+                            rowBjMax:end
+                            rowAiMin:begin
+                            rowAiMax:mid
+                            rowAjMin:begin
+                            rowAjMax:mid];
+    
+    Matrix *S3 = [A addMatrixInRange:A
+                            rowBiMin:mid
+                            rowBiMax:end
+                            rowBjMin:begin
+                            rowBjMax:mid
+                            rowAiMin:mid
+                            rowAiMax:end
+                            rowAjMin:mid
+                            rowAjMax:end];
+    
+    Matrix *S4 = [B addMatrixInRange:B
+                            rowBiMin:begin
+                            rowBiMax:mid
+                            rowBjMin:mid
+                            rowBjMax:end
+                            rowAiMin:mid
+                            rowAiMax:end
+                            rowAjMin:mid
+                            rowAjMax:end];
+    
+    Matrix *S5 = [B addMatrixInRange:B
+                            rowBiMin:mid
+                            rowBiMax:end
+                            rowBjMin:begin
+                            rowBjMax:mid
+                            rowAiMin:begin
+                            rowAiMax:mid
+                            rowAjMin:begin
+                            rowAjMax:mid];
+    
+    Matrix *S6 = [A addMatrixInRange:A
+                            rowBiMin:begin
+                            rowBiMax:mid
+                            rowBjMin:begin
+                            rowBjMax:mid
+                            rowAiMin:begin
+                            rowAiMax:mid
+                            rowAjMin:mid
+                            rowAjMax:end];
+    
+    Matrix *S7 = [A addMatrixInRange:A
+                            rowBiMin:mid
+                            rowBiMax:end
+                            rowBjMin:begin
+                            rowBjMax:mid
+                            rowAiMin:begin
+                            rowAiMax:mid
+                            rowAjMin:begin
+                            rowAjMax:mid];
+    
+    Matrix *S8 = [B addMatrixInRange:B
+                            rowBiMin:begin
+                            rowBiMax:mid
+                            rowBjMin:begin
+                            rowBjMax:mid
+                            rowAiMin:begin
+                            rowAiMax:mid
+                            rowAjMin:mid
+                            rowAjMax:end];
+    
+    Matrix *S9 = [A addMatrixInRange:A
+                            rowBiMin:begin
+                            rowBiMax:mid
+                            rowBjMin:mid
+                            rowBjMax:end
+                            rowAiMin:mid
+                            rowAiMax:end
+                            rowAjMin:mid
+                            rowAjMax:end];
+    
+    Matrix *S10 = [B addMatrixInRange:B
+                             rowBiMin:mid
+                             rowBiMax:end
+                             rowBjMin:begin
+                             rowBjMax:mid
+                             rowAiMin:mid
+                             rowAiMax:end
+                             rowAjMin:mid
+                             rowAjMax:end];
+    
+    
+    
+    
+    
+    
+    
     // Add A_11 to B_11
 //    Matrix *S1 =
     
@@ -210,7 +317,7 @@ int main(int argc, const char * argv[]) {
         [matA printMatrix];
         [matB printMatrix];
         
-        Matrix *matC = [matA addMatrixInRange:matB rowBiMin:2 rowBiMax:3 rowBjMin:2 rowBjMax:3 rowAiMin:2 rowAiMax:3 rowAjMin:2 rowAjMax:3];
+        Matrix *matC = [matA addMatrixInRange:matA rowBiMin:2 rowBiMax:3 rowBjMin:2 rowBjMax:3 rowAiMin:2 rowAiMax:3 rowAjMin:2 rowAjMax:3];
         [matC printMatrix];
     }
     return 0;
