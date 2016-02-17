@@ -34,6 +34,8 @@
                  rowMaxi:(NSInteger)max_i
                  colMinj:(NSInteger)min_j
                  colMaxj:(NSInteger) max_j;
+- (Matrix*) addMatrix:(Matrix*) inB;
+- (Matrix*) subtractMatrix:(Matrix*) inB;
 
 
 @end
@@ -201,6 +203,52 @@
     return tmp;
 }
 
+///////////////////////////////////////////////////////////////////
+/// Add entire matrix and return new matrix
+- (Matrix*) addMatrix:(Matrix *)inB
+{
+    // Bound checking.
+    if (_mDim != [inB mDim]) return nil;
+    
+    
+    Matrix *tmp = [[Matrix alloc] initWithPower2:_mDim inMax:1];
+    
+    for (int i = 0; i < _mDim; ++i)
+    {
+        for (int j = 0; j < _mDim; ++j)
+        {
+            NSInteger vala = [self getAt:i pos_j:j];
+            NSInteger valb = [inB getAt:i pos_j:j];
+            [tmp setAt:vala + valb pos_i:i pos_j:j];
+        }
+    }
+    
+    return tmp;
+}
+
+///////////////////////////////////////////////////////////////////
+/// Subtract entire matrix and return new matrix
+- (Matrix*) subtractMatrix:(Matrix *)inB
+{
+    // Bound checking.
+    if (_mDim != [inB mDim]) return nil;
+    
+    
+    Matrix *tmp = [[Matrix alloc] initWithPower2:_mDim inMax:1];
+    
+    for (int i = 0; i < _mDim; ++i)
+    {
+        for (int j = 0; j < _mDim; ++j)
+        {
+            NSInteger vala = [self getAt:i pos_j:j];
+            NSInteger valb = [inB getAt:i pos_j:j];
+            [tmp setAt:vala - valb pos_i:i pos_j:j];
+        }
+    }
+    
+    return tmp;
+}
+
 @end
 
 
@@ -330,7 +378,7 @@ Matrix* strassenMatrixMultiplication(Matrix *A, Matrix *B)
     Matrix *m6 = strassenMatrixMultiplication(S7, S8);
     Matrix *m7 = strassenMatrixMultiplication(S9, S10);
     
-    
+    // Merge Stage: M1..M7 and build components C11..C22
     
     
     
@@ -363,6 +411,9 @@ int main(int argc, const char * argv[]) {
         
         Matrix *matD = [matA getSubmatrix:1 rowMaxi:2 colMinj:1 colMaxj:2];
         [matD printMatrix];
+        
+        Matrix *matE = [matA subtractMatrix:matB];
+        [matE printMatrix];
     }
     return 0;
 }
