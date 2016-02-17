@@ -254,9 +254,9 @@
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 /// Merge 4 Matrices into 1;
-Matrix* Merge(Matrix* C1, Matrix* C2, Matrix* C3, Matrix* C4)
+Matrix* Merge(Matrix* C11, Matrix* C12, Matrix* C21, Matrix* C22)
 {
-    int dim = [C1 mDim];
+    int dim = [C11 mDim];
     
     // Create zero matrix
     Matrix *tmp = [[Matrix alloc] initWithPower2:2*dim inMax:1];
@@ -266,6 +266,31 @@ Matrix* Merge(Matrix* C1, Matrix* C2, Matrix* C3, Matrix* C4)
         for (int j = 0; j < 2*dim; ++j)
         {
             // Merge the matrices here.
+            NSInteger val = 0;
+            if (i < dim && j < dim)
+            {
+                // C11
+                val = [C11 getAt:i pos_j:j];
+            }
+            else if (i < dim && j >= dim)
+            {
+                // C12
+                val = [C12 getAt:i pos_j:j - dim];
+                
+            }
+            else if (i >= dim && j < dim)
+            {
+                // C21
+                val = [C21 getAt:i - dim pos_j:j];
+            }
+            else
+            {
+                // C22
+                val = [C22 getAt:i - dim pos_j:j - dim];
+            }
+            
+            // Set val in new matrix
+            [tmp setAt:val pos_i:i pos_j:j];
         }
     }
     
@@ -396,7 +421,7 @@ Matrix* strassenMatrixMultiplication(Matrix *A, Matrix *B)
     Matrix *A22 = [A getSubmatrix:mid rowMaxi:end colMinj:mid colMaxj:end];
     Matrix *B22 = [B getSubmatrix:mid rowMaxi:end colMinj:mid colMaxj:end];
     
-    // Conquer and on S1..S10
+    // Conquer on S1..S10
     Matrix *M1 = strassenMatrixMultiplication(S1, S2);
     Matrix *M2 = strassenMatrixMultiplication(S3, B11);
     Matrix *M3 = strassenMatrixMultiplication(A11, S4);
@@ -412,7 +437,7 @@ Matrix* strassenMatrixMultiplication(Matrix *A, Matrix *B)
     Matrix *C22 = [M1 subtractMatrix:[M2 addMatrix:[M3 addMatrix:m6]]];
     
     // Merge C11..C22 into larger matrix.
-    
+    Matrix *C = Merge(C11, C12, C21, C22);
     
     // Add A_11 to B_11
 //    Matrix *S1 =
@@ -430,21 +455,28 @@ int main(int argc, const char * argv[]) {
         // insert code here...
         NSLog(@"Simple Implementation of Strassen's Algorithm");
         
-        Matrix *matA = [[Matrix alloc] initWithPower2:3 inMax:10];
-        Matrix *matB = [[Matrix alloc] initWithPower2:3 inMax:10];
+        Matrix *matA = [[Matrix alloc] initWithPower2:2 inMax:10];
+        Matrix *matB = [[Matrix alloc] initWithPower2:2 inMax:10];
+        Matrix *matF = [[Matrix alloc] initWithPower2:2 inMax:10];
+        Matrix *matG = [[Matrix alloc] initWithPower2:2 inMax:10];
         
         // Print matrices.
         [matA printMatrix];
         [matB printMatrix];
+        [matF printMatrix];
+        [matG printMatrix];
         
-        Matrix *matC = [matA addMatrixInRange:matA rowBiMin:2 rowBiMax:3 rowBjMin:2 rowBjMax:3 rowAiMin:2 rowAiMax:3 rowAjMin:2 rowAjMax:3];
-        [matC printMatrix];
+//        Matrix *matC = [matA addMatrixInRange:matA rowBiMin:2 rowBiMax:3 rowBjMin:2 rowBjMax:3 rowAiMin:2 rowAiMax:3 rowAjMin:2 rowAjMax:3];
+//        [matC printMatrix];
+//        
+//        Matrix *matD = [matA getSubmatrix:1 rowMaxi:2 colMinj:1 colMaxj:2];
+//        [matD printMatrix];
+//        
+//        Matrix *matE = [matA subtractMatrix:matB];
+//        [matE printMatrix];
         
-        Matrix *matD = [matA getSubmatrix:1 rowMaxi:2 colMinj:1 colMaxj:2];
-        [matD printMatrix];
-        
-        Matrix *matE = [matA subtractMatrix:matB];
-        [matE printMatrix];
+        Matrix *matH = Merge(matA, matB, matF, matG);
+        [matH printMatrix];
     }
     return 0;
 }
