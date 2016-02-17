@@ -315,10 +315,22 @@ Matrix* strassenMatrixMultiplication(Matrix *A, Matrix *B)
                              rowAjMin:mid
                              rowAjMax:end];
     
+    // Get Submatrices
+    Matrix *B11 = [B getSubmatrix:begin rowMaxi:mid colMinj:begin colMaxj:mid];
+    Matrix *A11 = [A getSubmatrix:begin rowMaxi:mid colMinj:begin colMaxj:mid];
+    Matrix *A22 = [A getSubmatrix:mid rowMaxi:end colMinj:mid colMaxj:end];
+    Matrix *B22 = [B getSubmatrix:mid rowMaxi:end colMinj:mid colMaxj:end];
     
     // Conquer and on S1..S10
     Matrix *M1 = strassenMatrixMultiplication(S1, S2);
-//    Matrix *M2 = strassenMatrixMultiplication(S3, <#Matrix *B#>)
+    Matrix *M2 = strassenMatrixMultiplication(S3, B11);
+    Matrix *M3 = strassenMatrixMultiplication(A11, S4);
+    Matrix *M4 = strassenMatrixMultiplication(A22, S5);
+    Matrix *M5 = strassenMatrixMultiplication(S6, B22);
+    Matrix *m6 = strassenMatrixMultiplication(S7, S8);
+    Matrix *m7 = strassenMatrixMultiplication(S9, S10);
+    
+    
     
     
     
