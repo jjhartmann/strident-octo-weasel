@@ -42,6 +42,20 @@ void CreateRandomBoxes(vector<Box> &boxes, int n, int MAX)
     }
 }
 
+////////////////////////////////////////////////////////////////
+// Solution Class
+class Solution
+{
+public:
+    template<typename T>
+    static void StackBoxes(vector<Box> &boxes)
+    {
+
+    }
+
+private:
+};
+
 int main()
 {
     cout << "Stack boxes on top of each other with strictly larger boxes on top." << endl;
