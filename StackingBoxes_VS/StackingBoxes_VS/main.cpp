@@ -47,19 +47,38 @@ void CreateRandomBoxes(vector<Box> &boxes, int n, int MAX)
 class Solution
 {
 public:
-    template<typename T>
     static void StackBoxes(vector<Box> &boxes)
     {
 
     }
 
 private:
+    static void StackBoxes(vector<Box> &boxes, int a, int b)
+    {
+
+        if (a - b <= 0) return;
+
+        int mid = ceil((a - b) / 2);
+        StackBoxes(boxes, a, mid);
+        StackBoxes(boxes, mid + 1, b);
+
+        // Merge results
+        merge(boxes, a, mid, mid + 1, b);
+    }
+
+    static void merge(vector<Box> &boxes, int a, int b, int c, int d)
+    {
+
+    }
+
 };
 
 int main()
 {
     cout << "Stack boxes on top of each other with strictly larger boxes on top." << endl;
-    
+    vector<Box> boxes;
+    CreateRandomBoxes(boxes, 10, 10);
+
 
 
     return 0;
