@@ -14,9 +14,9 @@ using namespace std;
 struct Box
 {
     Box() :
-        height(0),
-        width(0),
-        depth(0)
+        height(-1),
+        width(-1),
+        depth(-1)
     {}
 
     Box(int h, int w, int d) :
@@ -26,10 +26,20 @@ struct Box
         volumn(h*w*d)
     {}
 
-    bool operator==(const Box &other)
+    bool operator==(const Box &other) const
     {
         return this->depth == other.depth && this->height == other.height &&
             this->width == other.width && this->volumn == other.volumn;
+    }
+
+    bool empty()
+    {
+        return height < 0 && width < 0 && depth < 0;
+    }
+
+    bool canBeAbove(const Box &b)
+    {
+        return height < b.height && width < b.width && depth < b.depth;
     }
 
     int height;
@@ -111,9 +121,62 @@ public:
 
 
     // Alternative using DP and Recursion
-    static vector<Box> StackBoxes(vector<Box> &boxes, Box bottom, unordered_map<Box, vector<Box>> stack_map)
+    static vector<Box> StackBoxes(vector<Box> &boxes, unordered_map<Box, vector<Box>> &stack_map)
     {
+        vector<Box> res;
+        for (int i = 0; i < boxes.size(); ++i)
+        {
+            vector<Box> tmp;
+            if (stack_map.find(boxes[i]) == stack_map.end())
+            {
+                tmp = StackBoxes(boxes, stack_map, boxes[i]);
+            }
+            else
+            {
+                tmp = stack_map[boxes[i]];
+            }
 
+            if (tmp.size() > res.size())
+            {
+                res = tmp;
+            }
+        }
+
+        return res;
+    }
+
+    static vector<Box> StackBoxes(vector<Box> &boxes, unordered_map<Box, vector<Box>> &stack_map, Box bottom)
+    {
+        if (!bottom.empty() && stack_map.find(bottom) != stack_map.end())
+        {
+            return stack_map[bottom];
+        }
+
+        int MAX_Height = 0;
+        vector<Box> max_stack;
+
+        // Check every combination of box as bottom
+        for (int i = 0; i < boxes.size(); ++i)
+        {
+            if (boxes[i].canBeAbove(bottom))
+            {
+                vector<Box> nBoxes = StackBoxes(boxes, stack_map, boxes[i]);
+                int height = nBoxes.size();
+                if (height > MAX_Height)
+                {
+                    MAX_Height = height;
+                    max_stack = nBoxes;
+                }
+            }
+        }
+
+        if (!bottom.empty())
+            max_stack.insert(max_stack.begin(), bottom);
+
+        // Place bottom in hashmap
+        stack_map[bottom] = max_stack;
+
+        return max_stack;
     }
 
 private:
@@ -208,9 +271,15 @@ int main()
 {
     cout << "Stack boxes on top of each other with strictly larger boxes on top." << endl;
     vector<Box> boxes;
-    CreateRandomBoxes(boxes, 10000, 50);
+    vector<Box> boxes2;
+    CreateRandomBoxes(boxes, 50, 50);
+    boxes2 = boxes;
 
-    Solution::StackBoxes(boxes);
+    vector<Box> sol1 = Solution::StackBoxes(boxes);
+
+    // Alt
+    unordered_map<Box, vector<Box>> stack_map;
+    vector<Box> sol2 = Solution::StackBoxes(boxes2, stack_map);
 
     return 0;
 }
