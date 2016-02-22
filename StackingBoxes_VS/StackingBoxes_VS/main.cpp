@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 #include <ctime>
 #include <cstdlib>
 
@@ -25,6 +26,12 @@ struct Box
         volumn(h*w*d)
     {}
 
+    bool operator==(const Box &other)
+    {
+        return this->depth == other.depth && this->height == other.height &&
+            this->width == other.width && this->volumn == other.volumn;
+    }
+
     int height;
     int width;
     int depth;
@@ -38,6 +45,22 @@ enum BOXDIM
     DEPTH,
     VOLUMN
 };
+
+// Creating cutom hash function for Box class
+namespace std {
+    template<>
+    struct hash <Box>
+    {
+        std::size_t operator() (Box const& k) const
+        {
+            using std::size_t;
+            using std::hash;
+            
+            // Compute hash for Box Key
+            return (((hash<int>()(k.depth) ^ (hash<int>()(k.height) << 1)) >> 1) ^ ((hash<int>()(k.depth) ^ (hash<int>()(k.volumn) << 1) >> 1)));
+        }
+    };
+}
 
 ////////////////////////////////////////////////////////////////
 // Create Random Boxes
@@ -83,6 +106,14 @@ public:
         }
 
         return stacked;
+    }
+
+
+
+    // Alternative using DP and Recursion
+    static vector<Box> StackBoxes(vector<Box> &boxes, Box bottom, unordered_map<Box, vector<Box>> stack_map)
+    {
+
     }
 
 private:
