@@ -21,19 +21,22 @@ struct Box
     Box(int h, int w, int d) :
         height(h),
         width(w),
-        depth(d)
+        depth(d),
+        volumn(h*w*d)
     {}
 
     int height;
     int width;
     int depth;
+    int volumn;
 };
 
 enum BOXDIM
 {
     HEIGHT = 0,
     WIDTH,
-    DEPTH
+    DEPTH,
+    VOLUMN
 };
 
 ////////////////////////////////////////////////////////////////
@@ -57,16 +60,38 @@ public:
     static vector<Box> StackBoxes(vector<Box> &boxes)
     {
         // Sort on the w, h, and d. Merge sort. 
+        int a = 0;
+        int b = boxes.size() - 1;
 
+        // Sort Via MergeSort (Stable)
+        StackBoxes(boxes, a, b, HEIGHT);
+        StackBoxes(boxes, a, b, WIDTH);
+        StackBoxes(boxes, a, b, DEPTH);
+        StackBoxes(boxes, a, b, VOLUMN);
+
+        // Create array of strictly smaller boxes in increasing order. 
+        vector<Box> stacked;
+        stacked.push_back(boxes.back());
+        for (int i = boxes.size() - 2; i >= 0; --i)
+        {
+            if (stacked.back().height > boxes[i].height &&
+                stacked.back().width > boxes[i].width &&
+                stacked.back().depth > boxes[i].depth)
+            {
+                stacked.push_back(boxes[i]);
+            }
+        }
+
+        return stacked;
     }
 
 private:
     static void StackBoxes(vector<Box> &boxes, int a, int b, BOXDIM dim)
     {
 
-        if (a - b <= 0) return;
+        if (b - a <= 0) return;
 
-        int mid = ceil((a - b) / 2);
+        int mid = a + ceil((b - a) / 2);
         StackBoxes(boxes, a, mid, dim);
         StackBoxes(boxes, mid + 1, b, dim);
 
@@ -102,18 +127,23 @@ private:
                 vala = boxes[a].depth;
                 valb = boxes[c].depth;
                 break;
+
+            case 3: // VOLUMN
+                vala = boxes[a].volumn;
+                valb = boxes[c].volumn;
+                break;
             }
 
             // Build sorted vec
-            if (vala < valb)
+            if (vala <= valb)
             {
                 buffer.push_back(boxes[a]);
                 a++;
             }
             else
             {
-                buffer.push_back(boxes[b]);
-                b++;
+                buffer.push_back(boxes[c]);
+                c++;
             }
         }
 
@@ -126,8 +156,8 @@ private:
 
         while (c <= d)
         {
-            buffer.push_back(boxes[b]);
-            b++;
+            buffer.push_back(boxes[c]);
+            c++;
         }
 
         // Place Sorted Vec into boxes array.
@@ -147,9 +177,9 @@ int main()
 {
     cout << "Stack boxes on top of each other with strictly larger boxes on top." << endl;
     vector<Box> boxes;
-    CreateRandomBoxes(boxes, 10, 10);
+    CreateRandomBoxes(boxes, 10000, 50);
 
-
+    Solution::StackBoxes(boxes);
 
     return 0;
 }
