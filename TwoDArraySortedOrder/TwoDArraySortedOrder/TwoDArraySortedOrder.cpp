@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include <algorithm>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -50,6 +51,21 @@ void SortTwoDArray(vector< vector<int> > &mat)
 
 
 
+void PrintMatrix(vector<vector<int>> &mat)
+{
+    for (const auto &rowitr : mat)
+    {
+        for (const auto &colitr : rowitr)
+        {
+            cout << colitr << "\t";
+        }
+
+        cout << endl;
+    }
+
+    cout << endl;
+}
+
 
 int main()
 {
@@ -60,9 +76,10 @@ int main()
         { 7,5,4,5,2},
     }; 
     
-
+    PrintMatrix(matrix);
     SortTwoDArray(matrix);
-    
+    PrintMatrix(matrix);
+
     return 0;
 }
 
