@@ -68,6 +68,30 @@ void PrintList(Node<T> *n)
     cout << endl;
 }
 
+
+// Reverse the linked List. 
+template <typename T>
+Node<T>* ReverseList(Node<T> *head)
+{
+    if (!head) return nullptr;
+    if (!head->getNext()) return head;
+    if (!head->getNext()->getNext())
+    {
+        Node<T> *tmp = head;
+        head = tmp->getNext();
+        head->setNext(tmp);
+        tmp->setNext(nullptr);
+    }
+
+    // REverse list > 2
+
+
+
+
+}
+
+
+
 // To execute C++, please define "int main()"
 int main() {
 
