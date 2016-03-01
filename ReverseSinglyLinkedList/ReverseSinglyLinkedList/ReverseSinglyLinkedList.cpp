@@ -81,13 +81,27 @@ Node<T>* ReverseList(Node<T> *head)
         head = tmp->getNext();
         head->setNext(tmp);
         tmp->setNext(nullptr);
+        return head;
     }
 
     // REverse list > 2
+    Node<T> *ptr1 = head->getNext();
+    Node<T> *ptr2 = ptr1->getNext();
+    head->setNext(nullptr);
+    
+    while (ptr2)
+    {
+        ptr1->setNext(head);
+        head = ptr1;
+        ptr1 = ptr2;
+        ptr2 = ptr2->getNext();
+    }
 
-
-
-
+    // Last switch
+    ptr1->setNext(head);
+    head = ptr1;
+    
+    return head;
 }
 
 
@@ -95,9 +109,10 @@ Node<T>* ReverseList(Node<T> *head)
 // To execute C++, please define "int main()"
 int main() {
 
-    Node<int> *head = BuildLinkedList(5, 10);
+    Node<int> *head = BuildLinkedList(20, 50);
     PrintList<int>(head);
-
+    head = ReverseList(head);
+    PrintList(head);
 
     return 0;
 }
