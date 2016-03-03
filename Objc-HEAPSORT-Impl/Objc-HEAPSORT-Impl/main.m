@@ -40,7 +40,11 @@
 // Private Methods
 + (void)buildMaxHeap:(NSMutableArray *)inArr
 {
-    
+    NSInteger size = [inArr count];
+    for (NSInteger i = (NSInteger) floor(size/2); i >= 0; --i)
+    {
+        [self heapify:inArr index:i];
+    }
 }
 
 + (void)heapify:(NSMutableArray *)inArr index:(NSInteger)i
@@ -91,7 +95,7 @@ int main(int argc, const char * argv[]) {
         NSLog(@"Simple Heapsort Impl");
         
         NSMutableArray *arr = [[NSMutableArray alloc] initWithObjects:@1,@9,@4,@5,@3,@9,@8,@1,@6,@0, nil];
-        [HEAPSORT heapify:arr index:0];
+        [HEAPSORT buildMaxHeap:arr];
         
         
         
