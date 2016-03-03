@@ -45,6 +45,29 @@
 
 + (void)heapify:(NSMutableArray *)inArr index:(NSInteger)i
 {
+    NSInteger lchild = [self left:i];
+    NSInteger rchild = [self right:i];
+    NSInteger size = [inArr count];
+    NSInteger largest = i;
+    
+    if (lchild < size && [inArr objectAtIndex:lchild] > [inArr objectAtIndex:largest])
+    {
+        largest = lchild;
+    }
+    
+    if (rchild < size && [inArr objectAtIndex:rchild] > [inArr objectAtIndex:largest])
+    {
+        largest = rchild;
+    }
+    
+    if (largest != i)
+    {
+        NSNumber *tmp = [inArr objectAtIndex:i];
+        [inArr replaceObjectAtIndex:i withObject:[inArr objectAtIndex:largest]];
+        [inArr replaceObjectAtIndex:largest withObject:tmp];
+        [self heapify:inArr index:largest];
+    }
+    
     
 }
 
@@ -65,7 +88,13 @@
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         // insert code here...
-        NSLog(@"Hello, World!");
+        NSLog(@"Simple Heapsort Impl");
+        
+        NSMutableArray *arr = [[NSMutableArray alloc] initWithObjects:@1,@9,@4,@5,@3,@9,@8,@1,@6,@0, nil];
+        [HEAPSORT heapify:arr index:0];
+        
+        
+        
     }
     return 0;
 }
