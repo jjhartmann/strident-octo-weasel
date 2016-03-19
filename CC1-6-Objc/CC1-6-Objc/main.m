@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface NSArray (EXArray)
-- (NSArray *)rotateMatrix
+- (NSArray *)rotateMatrix;
 @end
 
 @implementation NSArray (EXArray)
