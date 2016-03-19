@@ -15,7 +15,7 @@
 @implementation NSString (EXString)
 - (NSString *)compress
 {
-    NSMutableString *tmp;
+    NSMutableString *tmp = [[NSMutableString alloc] init];
     
     int charCount = 0;
     char prevC = 0;
@@ -32,10 +32,16 @@
             [tmp appendFormat:@"%c", currC];
             charCount = 0;
         }
+        
+        charCount++;
     }
     
-    return [NSString stringWithString:tmp];
+    [tmp appendFormat:@"%i", charCount];
     
+    if (tmp.length < self.length)
+        return [NSString stringWithString:tmp];
+    else
+        return self;
 }
 @end
 
