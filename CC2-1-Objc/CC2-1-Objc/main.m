@@ -28,13 +28,63 @@
     
     return self;
 }
+@end
+
+
+/// Solution class
+@interface Solution : NSObject
++ (void)removeDuplicates:(Node *)head;
+@end
+
+@implementation Solution
+
++ (void)removeDuplicates:(Node *)head
+{
+    NSMutableSet *map = [NSMutableSet set];
+    
+    Node *n = head;
+    Node *p = nil;
+    while (n != nil)
+    {
+        if (![map containsObject:@(n.data)])
+        {
+            [map addObject:@(n.data)];
+        }
+        else
+        {
+            // remove from linked list
+            p.next = n.next;
+        }
+        p = n;
+        n = n.next;
+    }
+}
 
 @end
+
+
+/// Create random linked list with length 'len'
+Node* createLinkedList(int len, int max)
+{
+    Node *head = [[Node alloc] initWithData:random()%max];
+    Node *n = head;
+    for (int i = 0; i < len; ++i)
+    {
+        n.next = [[Node alloc] initWithData:random()%max];
+        n = n.next;
+    }
+    
+    return head;
+}
+
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         // insert code here...
         NSLog(@"Hello, World!");
+        
+        Node *head = createLinkedList(4, 10);
+        [Solution removeDuplicates:head];
     }
     return 0;
 }
