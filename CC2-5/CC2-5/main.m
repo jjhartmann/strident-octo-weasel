@@ -35,7 +35,7 @@
 /// Add two linked list number represenation (reverse order)
 Node* add(Node *l, Node*r)
 {
-    
+    return nil;
 }
 
 /// Convert number into linked list
@@ -45,7 +45,7 @@ Node* convertNumberToReverseLinkeList(NSInteger x)
     x = floor(x/10);
     
     Node *n = head;
-    While (x)
+    while (x)
     {
         n.next = [[Node alloc] initWithData:x % 10];
         x = floor(x/10);
@@ -56,6 +56,21 @@ Node* convertNumberToReverseLinkeList(NSInteger x)
     return head;
 }
 
+/// Convert linked list to number repesentation
+NSInteger convertLinkedListToNumber(Node *head)
+{
+    NSInteger multiplier = 0;
+    NSInteger result = 0;
+    Node *n = head;
+    while(n)
+    {
+        result += n.data * pow(10, multiplier);
+        n = n.next;
+        multiplier++;
+    }
+    
+    return result;
+}
 
 /// Create and return linked list
 Node* createRandomLinkedList(int len, int max)
@@ -76,6 +91,13 @@ int main(int argc, const char * argv[]) {
     @autoreleasepool {
         // insert code here...
         NSLog(@"Hello, World!");
+        
+        Node *num1 = convertNumberToReverseLinkeList(4318);
+        NSInteger x = convertLinkedListToNumber(num1);
+        
+        
+        
+        
     }
     return 0;
 }
