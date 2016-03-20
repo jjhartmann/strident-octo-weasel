@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#include <stdlib.h>
 
 @interface Node : NSObject
 @property Node *next;
@@ -49,13 +50,14 @@
         if (![map containsObject:@(n.data)])
         {
             [map addObject:@(n.data)];
+            p = n;
         }
         else
         {
             // remove from linked list
             p.next = n.next;
         }
-        p = n;
+        
         n = n.next;
     }
 }
@@ -66,11 +68,12 @@
 /// Create random linked list with length 'len'
 Node* createLinkedList(int len, int max)
 {
-    Node *head = [[Node alloc] initWithData:random()%max];
+
+    Node *head = [[Node alloc] initWithData:arc4random()%max];
     Node *n = head;
     for (int i = 0; i < len; ++i)
     {
-        n.next = [[Node alloc] initWithData:random()%max];
+        n.next = [[Node alloc] initWithData:arc4random()%max];
         n = n.next;
     }
     
@@ -83,7 +86,7 @@ int main(int argc, const char * argv[]) {
         // insert code here...
         NSLog(@"Hello, World!");
         
-        Node *head = createLinkedList(4, 10);
+        Node *head = createLinkedList(20, 5);
         [Solution removeDuplicates:head];
     }
     return 0;
