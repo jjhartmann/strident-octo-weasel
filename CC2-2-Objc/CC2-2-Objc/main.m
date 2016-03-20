@@ -31,7 +31,33 @@
 @end
 
 
+@interface Solution : NSObject
++ (Node *)findKthToLastElement:(Node *)head elementk:(NSInteger)k;
+@end
 
+@implementation Solution
+
++ (Node *)findKthToLastElement:(Node *)head elementk:(NSInteger)k
+{
+    // Define a two pointers: runner and walk.
+    Node *run = head;
+    Node *walk = head;
+    
+    NSInteger index = 0;
+    while (run != nil)
+    {
+        if (index >= k)
+        {
+            walk = walk.next;
+        }
+    
+        run = run.next;
+        ++index;
+    }
+    
+    return walk;
+}
+@end
 
 
 
@@ -39,6 +65,12 @@ int main(int argc, const char * argv[]) {
     @autoreleasepool {
         // insert code here...
         NSLog(@"Hello, World!");
+        
+        
+        
+        
+        
+        
     }
     return 0;
 }
