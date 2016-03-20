@@ -29,6 +29,15 @@
 
 @end
 
+void deleteNode(Node *n)
+{
+    Node *next = n.next;
+    n.data = next.data;
+    n.next = next.next;
+}
+
+
+
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
