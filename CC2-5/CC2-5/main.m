@@ -31,6 +31,25 @@
 
 @end
 
+
+/// Create and return linked list
+Node* createRandomLinkedList(int len, int max)
+{
+    Node *head = [[Node alloc] initWithData:arc4random() % max];
+    Node *n = head;
+    
+    for (int i = 0; i < len; ++i)
+    {
+        n.next = [[Node alloc] initWithData:arc4random() % max];
+        n = n.next;
+    }
+    
+    return head;
+}
+
+
+
+
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         // insert code here...
