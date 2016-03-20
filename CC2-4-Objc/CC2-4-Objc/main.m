@@ -32,10 +32,26 @@
 @end
 
 
-
-
-
-
+void partition(Node* head, NSInteger x)
+{
+    
+    Node *i = head;
+    Node *n = head;
+    while (n != nil)
+    {
+        if (n.data < x)
+        {
+            // Swap with i
+            NSInteger tmp = n.data;
+            n.data = i.data;
+            i.data = tmp;
+        
+            i = i.next;
+        }
+        
+        n = n.next;
+    }
+}
 
 
 Node* createRandomLinkedlist(int len, int max)
@@ -56,6 +72,9 @@ int main(int argc, const char * argv[]) {
     @autoreleasepool {
         // insert code here...
         NSLog(@"Hello, World!");
+        
+        Node *head = createRandomLinkedlist(10, 20);
+        partition(head, 10);
     }
     return 0;
 }
