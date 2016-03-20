@@ -32,15 +32,7 @@
 @end
 
 
-/// Add two linked list number represenation (reverse order)
-Node* add(Node *l, Node*r)
-{
-    NSInteger lint = convertLinkedListToNumber(l);
-    NSInteger rint = convertLinkedListToNumber(r);
-    NSInteger sum = lint + rint;
-    
-    return convertNumberToReverseLinkeList(sum);
-}
+
 
 /// Convert number into linked list
 Node* convertNumberToReverseLinkeList(NSInteger x)
@@ -91,6 +83,74 @@ Node* createRandomLinkedList(int len, int max)
     return head;
 }
 
+/// Create and return linked list
+Node* createLinkedList(int len)
+{
+    Node *head = [[Node alloc] initWithData:0];
+    Node *n = head;
+    
+    for (int i = 1; i < len; ++i)
+    {
+        n.next = [[Node alloc] initWithData:i];
+        n = n.next;
+    }
+    
+    return head;
+}
+
+/// Add two linked list number represenation (reverse order)
+Node* add(Node *l, Node*r)
+{
+    NSInteger lint = convertLinkedListToNumber(l);
+    NSInteger rint = convertLinkedListToNumber(r);
+    NSInteger sum = lint + rint;
+    Node *result = convertNumberToReverseLinkeList(sum);
+    return result;
+}
+
+
+Node* swapPairs(Node* head) {
+    if (!head)
+    {
+        return head;
+    }
+    if (!head.next)
+    {
+        return head;
+    }
+    if (!head.next.next)
+    {
+        Node *tmp = head.next;
+        tmp.next = head;
+        head.next = nil;
+        
+        return tmp;
+    }
+    
+    Node *tmp = head.next;
+    Node *tmp2 = tmp.next;
+    tmp.next = head;
+    head.next = tmp2;
+    
+    head = tmp;
+    Node *n = head.next.next;
+    Node *p = head.next;
+    while (n.next != nil)
+    {
+        Node *t1 = n.next;
+        Node *t2 = t1.next;
+        t1.next = n;
+        n.next = t2;
+        p.next = t1;
+        p = n;
+        n = t2;
+    }
+    
+    
+    return head;
+}
+
+
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         // insert code here...
@@ -99,8 +159,8 @@ int main(int argc, const char * argv[]) {
         Node *num1 = convertNumberToReverseLinkeList(4318);
         NSInteger x = convertLinkedListToNumber(num1);
         
-        
-        
+        Node *head = createLinkedList(7);
+        Node *res = swapPairs(head);
         
     }
     return 0;
