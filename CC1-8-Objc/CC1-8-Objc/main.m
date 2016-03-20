@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 @interface NSString (EXString)
 - (BOOL)isRotation:(NSString *)string;
+- (BOOL)isRotation2:(NSString *)string;
 @end;
 
 
@@ -43,6 +44,12 @@
     
     return isRotation;
 }
+
+- (BOOL)isRotation2:(NSString *)string
+{
+    NSString *s2 = [NSString stringWithFormat:@"%@%@", string, string];
+    return [s2 rangeOfString:self].location != NSNotFound;
+}
 @end
 
 
@@ -53,9 +60,10 @@ int main(int argc, const char * argv[]) {
         
         
         NSString *test =  @"rotations";
-        NSString *test2 = @"ationtrot";
+        NSString *test2 = @"ationsrot";
         
         BOOL res = [test isRotation:test2];
+        BOOL res2 = [test isRotation2:test2];
         
     }
     return 0;
