@@ -50,14 +50,27 @@ Node* createRandomLinkedList(int len, int max)
     return head;
 }
 
+Node* getRandomNode(Node *head, int len)
+{
+    Node *n = head;
+    for (int i = 0; i < arc4random()%len; ++i)
+    {
+        n = n.next;
+    }
+    
+    return n;
+}
+
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         // insert code here...
         NSLog(@"Hello, World!");
         
-        Node *head = createRandomLinkedList(10, 10);
+        Node *head = createRandomLinkedList(10, 1000);
+        Node *randNode = getRandomNode(head, 10);
         
+        deleteNode(randNode);
         
     }
     return 0;
