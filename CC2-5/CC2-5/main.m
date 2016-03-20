@@ -35,7 +35,11 @@
 /// Add two linked list number represenation (reverse order)
 Node* add(Node *l, Node*r)
 {
-    return nil;
+    NSInteger lint = convertLinkedListToNumber(l);
+    NSInteger rint = convertLinkedListToNumber(r);
+    NSInteger sum = lint + rint;
+    
+    return convertNumberToReverseLinkeList(sum);
 }
 
 /// Convert number into linked list
