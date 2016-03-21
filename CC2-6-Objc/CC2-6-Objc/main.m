@@ -31,10 +31,40 @@
 
 @end
 
+
+/// Build random circular linked list
+Node* createCircularLinkedList(int len)
+{
+    Node *head = [[Node alloc] initWithData:0];
+    Node *n = head;
+    NSInteger start = arc4random() % len;
+    Node *startNode = nil;
+    for (int i = 1; i < len; ++i)
+    {
+        n.next = [[Node alloc] initWithData:i];
+        if (start == i)
+        {
+            startNode = n.next;
+        }
+        
+        n = n.next;
+    }
+    
+    // Set circle
+    n.next = startNode;
+    
+    return head;
+}
+
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         // insert code here...
         NSLog(@"Hello, World!");
+        
+        // BUild circular linked list
+        Node *head = createCircularLinkedList(10);
+        
+        
     }
     return 0;
 }
