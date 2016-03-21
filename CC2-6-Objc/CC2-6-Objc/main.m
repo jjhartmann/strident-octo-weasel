@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+
+
 @interface Node : NSObject
 @property Node *next;
 @property NSInteger data;
@@ -31,6 +33,41 @@
 
 @end
 
+@interface Solution : NSObject
++ (Node *)findStartofCircle:(Node *)head;
+
+@end
+
+@implementation Solution
+
++ (Node *)findStartofCircle:(Node *)head
+{
+    Node *pt1 = head.next;
+    Node *pt2 = head.next.next;
+    
+    // Find collision point
+    while (pt2 != pt1)
+    {
+        // Walker
+        pt1 = pt1.next;
+        
+        // Runner
+        pt2 = pt2.next.next;
+    }
+    
+    // Walk from head to start of circle
+    pt1 = head;
+    while (pt1 != pt2)
+    {
+        pt2 = pt2.next;
+        pt1 = pt1.next;
+    }
+    
+    return pt1;
+}
+
+
+@end
 
 /// Build random circular linked list
 Node* createCircularLinkedList(int len)
@@ -63,7 +100,7 @@ int main(int argc, const char * argv[]) {
         
         // BUild circular linked list
         Node *head = createCircularLinkedList(10);
-        
+        Node *start = [Solution findStartofCircle:head];
         
     }
     return 0;
