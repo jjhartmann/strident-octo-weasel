@@ -8,10 +8,24 @@
 
 #import <Foundation/Foundation.h>
 
+@interface Solution : NSObject
++ (NSInteger)cuttingRod:(NSArray *)price length:(NSInteger)length;
+
+@end
+
+@implementation Solution
+
++ (NSInteger)cuttingRod:(NSArray *)price length:(NSInteger)length
+{
+    
+}
+
+@end
+
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         // insert code here...
-        NSLog(@"Hello, World!");
+        NSLog(@"Cutting Rod");
     }
     return 0;
 }
