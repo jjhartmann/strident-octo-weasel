@@ -75,7 +75,7 @@ int main()
     cout << "Multiply Strings" << endl;
     int res = countInteger(123456789);
     
-    string sum = addStrings("923", "88");
+    string sum = addStrings("92258441254412541111221122211443", "99855566658477412554412155444188");
 
     return 0;
 }
