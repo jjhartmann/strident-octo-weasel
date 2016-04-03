@@ -5,11 +5,20 @@
 
 #include <iostream>
 #include <algorithm>
+#include <vector>
 #include <string>
 #include <cmath>
 #include <cstdlib>
 
 using namespace std;
+
+// Struct to represent disembodied numer
+struct NumberD
+{
+    int val;
+    int exp;
+};
+
 
 int countInteger(int x)
 {
@@ -70,12 +79,59 @@ string addStrings(string a, string b)
 }
 
 
+// Build vector
+void buildNumVec(string str, vector<NumberD> &vec)
+{
+    int slen = str.length();
+    int i = max(slen - 4, 0);
+    int exp = 0;
+    int len = 4;
+    while (len > 0)
+    {
+        NumberD num;
+        string valstr = str.substr(i, len);
+        int val = atoi(valstr.c_str());
+
+        num.val = val;
+        num.exp = exp;
+        vec.push_back(num);
+
+        if (i - 4 < 0) {
+            len = i;
+            i = 0;
+        }
+        else {
+            i -= 4;
+        }
+
+        exp += 4;
+    }
+}
+
+
+// Multiply Two Strings
+string multiplyString(string a, string b)
+{
+    int alen = a.length();
+    int blen = b.length();
+
+    vector<NumberD> avec;
+    vector<NumberD> bvec;
+
+    buildNumVec(b, avec);
+    buildNumVec(b, bvec);
+
+    return "";
+}
+
+
+
 int main()
 {
     cout << "Multiply Strings" << endl;
     int res = countInteger(123456789);
     
     string sum = addStrings("92258441254412541111221122211443", "99855566658477412554412155444188");
-
+    string test = multiplyString("12345", "5854445566321254");
     return 0;
 }
