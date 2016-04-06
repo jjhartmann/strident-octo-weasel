@@ -108,6 +108,40 @@ void buildNumVec(string str, vector<NumberD> &vec)
     }
 }
 
+// Multiple Vectors
+vector<NumberD> multipleVector(vector<NumberD> &avec, vector<NumberD> &bvec)
+{
+    vector<NumberD> res;
+    
+    int asize = avec.size();
+    int bsize = bvec.size();
+
+    for (int i = 0; i < max(asize, bsize); ++i)
+    {
+        NumberD temp;
+        if (i < asize && i < bsize)
+        {
+            temp.val = avec[i].val * bvec[i].val;
+            temp.exp = avec[i].exp;
+        }
+        else if (i < asize && !(i < bsize))
+        {
+            temp.val = avec[i].val;
+            temp.exp = avec[i].exp;
+        }
+        else
+        {
+            temp.val = bvec[i].val;
+            temp.exp = bvec[i].exp;
+        }
+
+
+
+        res.push_back(temp);
+    }
+
+    return res;
+}
 
 // Multiply Two Strings
 string multiplyString(string a, string b)
@@ -118,8 +152,11 @@ string multiplyString(string a, string b)
     vector<NumberD> avec;
     vector<NumberD> bvec;
 
-    buildNumVec(b, avec);
+    buildNumVec(a, avec);
     buildNumVec(b, bvec);
+
+    // Multiply components and merge. 
+    vector<NumberD> resvec = multipleVector(avec, bvec);
 
     return "";
 }
