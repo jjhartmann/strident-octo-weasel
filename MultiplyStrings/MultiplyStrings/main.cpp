@@ -177,14 +177,45 @@ string multiplyString(string a, string b)
     return product;
 }
 
+class Solution {
+public:
+    string multiply(string num1, string num2) {
 
+        int alen = num1.length();
+        int blen = num2.length();
+
+        vector<NumberD> avec;
+        vector<NumberD> bvec;
+
+        buildNumVec(num1, avec);
+        buildNumVec(num2, bvec);
+
+        // Multiply components and merge. 
+        vector<NumberD> resvec = multipleVector(avec, bvec);
+
+        // Convert resvect to strings
+        vector<string> resStr = convertVecToString(resvec);
+
+        // Add Strings together
+        string product = "0";
+        for (int i = 0; i < resStr.size(); ++i)
+        {
+            product = addStrings(resStr[i], product);
+        }
+
+        return product;
+    }
+};
 
 int main()
 {
     cout << "Multiply Strings" << endl;
     int res = countInteger(123456789);
     
+    Solution sol;
+
+
     string sum = addStrings("92258441254412541111221122211443", "99855566658477412554412155444188");
-    string test = multiplyString("9212518930487213973668059034619153835677898283391567122521443284", "9212518930487213973668059034619153835677898283391567122521443284");
+    string test = sol.multiply("9212518930487213973668059034619153835677898283391567122521443284", "9212518930487213973668059034619153835677898283391567122521443284");
     return 0;
 }
