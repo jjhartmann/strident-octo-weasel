@@ -116,26 +116,32 @@ vector<NumberD> multipleVector(vector<NumberD> &avec, vector<NumberD> &bvec)
     int asize = avec.size();
     int bsize = bvec.size();
 
-    for (int i = 0; i < max(asize, bsize); ++i)
+    for (int i = 0; i < asize; ++i)
     {
-        NumberD temp;
-        if (i < asize && i < bsize)
+        for (int j = 0; j < bsize; ++j)
         {
-            temp.val = avec[i].val * bvec[i].val;
-            temp.exp = avec[i].exp;
+            NumberD temp;
+            temp.val = avec[i].val * bvec[j].val;
+            temp.exp = avec[i].exp + bvec[j].exp;
+            res.push_back(temp);
         }
-        else if (i < asize && !(i < bsize))
-        {
-            temp.val = avec[i].val;
-            temp.exp = avec[i].exp;
-        }
-        else
-        {
-            temp.val = bvec[i].val;
-            temp.exp = bvec[i].exp;
-        }
+    }
 
+    return res;
+}
 
+// Convert to string
+vector<string> convertVecToString(vector<NumberD> vec)
+{
+    vector<string> res;
+    for (int i = 0; i < vec.size(); ++i)
+    {
+        string temp = to_string(vec[i].val);
+
+        for (int j = 0; j < vec[i].exp; ++j)
+        {
+            temp += "0";
+        }
 
         res.push_back(temp);
     }
@@ -158,7 +164,17 @@ string multiplyString(string a, string b)
     // Multiply components and merge. 
     vector<NumberD> resvec = multipleVector(avec, bvec);
 
-    return "";
+    // Convert resvect to strings
+    vector<string> resStr = convertVecToString(resvec);
+
+    // Add Strings together
+    string product = "0";
+    for (int i = 0; i < resStr.size(); ++i)
+    {
+        product = addStrings(resStr[i], product);
+    }
+
+    return product;
 }
 
 
@@ -169,6 +185,6 @@ int main()
     int res = countInteger(123456789);
     
     string sum = addStrings("92258441254412541111221122211443", "99855566658477412554412155444188");
-    string test = multiplyString("12345", "5854445566321254");
+    string test = multiplyString("9212518930487213973668059034619153835677898283391567122521443284", "9212518930487213973668059034619153835677898283391567122521443284");
     return 0;
 }
