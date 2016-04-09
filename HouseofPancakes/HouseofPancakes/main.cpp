@@ -12,7 +12,7 @@ using namespace std;
 
 int main()
 {
-    ifstream file("A-large.in");
+    ifstream file("B-large.in");
     ofstream ofile("sol.txt");
     if (!file.is_open()) return 1;
 
@@ -24,52 +24,51 @@ int main()
     for (int i = 0; i < trails; ++i)
     {
         getline(file, line);
-        int N = atoi(line.c_str());
-        int res = -1;
+        int numberofFlips = 0;
+        int NumofPancakes = line.length();
+        vector<bool> stack(NumofPancakes, false);
 
-        vector<bool> map(10, 0);
-        int mapcount = 0;
-
-        if (N != 0)
+        int happycnt = 0;
+        for (int j = 0; j < NumofPancakes; ++j)
         {
-            for (int j = 1; j < MAX_RUN; ++j)
+            if (line[j] == '+')
             {
-
-                int curr = j * N;
-                res = curr;
-
-                while (curr > 0)
-                {
-                    int index = curr % 10;
-                    curr = floor(curr / 10);
-
-                    if (!map[index])
-                    {
-                        map[index] = true;
-                        mapcount++;
-                    }
-                }
-
-                if (mapcount >= 10)
-                {
-                    break;
-                }
+                stack[j] = true;
+                happycnt++;
             }
         }
 
+        bool happy = (happycnt == NumofPancakes);
+        while (!happy)
+        {
+            happycnt = 0;
+            for (int j = 0; j < NumofPancakes; ++j)
+            {
+                if (stack[j]) happycnt++;
+            }
 
-        cout << "Case #" << i + 1 << ": ";
-        ofile << "Case #" << i + 1 << ": ";
-        if (res > 0)
-        {
-            cout << res << endl;
-            ofile << res << endl;
+            if (happycnt == NumofPancakes)
+            {
+                happy = true;
+            }
+            else
+            {
+                int index = 0;
+                bool topP = stack[0];
+                while (index < NumofPancakes && stack[index] == topP)
+                {
+                    stack[index] = !stack[index];
+                    index++;
+                }
+
+                if (index) numberofFlips++;
+            }
         }
-        else
-        {
-            cout << "INSOMNIA" << endl;
-            ofile << "INSOMNIA" << endl;
-        }
+        
+
+
+        cout << "Case #" << i + 1 << ": " << numberofFlips << endl;
+        ofile << "Case #" << i + 1 << ": " << numberofFlips << endl;
     }
 
     file.close();
