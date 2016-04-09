@@ -12,7 +12,8 @@ using namespace std;
 
 int main()
 {
-    ifstream file("A-small-attempt1.in");
+    ifstream file("A-large.in");
+    ofstream ofile("sol.txt");
     if (!file.is_open()) return 1;
 
     string line;
@@ -57,14 +58,17 @@ int main()
         }
 
         
-        cout << N << "\tCase #" << i << ": ";
+        cout << "Case #" << i + 1 << ": ";
+        ofile << "Case #" << i + 1 << ": ";
         if (res > 0)
         {
              cout << res << endl;
+             ofile << res << endl;
         }
         else
         {
             cout << "INSOMNIA" << endl;
+            ofile << "INSOMNIA" << endl;
         }
     }
     
