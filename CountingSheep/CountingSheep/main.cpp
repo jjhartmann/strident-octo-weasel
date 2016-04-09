@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#define MAX_RUN 1000
+#define MAX_RUN 10000
 
 using namespace std;
 
