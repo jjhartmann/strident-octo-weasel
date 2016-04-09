@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
+#include <vector>
 
 #define MAX_RUN 1000
 
@@ -26,14 +26,34 @@ int main()
         int N = atoi(line.c_str());
         int res = -1;
 
+        vector<bool> map(10, 0);
+        int mapcount = 0;
 
         if (N != 0)
         {
-            for (int j = 0; j < MAX_RUN; ++j)
+            for (int j = 1; j < MAX_RUN; ++j)
             {
 
-            }
+                int curr = j * N;
+                res = curr;
 
+                while (curr > 0)
+                {
+                    int index = curr % 10;
+                    curr = floor(curr / 10);
+                    
+                    if (!map[index])
+                    {
+                        map[index] = true;
+                        mapcount++;
+                    }
+                }
+
+                if (mapcount >= 10)
+                {
+                    break;
+                }
+            }
         }
 
         
