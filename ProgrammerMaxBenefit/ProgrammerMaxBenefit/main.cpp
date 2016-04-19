@@ -51,7 +51,25 @@ int MaxBenefit(BMAP b, int k, int N)
         DP.pop_back();
     }
 
-    return 0;
+    return res;
+}
+
+
+int MB(BMAP &b, int n, int k, int p)
+{
+
+    if (n < 0 || k < 0 || p <= 0)
+    {
+        return 0;
+    }
+
+    if (p < k)
+    {
+        return max(MB(b, n, k - 1, p), MB(b, n - 1, k, p));
+    }
+
+    return max(max(MB(b, n, k - 1, p - k - 1) + b[n][k], MB(b, n - 1, k, p - k - 1) + b[n][k]), max(MB(b, n, k - 1, p), MB(b, n - 1, k, p)));
+
 }
 
 
@@ -60,12 +78,14 @@ int main()
 {
 
     BMAP test = {
-        {2,4,12,5,8,29},
-        { 4,4,2,15,8,19 },
-        { 2,4,12,5,8,19 },
-        { 5,4,1,5,18,19 },
-        { 2,4,3,7,8,23 },
+        {2,4,12,5,8,35},
+        { 20,4,2,15,8,60 },
+        { 2,4,20,5,8,19 },
+        { 6,4,20,5,18,19 },
+        { 2,20,3,7,8,23 },
     };
+
+    int res = MB(test, 4, 5, 6);
 
     MaxBenefit(test, 6, 5);
 
