@@ -14,7 +14,7 @@ using namespace std;
 #define DPAIR pair<int, pair<int, int>>
 
 
-
+// This is wrong, greedy doesn't work. 
 int MaxBenefit(BMAP b, int k, int N)
 {
     // 1: build a ratio map with ratio = benefit/programmers
@@ -37,14 +37,17 @@ int MaxBenefit(BMAP b, int k, int N)
 
     int k_tmp = k;
     int res = 0;
+    vector<int> programcount;
     while (k_tmp > 0)
     {
         int programmers = DP.front().second.second;
-        if (k_tmp >= programmers)
+        int programNumber = DP.front().second.first;
+        if (k_tmp >= programmers && find(programcount.begin(), programcount.end(), programNumber) == programcount.end())
         {
-            cout << "Program Number: " << DP.front().second.first << "\tProgrammers: " << DP.front().second.second << "\tWeight: " << DP.front().first << endl;
-            res += DP.front().first;
+            cout << "Program Number: " << programNumber << "\tProgrammers: " << DP.front().second.second << "\tWeight: " << DP.front().first << endl;
+            res += (DP.front().first * programmers);
             k_tmp -= programmers;
+            programcount.push_back(programNumber);
         }
         
         pop_heap(DP.begin(), DP.end(), heapComp);
@@ -105,7 +108,7 @@ int main()
 
     int res = MB(test, 4, 5, 6);
 
-    MaxBenefit(test, 6, 5);
+    int res2 = MaxBenefit(test, 6, 5);
 
 
     return 0;
