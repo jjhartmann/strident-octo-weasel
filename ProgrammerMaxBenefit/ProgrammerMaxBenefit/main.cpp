@@ -55,22 +55,34 @@ int MaxBenefit(BMAP b, int k, int N)
 }
 
 
+
+
+
+// Recursive solution: NO DP
 int MB(BMAP &b, int n, int k, int p)
 {
 
-    if (n < 0 || k < 0 || p <= 0)
+    if (n < 0 || p <= 0)
     {
         return 0;
     }
 
-    if (p < k)
+    // For when we don't choose this program
+    int currMax = MB(b, n - 1, k, p);
+
+    for (int i = 0; i <= k; ++i)
     {
-        return max(MB(b, n, k - 1, p), MB(b, n - 1, k, p));
+        int tmp = MB(b, n - 1, k - i - 1, p - i - 1) + b[n][i];
+        if (tmp > currMax)
+        {
+            currMax = tmp;
+        }
     }
 
-    return max(max(MB(b, n, k - 1, p - k - 1) + b[n][k], MB(b, n - 1, k, p - k - 1) + b[n][k]), max(MB(b, n, k - 1, p), MB(b, n - 1, k, p)));
-
+    return currMax;
 }
+
+
 
 
 
@@ -79,10 +91,16 @@ int main()
 
     BMAP test = {
         {2,4,12,5,8,35},
-        { 20,4,2,15,8,60 },
-        { 2,4,20,5,8,19 },
-        { 6,4,20,5,18,19 },
-        { 2,20,3,7,8,23 },
+        { 40,40,30,15,8,45 },
+        { 2,11,21,5,8,19 },
+        { 6,4,21,5,18,19 },
+        { 2,4,3,7,8,23 },
+    };
+
+    BMAP test2 = {
+        { 2,4,12 },
+        { 30,4, 2 },
+        { 2,4,20}
     };
 
     int res = MB(test, 4, 5, 6);
