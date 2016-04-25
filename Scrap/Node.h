@@ -22,9 +22,13 @@ class Node
 	void addBackwardConnection(Node* n);	
 	
 	private:
+	// Private Vars
 	float mWeight;
 	std::vector<Node*> mConnectionForward;
 	std::vector<Node*> mConnectionBackward;
+
+	//Private Methods
+	float activationFunction(float data);
 };
 
 #endif
