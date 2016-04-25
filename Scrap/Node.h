@@ -16,7 +16,10 @@ class Node
 	~Node();
 	
 	float feedForward(float data);
-	float backPropogate(float error);	
+	float backPropogate(float error);
+	
+	void addFowardConnection(Node* n);
+	void addBackwardConnection(Node* n);	
 	
 	private:
 	float mWeight;

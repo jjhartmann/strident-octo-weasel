@@ -31,5 +31,19 @@ float Node::backPropogate(float error)
 	return 0;
 }
 
+// Add a node to the forward output
+void addForwardConnection(Node* n)
+{
+	
+	
+}
+
+// Add a node to the backward addForwardConnection
+void addBackwardConnection(Node* n)
+{
+	
+	
+}
+
 
 
