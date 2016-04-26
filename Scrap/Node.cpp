@@ -24,21 +24,17 @@ Node::~Node()
 }
 
 // Mehtod to process data in a feed forward network
-float Node::feedForward(float data)
+void Node::feedForward(float data)
 {
-	for (auto& node : mConnectionForward)
-	{
-		node->feedForward(activationFunction(data * mWeight));
-	}
-	return 0;
+	mData = data * mWeight;
 }
 
 // Process error and backpropogate through layers. 
-float Node::backPropogate(float error)
+void Node::backPropogate(float error)
 {
-	
-	
-	return 0;
+	// calculate error based on error from previous
+	mError = error;
+	mWeight += error;
 }
 
 // Add a node to the forward output

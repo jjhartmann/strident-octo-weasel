@@ -15,15 +15,22 @@ class Node
 	Node(float weight);
 	~Node();
 	
-	float feedForward(float data);
-	float backPropogate(float error);
+	void feedForward(float data);
+	void backPropogate(float error);
 	
 	void addFowardConnection(Node* n);
 	void addBackwardConnection(Node* n);	
 	
+	inline void setWeight(float w) {mWeight = w;}
+	inline float getWeight(){ return mWeight; }
+	float getData();
+	float getError();
+	
 	private:
 	// Private Vars
 	float mWeight;
+	float mData;
+	float mError;
 	std::vector<Node*> mConnectionForward;
 	std::vector<Node*> mConnectionBackward;
 
