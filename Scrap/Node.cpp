@@ -5,9 +5,11 @@
 
 #include "math.h"
 
+
 using namespace std;
 
-
+////////////////////////////////////////////////////////////
+// Public Methods
 // Constructor
 Node::Node(float weight):
 	mWeight(weight)
@@ -26,7 +28,7 @@ float Node::feedForward(float data)
 {
 	for (auto& node : mConnectionForward)
 	{
-		node->feedForward(data * mWeight);
+		node->feedForward(activationFunction(data * mWeight));
 	}
 	return 0;
 }
@@ -53,6 +55,8 @@ void addBackwardConnection(Node* n)
 	
 }
 
+///////////////////////////////////////////////////////////
+// Private Methods
 // Activation function, ReLU (Rectified Linear Unit)
 float activationFunction(float data)
 {
