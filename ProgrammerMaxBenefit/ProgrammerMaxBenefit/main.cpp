@@ -95,7 +95,7 @@ int MBDP(BMAP &DP, BMAP &b, int n, int k, int p)
         return 0;
     }
 
-    if (DP[n][k] > -1)
+    if (DP[n][k] > -1) 
     {
         return DP[n][k];
     }
@@ -117,6 +117,8 @@ int MBDP(BMAP &DP, BMAP &b, int n, int k, int p)
     return currMax;
 }
 
+
+// Bottom Up Solution
 
 
 
