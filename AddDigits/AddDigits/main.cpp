@@ -38,16 +38,13 @@ public:
 
         int offset = (int)(ceil(num / 9)) % 10;
 
-        if (offset == 0) return 9;
-
         int n = num % 10;
-
         if (num % 9 == 0)
         {
             offset -= 1;
         }
 
-        return ((n + offset) % 10);
+        return (offset < 0) ? 9 : ((n + offset) % 10);
 
     }
 };
