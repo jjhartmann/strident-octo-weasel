@@ -21,6 +21,22 @@ struct ListNode {
 class Solution {
 public:
     void deleteNode(ListNode* node) {
+        
+        if (node->next == nullptr)
+        {
+            delete node;
+            node = nullptr;
+        }
+        else
+        {
+            node->val = node->next->val;
+            ListNode *tmp = node->next;
+
+            node->next = node->next->next;
+
+            delete tmp;
+            tmp = nullptr;
+        }
 
     }
 };
