@@ -26,7 +26,7 @@ class Solution {
 public:
     vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
 
-        // Build hashtable
+        // Build hash table
         unordered_map<int, int> hmap;
         for (int i = 0; i < nums1.size(); ++i)
         {
