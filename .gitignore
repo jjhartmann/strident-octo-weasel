@@ -23,3 +23,5 @@ StrassenAlgorithm/StrassenAlgorithm.xcodeproj/xcuserdata/jeremyhartmann.xcuserda
 xcdebugger/*
 ./**/xcdebugger/*
 **/xcdebugger/*
+.settings/*
+Scrap/a.*
