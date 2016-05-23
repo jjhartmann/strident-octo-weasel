@@ -14,13 +14,38 @@
 // What if the inputs contain unicode characters ? How would you adapt your solution to such case ?
 
 #include <iostream>
-
+#include <vector>
 using namespace std;
 
 class Solution {
 public:
     bool isAnagram(string s, string t) {
 
+        if (s.length() != t.length()) return false;
+
+        // Using map of 256 for all ascii chars. 
+        int map[256];
+
+        for (int i = 0; i < 256; i++) { map[i] = 0; }
+        
+        // map s
+        for (int i = 0; i < s.length(); ++i)
+        {
+            map[s[i]]++;
+        }
+
+        // Check if anagram
+        for (int i = 0; i < t.length(); ++i)
+        {
+            if (map[t[i]] < 1)
+            {
+                return false;
+            }
+
+            map[t[i]]--;
+        }
+
+        return true;
     }
 };
 
