@@ -17,6 +17,13 @@
 
 using namespace std;
 
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+
+    }
+};
+
 int main()
 {
     cout << "Valid Anagram" << endl;
