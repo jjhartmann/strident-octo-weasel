@@ -6,9 +6,16 @@
 // You may assume that the array is non - empty and the majority element always exist in the array.
 
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+
+    }
+};
 
 int main()
 {
