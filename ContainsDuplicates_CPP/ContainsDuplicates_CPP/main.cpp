@@ -6,9 +6,16 @@
 // in the array, and it should return false if every element is distinct.
 
 #include<iostream>
+#include<vector>
 
 using namespace std;
 
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+
+    }
+};
 
 int main()
 {
