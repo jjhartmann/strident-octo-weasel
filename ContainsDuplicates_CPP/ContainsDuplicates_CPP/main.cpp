@@ -33,6 +33,23 @@ public:
         return false;
     }
 
+    bool containsDuplicate2(vector<int>& nums) {
+        // Tick, usuing vector<bool> which is optimized for sapce
+        vector<bool> bmap(2000000, false);
+
+        for (int x : nums)
+        {
+            x += 1000000; // for negative signs
+            if (bmap[x])
+            {
+                return true;
+            }
+
+            bmap[x] = true;
+        }
+
+        return false;
+    }
 
 };
 
