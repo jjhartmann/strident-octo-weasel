@@ -40,7 +40,13 @@ public:
     }
 };
 
+void deleteList(ListNode * n)
+{
+    if (n == nullptr) return;
+    deleteList(n->next);
 
+    delete n;
+}
 
 int main()
 {
@@ -51,6 +57,8 @@ int main()
 
     Solution sol;
     sol.reverseList(head);
+
+    deleteList(head);
 
     return 0;
 }
