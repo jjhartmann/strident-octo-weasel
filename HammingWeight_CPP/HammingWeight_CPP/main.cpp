@@ -16,7 +16,15 @@ using namespace std;
 class Solution {
 public:
     int hammingWeight(uint32_t n) {
+         int len = sizeof(uint32_t) * 8;
+        uint32_t mask = 1;
+        int weight = 0;
+        for (int i = 0; i < len; ++i)
+        {
+            weight = ((n >> i) & mask) >= 1 ? weight + 1 : weight;
+        }
 
+        return weight;
     }
 };
 
@@ -24,7 +32,11 @@ int main()
 {
     cout << "Calculate the Hamming Weight" << endl;
 
+    uint32_t test = 23234;
 
+    Solution sol;
+
+    int ret = sol.hammingWeight(test);
 
 
     return 0;
