@@ -9,13 +9,15 @@ ArrayList<ArrayList<PVector>> hullSetL;
 boolean drawHullU = false;
 boolean drawHullL = false;
 
+int POINT_SIZE = 100;
+
 void setup() {
-  size(800, 600);
+  size(800, 800);
   hullSetU = new ArrayList<ArrayList<PVector>>();
   hullSetL = new ArrayList<ArrayList<PVector>>();
 
-  pointSet = new ArrayList<PVector>(20);
-  for (int i = 0; i < 20; ++i) {
+  pointSet = new ArrayList<PVector>(POINT_SIZE);
+  for (int i = 0; i < POINT_SIZE; ++i) {
     pointSet.add(new PVector());
   }
 
@@ -37,7 +39,7 @@ void draw() {
 void drawRandomPointSet() {
   noStroke();
   fill(0);
-  for (int i = 0; i < 20; ++i) {
+  for (int i = 0; i < pointSet.size(); ++i) {
     ellipse(pointSet.get(i).x, pointSet.get(i).y, 10, 10);
   }
 }
@@ -63,7 +65,7 @@ void createRandomPointSet() {
 
 void computeCH(ArrayList<PVector> pSet) {
 
-  int HIndex = 0; //<>//
+  int HIndex = 0;
   while (pSet.size() > 2) 
   {
     hullSetU.add(new ArrayList<PVector>());
@@ -73,7 +75,7 @@ void computeCH(ArrayList<PVector> pSet) {
     computeConvexHullSet(pSet, hullSetU.get(HIndex), hullSetL.get(HIndex)); 
 
     // Delete U Nodes from pSet
-    for (int i = 0, j = 0; i < hullSetU.get(HIndex).size() && j < pSet.size(); ++i) {
+    for (int i = 0, j = 0; i < hullSetU.get(HIndex).size() && j < pSet.size(); ++i) { //<>//
       while (j < pSet.size() && pSet.get(j).x < hullSetU.get(HIndex).get(i).x) {
         ++j;
       }    
@@ -82,7 +84,7 @@ void computeCH(ArrayList<PVector> pSet) {
       }
     }
 
-    // Delete L Nodes
+    // Delete L Nodes //<>//
     for (int i = hullSetL.get(HIndex).size() - 1, j = 0; i >= 0 && j < pSet.size(); --i) {
       while (j < pSet.size() && pSet.get(j).x < hullSetL.get(HIndex).get(i).x) {
         ++j;
