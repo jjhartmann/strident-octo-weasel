@@ -47,9 +47,8 @@ void drawToMouse() {
   float eMax = sqrt(pow(width, 2) + pow(height, 2)); //<>//
   for (PVector p : points) {
     float eDist = sqrt(pow(mouseX - p.x, 2) + pow(mouseY - p.y, 2));
-    println(eDist);
-    println(log(10000000 * eMax/eDist));
-    stroke(0, 0, 0, eMax/eDist);
+
+    stroke(0, 0, 0, 10000/eDist - 90);
     line(mouseX, mouseY, p.x, p.y);
     
   }
