@@ -9,7 +9,7 @@ ArrayList<ArrayList<PVector>> hullSetL;
 boolean drawHullU = false;
 boolean drawHullL = false;
 
-int POINT_SIZE = 100;
+int POINT_SIZE = 20;
 
 void setup() {
   size(800, 800);
@@ -70,26 +70,29 @@ void computeCH(ArrayList<PVector> pSet) {
   {
     hullSetU.add(new ArrayList<PVector>());
     hullSetL.add(new ArrayList<PVector>());
-
+    
+    ArrayList<PVector> U = hullSetU.get(HIndex);
+    ArrayList<PVector> L = hullSetL.get(HIndex);
     // Compute Hull
-    computeConvexHullSet(pSet, hullSetU.get(HIndex), hullSetL.get(HIndex)); 
+    computeConvexHullSet(pSet, U, L); 
 
     // Delete U Nodes from pSet
-    for (int i = 0, j = 0; i < hullSetU.get(HIndex).size() && j < pSet.size(); ++i) { //<>//
-      while (j < pSet.size() && pSet.get(j).x < hullSetU.get(HIndex).get(i).x) {
+    
+    for (int i = 0, j = 0; i < U.size() && j < pSet.size(); ++i) { //<>//
+      while (j < pSet.size() && pSet.get(j).x < U.get(i).x) {
         ++j;
       }    
-      if (j < pSet.size() && pSet.get(j) == hullSetU.get(HIndex).get(i)) {
+      if (j < pSet.size() && pSet.get(j) == U.get(i)) {
         pSet.remove(j);
       }
     }
 
-    // Delete L Nodes //<>//
-    for (int i = hullSetL.get(HIndex).size() - 1, j = 0; i >= 0 && j < pSet.size(); --i) {
-      while (j < pSet.size() && pSet.get(j).x < hullSetL.get(HIndex).get(i).x) {
+    // Delete L Nodes
+    for (int i = L.size() - 1, j = 0; i >= 0 && j < pSet.size(); --i) { //<>//
+      while (j < pSet.size() && pSet.get(j).x < L.get(i).x) {
         ++j;
       }    
-      if (j < pSet.size() && pSet.get(j) == hullSetL.get(HIndex).get(i)) {
+      if (j < pSet.size() && pSet.get(j) == L.get(i)) {
         pSet.remove(j);
       }
     }
