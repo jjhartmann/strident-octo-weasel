@@ -1,27 +1,41 @@
 import java.util.Comparator;
-
-int POINT_COUNT = 100;
+PFont mono;
+int POINT_COUNT = 400;
 
 ArrayList<PVector> pointsX;
 ArrayList<PVector> pointsY;
 
+boolean doShift = false;
+
 void setup() {
- size(800, 600); 
+ fullScreen(); 
  pointsX = new ArrayList<PVector>(POINT_COUNT);
  for (int i = 0; i < POINT_COUNT; ++i) {
    pointsX.add(new PVector());
  }
+ 
+ mono = createFont("Neue Helvetica", 500);
  
  createRandPointSet();
 }
 
 
 void draw() {
-  background(200);
+  background(0);
   
   // Draw Points
   drawPoints();
   drawToMouse();
+  
+  fill(255, 255, 255, 200);
+  textSize(500);
+  textAlign(CENTER);
+  textFont(mono);
+  text("CS 105", width/2, height/2 + 100);
+  
+  if (doShift){
+    shift(1); 
+  }
 }
 
 // Create random point set
@@ -37,17 +51,30 @@ void createRandPointSet() {
   pointsY.sort(new comparePVecY());
 }
 
+// Shift all points
+void shift(float i) {
+   for(PVector p : pointsX){
+    p.x += random(-i, i);
+    p.y += random(-i, i);
+  }
+  pointsX.sort(new comparePVecX());
+  pointsY = (ArrayList<PVector>)pointsX.clone();
+  pointsY.sort(new comparePVecY());
+}
+
 // Draw the points
 void drawPoints() {
   for (PVector p : pointsX) {
     noStroke();
-    fill(80);
+    fill(220);
     ellipse(p.x, p.y, 5, 5);
   }
   
   drawWeb(pointsX);
   drawWeb(pointsY);
 }
+
+
 
 void drawWeb(ArrayList<PVector> list) {
   int offset = 0;
@@ -74,8 +101,8 @@ float ecludianDistance(PVector p1, PVector p2) {
 
 void drawDynamicLine(PVector p1, PVector p2) {  
     float eDist = ecludianDistance(p1, p2) + 2;
-    float decay = 10000/eDist - 90;
-    stroke(0, 0, 0, decay);
+    float decay = 20000/eDist - 90;
+    stroke(255, 255, 255, decay);
     
     float weight = constrain(map(decay, 0, 500, 0, 4), 0, 4);
     //println(weight);
@@ -108,5 +135,12 @@ class comparePVecY implements Comparator<PVector> {
 void keyPressed() {
  if (key == 'r') {
    createRandPointSet();
+ }
+ if (key == 's') {
+   if (doShift) {
+     doShift = false;
+   } else {
+     doShift = true;
+   }
  }
 }
