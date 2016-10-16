@@ -1,6 +1,6 @@
 import java.util.Comparator;
 
-int POINT_COUNT = 30;
+int POINT_COUNT = 100;
 
 ArrayList<PVector> points;
 
@@ -41,15 +41,24 @@ void drawPoints() {
     fill(80);
     ellipse(p.x, p.y, 5, 5);
   }
+  
+  // Draw Web
 }
 
 void drawToMouse() {
   float eMax = sqrt(pow(width, 2) + pow(height, 2)); //<>//
   for (PVector p : points) {
-    float eDist = sqrt(pow(mouseX - p.x, 2) + pow(mouseY - p.y, 2));
-
-    stroke(0, 0, 0, 10000/eDist - 90);
-    line(mouseX, mouseY, p.x, p.y);
-    
+    drawDynamicLine(new PVector(mouseX, mouseY), p);
   }
+}
+
+void drawDynamicLine(PVector p1, PVector p2) {  
+    float eDist = sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
+    float decay = 10000/eDist - 90;
+    stroke(0, 0, 0, decay);
+    
+    float weight = constrain(map(decay, 0, 500, 0, 5), 0, 5);
+    println(weight);
+    strokeWeight(((weight >= 0) ? weight : 0));
+    line(p1.x, p1.y, p2.x, p2.y);
 }
