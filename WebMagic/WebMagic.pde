@@ -6,6 +6,7 @@ ArrayList<PVector> pointsX;
 ArrayList<PVector> pointsY;
 
 boolean doShift = false;
+boolean invert = false;
 
 void setup() {
  fullScreen(); 
@@ -14,15 +15,18 @@ void setup() {
    pointsX.add(new PVector());
  }
  
- mono = createFont("Neue Helvetica", 500);
+ mono = createFont("Neue Helvetica", 300);
  
  createRandPointSet();
 }
 
 
 void draw() {
-  background(0);
-  
+  if (invert){
+    background(255);
+  } else {
+    background(0);
+  }
   // Draw Points
   drawPoints();
   drawToMouse();
@@ -34,7 +38,7 @@ void draw() {
   text("CS 105", width/2, height/2 + 100);
   
   if (doShift){
-    shift(1); 
+    shift(2); 
   }
 }
 
@@ -102,8 +106,12 @@ float ecludianDistance(PVector p1, PVector p2) {
 void drawDynamicLine(PVector p1, PVector p2) {  
     float eDist = ecludianDistance(p1, p2) + 2;
     float decay = 20000/eDist - 90;
-    stroke(255, 255, 255, decay);
     
+    if (invert) {
+      stroke(0, 0, 0, decay);
+    } else {
+      stroke(255, 255, 255, decay);
+    }
     float weight = constrain(map(decay, 0, 500, 0, 4), 0, 4);
     //println(weight);
     strokeWeight(((weight >= 0) ? weight : 0));
@@ -143,4 +151,13 @@ void keyPressed() {
      doShift = true;
    }
  }
+ 
+ if (key == 'i') {
+   if (invert){
+     invert = false;
+   } else {
+     invert = true;
+   } 
+ }
+ 
 }
