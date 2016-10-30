@@ -5,7 +5,7 @@
 //  Created by Jeremy Hartmann on 2016-10-29.
 //  Copyright © 2016 Jeremy Hartmann. All rights reserved.
 //
-//  Given a a set of n integers, find a subset S that sums up to
+//  Given a a set of n integers, find a continguous subset S that sums up to
 //  a given interger x
 
 #include <iostream>
