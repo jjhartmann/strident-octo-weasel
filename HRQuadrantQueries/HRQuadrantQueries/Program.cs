@@ -22,7 +22,7 @@ namespace HRQuadrantQueries
 			{
 				return 0; 
 			}
-			if (X > 0 && Y < 0)
+			if (X < 0 && Y > 0)
 			{
 				return 1;
 			}
@@ -58,29 +58,34 @@ namespace HRQuadrantQueries
 				// Process query
 				string[] sQuery = Console.ReadLine().Split(' ');
 				string type = sQuery[0];
-				int q_i = Convert.ToInt32(sQuery[1]);
-				int q_j = Convert.ToInt32(sQuery[2]);
+				int q_i = Convert.ToInt32(sQuery[1]) - 1;
+				int q_j = Convert.ToInt32(sQuery[2]) - 1;
 
 				// Processes points (inclusive) 
-				int q1 = 0, q2 = 0, q3 = 0, q4 = 0;
+				int[] count = new int[4];
 				for (int k = q_i; k <= q_j; ++k)
 				{
 					if (type == "C")
 					{
-
-
-
+						count[points[k].GetQuadrant()]++;
 					}
 					else if (type == "X")
 					{
-						points[k].X = -points[k].X;
+						points[k].Y = -points[k].Y;
 					}
 					else
 					{							
-						points[k].Y = -points[k].Y;
+						points[k].X = -points[k].X;
 					}
 				}
+
+				// Print count if type is "C"
+				if (type == "C") {
+					Console.WriteLine("{0} {1} {2} {3}", count[0], count[1], count[2], count[3]);
+				}
 			}
+
+			 
 		}
 	}
 }
