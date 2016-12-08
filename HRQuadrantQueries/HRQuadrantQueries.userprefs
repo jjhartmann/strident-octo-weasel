@@ -1,0 +1,14 @@
+﻿<Properties StartupConfiguration="{8A1EB0E1-2159-4D20-8DD1-E18118E251C7}|Default">
+  <MonoDevelop.Ide.ItemProperties.HRQuadrantQueries PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="HRQuadrantQueries/Program.cs">
+    <Files>
+      <File FileName="HRQuadrantQueries/Program.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>
