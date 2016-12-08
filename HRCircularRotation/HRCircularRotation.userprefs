@@ -1,0 +1,14 @@
+﻿<Properties StartupConfiguration="{60FFBB02-1888-4563-8D7C-929DB99F9541}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HRCircularRotation/Program.cs">
+    <Files>
+      <File FileName="HRCircularRotation/Program.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.HRCircularRotation PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
+</Properties>
