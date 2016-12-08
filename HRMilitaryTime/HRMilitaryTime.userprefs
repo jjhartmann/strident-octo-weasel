@@ -1,0 +1,14 @@
+﻿<Properties StartupConfiguration="{BE1CE8FD-B6DC-46D4-8C6C-B73B644C1D9C}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HRMilitaryTime/Program.cs">
+    <Files>
+      <File FileName="HRMilitaryTime/Program.cs" Line="6" Column="3" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.HRMilitaryTime PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
+</Properties>
