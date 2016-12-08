@@ -16,7 +16,16 @@ namespace HRQuadrantQueries
 		public int X { get; set; }
 		public int Y { get; set; }
 
-		public int GetQuadrant() {
+		public int GetQuadrant(bool xflip, bool yflip) {
+			if (xflip)
+			{
+				Y = -Y;
+			}
+			if (yflip)
+			{
+				X = -X;
+			}
+
 
 			if (X > 0 && Y > 0)
 			{
@@ -53,10 +62,52 @@ namespace HRQuadrantQueries
 
 			// Get number of queries and parse
 			int q = Convert.ToInt32(Console.ReadLine().ToString());
+
+			// Preprocess queries
+			//   Count X and Y flips
+			//   If odd then flip once
+			//   Remove all others. 
+			List<string> nQuerys = new List<string>();
+			List<int[]> XFlips = new List<int[]>();
+			XFlips.Add(new int[n]);
+			List<int[]> YFlips = new List<int[]>();
+			YFlips.Add(new int[n]);
+
 			for (int i = 0; i < q; ++i)
 			{
 				// Process query
-				string[] sQuery = Console.ReadLine().Split(' ');
+				string rawQuery = Console.ReadLine();
+				string[] sQuery = rawQuery.Split(' ');
+				string type = sQuery[0];
+				int q_i = Convert.ToInt32(sQuery[1]) - 1;
+				int q_j = Convert.ToInt32(sQuery[2]) - 1;
+
+				if (type == "C")
+				{
+					nQuerys.Add(rawQuery);
+					XFlips.Add(new int[n]);
+					YFlips.Add(new int[n]);
+				}
+				else if (type == "X")
+				{
+					for (int j = q_i; j <= q_j; ++j)
+					{
+						XFlips[XFlips.Count - 1][j]++;
+					}
+				}
+				else
+				{
+					for (int j = q_i; j <= q_j; ++j)
+					{
+						YFlips[YFlips.Count - 1][j]++;
+					}
+				}
+			}
+
+			for (int i = 0; i < nQuerys.Count; ++i)
+			{
+				// Count Quadrants
+				string[] sQuery = nQuerys[i].Split(' ');
 				string type = sQuery[0];
 				int q_i = Convert.ToInt32(sQuery[1]) - 1;
 				int q_j = Convert.ToInt32(sQuery[2]) - 1;
@@ -67,15 +118,9 @@ namespace HRQuadrantQueries
 				{
 					if (type == "C")
 					{
-						count[points[k].GetQuadrant()]++;
-					}
-					else if (type == "X")
-					{
-						points[k].Y = -points[k].Y;
-					}
-					else
-					{							
-						points[k].X = -points[k].X;
+						bool xflip = XFlips[i][k] % 2 > 0;
+						bool yflip = YFlips[i][k] % 2 > 0;
+						count[points[k].GetQuadrant(xflip, yflip)]++;
 					}
 				}
 
