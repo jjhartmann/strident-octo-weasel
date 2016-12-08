@@ -19,10 +19,16 @@ namespace HRMilitaryTime
 
 			// Convert to int array
 			int[] arr = Array.ConvertAll(arr_temp, Int32.Parse);
-			if (indicator == "PM")
+			if (indicator == "PM" && arr[0] != 12)
 			{
 				arr[0] += 12;
 			}
+			else if (indicator == "AM" && arr[0] == 12)
+			{
+				arr[0] = 0;	
+			}
+
+
 
 			Console.WriteLine("{0:D2}:{1:D2}:{2:D2}", arr[0], arr[1], arr[2]);
 
