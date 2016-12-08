@@ -57,27 +57,27 @@ namespace HRQuadrantQueries
 			{
 				// Process query
 				string[] sQuery = Console.ReadLine().Split(' ');
-				char type = sQuery[0];
+				string type = sQuery[0];
 				int q_i = Convert.ToInt32(sQuery[1]);
 				int q_j = Convert.ToInt32(sQuery[2]);
 
 				// Processes points (inclusive) 
+				int q1 = 0, q2 = 0, q3 = 0, q4 = 0;
 				for (int k = q_i; k <= q_j; ++k)
 				{
-					int q1 = 0, q2 = 0, q3 = 0, q4 = 0;
-
-					switch (type)
+					if (type == "C")
 					{
-						case 'C':
-							break;
-						case 'X':
-							points[k].X = -points[k].X;
-							break;
-						case 'Y':
-							points[k].Y = -points[k].Y;
-							break;
-						default:
-							break;
+
+
+
+					}
+					else if (type == "X")
+					{
+						points[k].X = -points[k].X;
+					}
+					else
+					{							
+						points[k].Y = -points[k].Y;
 					}
 				}
 			}
