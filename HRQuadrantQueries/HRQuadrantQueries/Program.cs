@@ -51,19 +51,38 @@ namespace HRQuadrantQueries
 
 	class MainClass
 	{
-		public static void Main(string[] args)
+        public static int GetQuadrant(int X, int Y)
+        {
+            if (X > 0 && Y > 0)
+            {
+                return 0;
+            }
+            if (X < 0 && Y > 0)
+            {
+                return 1;
+            }
+            if (X < 0 && Y < 0)
+            {
+                return 2;
+            }
+
+            return 3;
+        }
+
+        public static void Main(string[] args)
 		{
 			int n = Convert.ToInt32(Console.ReadLine().ToString());
 
 			// Get and store all points
-			List<Point[]> PPoints = new List<Point[]>();
-            PPoints.Add( new Point[n]);
+			List<int[]> PPoints = new List<int[]>();
+            PPoints.Add( new int[2*n]);
 			for (int i = 0; i < n; ++i)
 			{
 				string[] arr_t = Console.ReadLine().Split(' ');
 				int[] arr = Array.ConvertAll(arr_t, Int32.Parse);
 
-                PPoints[PPoints.Count - 1][i] = new Point(arr[0], arr[1]);
+                PPoints[PPoints.Count - 1][i * 2] = arr[0];
+                PPoints[PPoints.Count - 1][i * 2 + 1] = arr[1];
 			}
 
 
@@ -92,7 +111,7 @@ namespace HRQuadrantQueries
 				if (type == "C")
 				{
 					nQuerys.Add(rawQuery);
-                    Point[] temp = new Point[n];
+                    int[] temp = new int[2*n];
                     PPoints[PPoints.Count - 1].CopyTo(temp, 0);
                     PPoints.Add(temp);
 
@@ -103,7 +122,7 @@ namespace HRQuadrantQueries
 				{
 					for (int j = q_i; j <= q_j; ++j)
 					{
-                        PPoints[PPoints.Count - 1][j].Y = -PPoints[PPoints.Count - 1][j].Y;
+                        PPoints[PPoints.Count - 1][j * 2 + 1] = -PPoints[PPoints.Count - 1][j * 2 + 1];
 
                         //XFlips[XFlips.Count - 1][j]++;
 					}
@@ -112,7 +131,7 @@ namespace HRQuadrantQueries
 				{
 					for (int j = q_i; j <= q_j; ++j)
 					{
-                        PPoints[PPoints.Count - 1][j].X = -PPoints[PPoints.Count - 1][j].X;
+                        PPoints[PPoints.Count - 1][j * 2] = -PPoints[PPoints.Count - 1][j * 2];
                         //YFlips[YFlips.Count - 1][j]++;
                     }
 				}
@@ -134,7 +153,7 @@ namespace HRQuadrantQueries
 					{
 						//bool xflip = XFlips[i][k] % 2 > 0;
 						//bool yflip = YFlips[i][k] % 2 > 0;
-						count[PPoints[i][k].GetQuadrant()]++;
+						count[GetQuadrant(PPoints[i][k * 2], PPoints[i][k * 2 + 1])]++;
 					}
 				}
 
