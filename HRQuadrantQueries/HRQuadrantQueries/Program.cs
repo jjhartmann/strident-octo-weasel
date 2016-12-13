@@ -60,11 +60,10 @@ class Solution
         //   If odd then flip once
         //   Remove all others. 
         List<string> nQuerys = new List<string>();
-        List<int[]> XFlips = new List<int[]>();
-        XFlips.Add(new int[n]);
-        List<int[]> YFlips = new List<int[]>();
-        YFlips.Add(new int[n]);
+        int[] XFlips = new int[n];
+        int[] YFlips = new int[n];
 
+        System.IO.StreamWriter foutput = new System.IO.StreamWriter("output.txt");
         for (int i = 0; i < q; ++i)
         {
             // Process query
@@ -76,70 +75,102 @@ class Solution
 
             if (type == "C")
             {
-                nQuerys.Add(rawQuery);
-                XFlips.Add(new int[n]);
-                YFlips.Add(new int[n]);
+                //nQuerys.Add(rawQuery);
+                for (int k = 0; k < n; ++k) {
+                    if (XFlips[k] % 2 > 0)
+                    {
+                        points[k].Y = -points[k].Y;
+                    }
+                    if (YFlips[k] % 2 > 0)
+                    {
+                        points[k].X = -points[k].X;
+                    }
+
+                    // Reset FLips
+                    XFlips[k] = 0;
+                    YFlips[k] = 0;
+                }
+
+                // Print Result
+                // Processes points (inclusive) 
+                int[] count = new int[4];
+                for (int k = q_i; k <= q_j; ++k)
+                {
+                    if (type == "C")
+                    {
+                        count[points[k].GetQuadrant()]++;
+                    }
+                }
+
+                // Print to console
+                Console.WriteLine("{0} {1} {2} {3}", count[0], count[1], count[2], count[3]);
+                StringBuilder line = new StringBuilder();
+                line.AppendFormat("{0} {1} {2} {3}", count[0], count[1], count[2], count[3]);
+                foutput.WriteLine(line);
+
             }
             else if (type == "X")
             {
                 for (int j = q_i; j <= q_j; ++j)
                 {
-                    XFlips[XFlips.Count - 1][j]++;
+                    XFlips[j]++;
                 }
             }
             else
             {
                 for (int j = q_i; j <= q_j; ++j)
                 {
-                    YFlips[YFlips.Count - 1][j]++;
+                    YFlips[j]++;
                 }
             }
         }
 
-        System.IO.StreamWriter foutput = new System.IO.StreamWriter("output.txt");
-        for (int i = 0; i < nQuerys.Count; ++i)
-        {
-            // Process Flips
-            for (int k = 0; k < n; ++k)
-            {
-                if (XFlips[i][k] % 2 > 0)
-                {
-                    points[k].Y = -points[k].Y;
-                }
-
-                if (YFlips[i][k] % 2 > 0)
-                {
-                    points[k].X = -points[k].X;
-                }
-            }
-
-            // Count Quadrants
-            string[] sQuery = nQuerys[i].Split(' ');
-            string type = sQuery[0];
-            int q_i = Convert.ToInt32(sQuery[1]) - 1;
-            int q_j = Convert.ToInt32(sQuery[2]) - 1;
-
-            // Processes points (inclusive) 
-            int[] count = new int[4];
-            for (int k = q_i; k <= q_j; ++k)
-            {
-                if (type == "C")
-                {
-                    count[points[k].GetQuadrant()]++;
-                }
-            }
-
-            // Print count if type is "C"
-            if (type == "C")
-            {
-                Console.WriteLine("{0} {1} {2} {3}", count[0], count[1], count[2], count[3]);
-                StringBuilder line = new StringBuilder();
-                line.AppendFormat("{0} {1} {2} {3}", count[0], count[1], count[2], count[3]);
-                foutput.WriteLine(line);
-            }
-        }
-
+        // Close file
         foutput.Close();
+
+
+        //for (int i = 0; i < nQuerys.Count; ++i)
+        //{
+        //    // Process Flips
+        //    for (int k = 0; k < n; ++k)
+        //    {
+        //        if (XFlips[i][k] % 2 > 0)
+        //        {
+        //            points[k].Y = -points[k].Y;
+        //        }
+
+        //        if (YFlips[i][k] % 2 > 0)
+        //        {
+        //            points[k].X = -points[k].X;
+        //        }
+        //    }
+
+        //    // Count Quadrants
+        //    string[] sQuery = nQuerys[i].Split(' ');
+        //    string type = sQuery[0];
+        //    int q_i = Convert.ToInt32(sQuery[1]) - 1;
+        //    int q_j = Convert.ToInt32(sQuery[2]) - 1;
+
+        //    // Processes points (inclusive) 
+        //    int[] count = new int[4];
+        //    for (int k = q_i; k <= q_j; ++k)
+        //    {
+        //        if (type == "C")
+        //        {
+        //            count[points[k].GetQuadrant()]++;
+        //        }
+        //    }
+
+        //    // Print count if type is "C"
+        //    if (type == "C")
+        //    {
+        //        Console.WriteLine("{0} {1} {2} {3}", count[0], count[1], count[2], count[3]);
+        //        StringBuilder line = new StringBuilder();
+        //        line.AppendFormat("{0} {1} {2} {3}", count[0], count[1], count[2], count[3]);
+        //        foutput.WriteLine(line);
+        //    }
+        //}
+
 
 
     }
