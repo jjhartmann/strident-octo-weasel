@@ -76,7 +76,8 @@ class Solution
             if (type == "C")
             {
                 //nQuerys.Add(rawQuery);
-                for (int k = 0; k < n; ++k) {
+                for (int k = q_i; k <= q_j; ++k)
+                {
                     if (XFlips[k] % 2 > 0)
                     {
                         points[k].Y = -points[k].Y;
@@ -90,6 +91,8 @@ class Solution
                     XFlips[k] = 0;
                     YFlips[k] = 0;
                 }
+
+
 
                 // Print Result
                 // Processes points (inclusive) 
