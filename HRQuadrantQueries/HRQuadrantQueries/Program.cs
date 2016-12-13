@@ -35,6 +35,108 @@ public class Point
     }
 }
 
+
+class Node
+{
+    const int QSize = 4;
+    int[] mQuad = new int[QSize];
+    public Node()
+    {
+        ; // Do nothing
+    }
+
+
+    public void Increment(int q)
+    {
+        if (q >= 0 && q < QSize)
+            mQuad[q]++;
+    }
+    public void merge(Node l, Node r)
+    {
+        for (int i = 0; i < QSize; ++i)
+        {
+            mQuad[i] = l.mQuad[i] + r.mQuad[i];
+        }
+    }
+}
+
+class SegmentTree
+{
+    Point[] mPoints;
+    Node[] mSegTree;
+    int mSTSize;
+    int mPSize;
+    int mHeight;
+
+    public SegmentTree(Point[] points, int n)
+    {
+        mPSize = n;
+        mPoints = points;
+        mHeight = (int) Math.Ceiling(Math.Log(n, 2));
+        mSTSize = (int) Math.Pow(2, mHeight + 1) - 1;
+        mSegTree = new Node[mSTSize];
+
+
+        // Initialize the end nodes
+        for (int i = mSTSize - 1, j = mPSize - 1; i >= mSTSize - mPSize; --i, --j) {
+            mSegTree[i] = new Node();
+            mSegTree[i].Increment(mPoints[j].GetQuadrant());
+        }
+
+        BuildTree(1);
+    }
+    
+    // Build and merge tree
+    private Node BuildTree(int idx)
+    {
+        // Base
+        if (idx > mSTSize - mPSize)
+        {
+            return mSegTree[idx - 1];
+        }
+
+        Node left = BuildTree(idx * 2);
+        Node right = BuildTree(idx * 2 + 1);
+
+        // Merge
+        mSegTree[idx - 1] = new Node();
+        mSegTree[idx - 1].merge(left, right);
+        return mSegTree[idx - 1];  
+    }
+
+    public Node Query(int left, int right)
+    {
+        return Query(1, 1, mPSize, left, right);
+    }
+
+    private Node Query(int idx, int sStart, int sEnd, int left, int right)
+    {
+        Node returnNode = new Node();
+        if (left > sEnd || right < sStart)
+        {
+            // Search range is outside the query
+            return returnNode;
+        }
+
+        if (left <= sStart && right >= sEnd)
+        {
+            // Search range is within query, so return substree parent node
+            return mSegTree[idx - 1];
+        }
+
+        // Recurse on subtrees
+        int midPoint = (sStart + sEnd) / 2;
+        Node tmpLeft = Query(idx * 2, sStart, midPoint, left, right);
+        Node tmpRight = Query(idx * 2 + 1, midPoint + 1, sEnd, left, right);
+
+        returnNode.merge(tmpLeft, tmpRight);
+        return returnNode;
+    }
+
+
+}
+
+
 class Solution
 {
     public static void Main(string[] args)
@@ -51,6 +153,14 @@ class Solution
             points.Add(new Point(arr[0], arr[1]));
         }
 
+        // Build Segment Tree
+        SegmentTree sgTree = new SegmentTree(points.ToArray(), points.Count);
+
+        Node res = sgTree.Query(1, 4);
+        res = sgTree.Query(1, 1);
+        res = sgTree.Query(1, 2);
+        res = sgTree.Query(3, 4);
+        res = sgTree.Query(2, 4);
 
         // Get number of queries and parse
         int q = Convert.ToInt32(Console.ReadLine().ToString());
@@ -59,7 +169,6 @@ class Solution
         //   Count X and Y flips
         //   If odd then flip once
         //   Remove all others. 
-        List<string> nQuerys = new List<string>();
         int[] XFlips = new int[n];
         int[] YFlips = new int[n];
 
@@ -75,7 +184,8 @@ class Solution
 
             if (type == "C")
             {
-                //nQuerys.Add(rawQuery);
+                // Iterate through range and process flips for Count
+                // Only reset the values for the processed flips.
                 for (int k = q_i; k <= q_j; ++k)
                 {
                     if (XFlips[k] % 2 > 0)
