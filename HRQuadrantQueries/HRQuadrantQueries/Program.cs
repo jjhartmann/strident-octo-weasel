@@ -16,7 +16,13 @@ namespace HRQuadrantQueries
 		public int X { get; set; }
 		public int Y { get; set; }
 
-		public int GetQuadrant(bool xflip, bool yflip) {
+        public int GetQuadrant()
+        {
+            return GetQuadrant(false, false);
+        }
+
+
+        public int GetQuadrant(bool xflip, bool yflip) {
 			if (xflip)
 			{
 				Y = -Y;
@@ -50,13 +56,14 @@ namespace HRQuadrantQueries
 			int n = Convert.ToInt32(Console.ReadLine().ToString());
 
 			// Get and store all points
-			List<Point> points = new List<Point>();
+			List<Point[]> PPoints = new List<Point[]>();
+            PPoints.Add( new Point[n]);
 			for (int i = 0; i < n; ++i)
 			{
 				string[] arr_t = Console.ReadLine().Split(' ');
 				int[] arr = Array.ConvertAll(arr_t, Int32.Parse);
 
-				points.Add(new Point(arr[0], arr[1]));
+                PPoints[PPoints.Count - 1][i] = new Point(arr[0], arr[1]);
 			}
 
 
@@ -68,10 +75,10 @@ namespace HRQuadrantQueries
 			//   If odd then flip once
 			//   Remove all others. 
 			List<string> nQuerys = new List<string>();
-			List<int[]> XFlips = new List<int[]>();
-			XFlips.Add(new int[n]);
-			List<int[]> YFlips = new List<int[]>();
-			YFlips.Add(new int[n]);
+			//List<int[]> XFlips = new List<int[]>();
+			//XFlips.Add(new int[n]);
+			//List<int[]> YFlips = new List<int[]>();
+			//YFlips.Add(new int[n]);
 
 			for (int i = 0; i < q; ++i)
 			{
@@ -85,22 +92,29 @@ namespace HRQuadrantQueries
 				if (type == "C")
 				{
 					nQuerys.Add(rawQuery);
-					XFlips.Add(new int[n]);
-					YFlips.Add(new int[n]);
-				}
+                    Point[] temp = new Point[n];
+                    PPoints[PPoints.Count - 1].CopyTo(temp, 0);
+                    PPoints.Add(temp);
+
+                    //XFlips.Add(new int[n]);
+                    //YFlips.Add(new int[n]);
+                }
 				else if (type == "X")
 				{
 					for (int j = q_i; j <= q_j; ++j)
 					{
-						XFlips[XFlips.Count - 1][j]++;
+                        PPoints[PPoints.Count - 1][j].Y = -PPoints[PPoints.Count - 1][j].Y;
+
+                        //XFlips[XFlips.Count - 1][j]++;
 					}
 				}
 				else
 				{
 					for (int j = q_i; j <= q_j; ++j)
 					{
-						YFlips[YFlips.Count - 1][j]++;
-					}
+                        PPoints[PPoints.Count - 1][j].X = -PPoints[PPoints.Count - 1][j].X;
+                        //YFlips[YFlips.Count - 1][j]++;
+                    }
 				}
 			}
 
@@ -118,9 +132,9 @@ namespace HRQuadrantQueries
 				{
 					if (type == "C")
 					{
-						bool xflip = XFlips[i][k] % 2 > 0;
-						bool yflip = YFlips[i][k] % 2 > 0;
-						count[points[k].GetQuadrant(xflip, yflip)]++;
+						//bool xflip = XFlips[i][k] % 2 > 0;
+						//bool yflip = YFlips[i][k] % 2 > 0;
+						count[PPoints[i][k].GetQuadrant()]++;
 					}
 				}
 
