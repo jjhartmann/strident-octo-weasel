@@ -251,8 +251,8 @@ class Solution
         //   Count X and Y flips
         //   If odd then flip once
         //   Remove all others. 
-        int[] XFlips = new int[n];
-        int[] YFlips = new int[n];
+        bool[] XFlips = new bool[n];
+        bool[] YFlips = new bool[n];
 
         System.IO.StreamWriter foutput = new System.IO.StreamWriter("output.txt");
         for (int i = 0; i < q; ++i)
@@ -268,21 +268,22 @@ class Solution
             {
                 //// Iterate through range and process flips for Count
                 //// Only reset the values for the processed flips.
-                //for (int k = q_i; k <= q_j; ++k)
-                //{
-                //    if (XFlips[k] % 2 > 0)
-                //    {
-                //        sgTree.Update(k + 1, true);
-                //    }
-                //    if (YFlips[k] % 2 > 0)
-                //    {
-                //        sgTree.Update(k + 1, false);
-                //    }
+                // TODO: Fix this
+                for (int k = q_i; k <= q_j; ++k)
+                {
+                    if (XFlips[k])
+                    {
+                        //sgTree.Update(k + 1, true);
+                    }
+                    if (YFlips[k])
+                    {
+                        //sgTree.Update(k + 1, false);
+                    }
 
-                //    // Reset FLips
-                //    XFlips[k] = 0;
-                //    YFlips[k] = 0;
-                //}
+                    // Reset FLips
+                    XFlips[k] = false;
+                    YFlips[k] = false;
+                }
 
 
                 // Print Result
@@ -298,23 +299,23 @@ class Solution
             }
             else if (type == "X")
             {
-                //for (int j = q_i; j <= q_j; ++j)
-                //{
-                //    XFlips[j]++;
-                //}
+                for (int j = q_i; j <= q_j; ++j)
+                {
+                    XFlips[j] = !XFlips[j];
+                }
 
 
-                // Process query
-                sgTree.Update(q_i + 1, q_j + 1, true);
+                //// Process query
+                //sgTree.Update(q_i + 1, q_j + 1, true);
             }
             else
             {
-                //for (int j = q_i; j <= q_j; ++j)
-                //{
-                //    YFlips[j]++;
-                //}
+                for (int j = q_i; j <= q_j; ++j)
+                {
+                    YFlips[j] = !YFlips[j];
+                }
 
-                sgTree.Update(q_i + 1, q_j + 1, false);
+                //sgTree.Update(q_i + 1, q_j + 1, false);
             }
         }
 
