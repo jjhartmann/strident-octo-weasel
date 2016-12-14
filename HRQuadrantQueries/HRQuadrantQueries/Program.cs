@@ -155,36 +155,41 @@ class SegmentTree
 
 
     // Update Values for Points in Tree
-    public void Update(int updateIdx, bool xFlip)
+    public void Update(int uBegin, int uEnd, bool xFlip)
     {
         // Get start quadrant
-        int quadS = mPoints[updateIdx - 1].GetQuadrant();
+        //int quadS = mPoints[updateIdx - 1].GetQuadrant();
 
-        // Update point
-        if (xFlip)
-            mPoints[updateIdx - 1].Y = -mPoints[updateIdx - 1].Y;
-        else
-            mPoints[updateIdx - 1].X = -mPoints[updateIdx - 1].X;
+        //// Update point
+        //if (xFlip)
+        //    mPoints[updateIdx - 1].Y = -mPoints[updateIdx - 1].Y;
+        //else
+        //    mPoints[updateIdx - 1].X = -mPoints[updateIdx - 1].X;
 
-        // Get  end quadrant
-        int quadE = mPoints[updateIdx - 1].GetQuadrant();
+        //// Get  end quadrant
+        //int quadE = mPoints[updateIdx - 1].GetQuadrant();
 
 
         Update(1, 1, mPSize, updateIdx, quadS, quadE);
 
     }
 
-    private void Update(int idx, int sStart, int sEnd, int uIdx, int qStart, int qEnd)
+
+    // Update this to do a range update
+    //    Take in a range for udating the xflips and yflips
+    //    Need to drill down to leafs and update them then merge
+    //    Very similar to BuildTree
+    private void Update(int idx, int sStart, int sEnd, int uBegin, int uEnd)
     {
         // Update node if in range
-        if (idx < mSChildren + mPSize && uIdx >= sStart && uIdx <= sEnd)
+        if (idx < mSChildren + mPSize && uBegin >= sStart && uEnd <= sEnd)
         {
             mSegTree[idx - 1].Decrement(qStart);
             mSegTree[idx - 1].Increment(qEnd);
         }
 
         // If udix is out of range return. 
-        if (uIdx > sEnd || uIdx < sStart || sStart == sEnd || idx >= mSChildren + mPSize)
+        if (uBegin > sEnd || uEnd < sStart || sStart == sEnd || idx >= mSChildren + mPSize)
             return;
 
         int midPoint = (sStart + sEnd) / 2;
@@ -238,23 +243,23 @@ class Solution
 
             if (type == "C")
             {
-                // Iterate through range and process flips for Count
-                // Only reset the values for the processed flips.
-                for (int k = q_i; k <= q_j; ++k)
-                {
-                    if (XFlips[k] % 2 > 0)
-                    {
-                        sgTree.Update(k + 1, true);
-                    }
-                    if (YFlips[k] % 2 > 0)
-                    {
-                        sgTree.Update(k + 1, false);
-                    }
+                //// Iterate through range and process flips for Count
+                //// Only reset the values for the processed flips.
+                //for (int k = q_i; k <= q_j; ++k)
+                //{
+                //    if (XFlips[k] % 2 > 0)
+                //    {
+                //        sgTree.Update(k + 1, true);
+                //    }
+                //    if (YFlips[k] % 2 > 0)
+                //    {
+                //        sgTree.Update(k + 1, false);
+                //    }
 
-                    // Reset FLips
-                    XFlips[k] = 0;
-                    YFlips[k] = 0;
-                }
+                //    // Reset FLips
+                //    XFlips[k] = 0;
+                //    YFlips[k] = 0;
+                //}
 
 
                 // Print Result
@@ -270,17 +275,17 @@ class Solution
             }
             else if (type == "X")
             {
-                for (int j = q_i; j <= q_j; ++j)
-                {
-                    XFlips[j]++;
-                }
+                //for (int j = q_i; j <= q_j; ++j)
+                //{
+                //    XFlips[j]++;
+                //}
             }
             else
             {
-                for (int j = q_i; j <= q_j; ++j)
-                {
-                    YFlips[j]++;
-                }
+                //for (int j = q_i; j <= q_j; ++j)
+                //{
+                //    YFlips[j]++;
+                //}
             }
         }
 
