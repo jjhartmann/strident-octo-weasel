@@ -59,6 +59,7 @@ class Node
     }
     public void merge(Node l, Node r)
     {
+
         for (int i = 0; i < QSize; ++i)
         {
             mQuad[i] = l.mQuad[i] + r.mQuad[i];
@@ -123,13 +124,13 @@ class SegmentTree
     // Query range
     public Node Query(int left, int right)
     {
-        return Query(1, 1, mPSize, left, right);
+        return Query(1, 1, mSTSize - mSChildren + 1 , left, right);
     }
 
     private Node Query(int idx, int sStart, int sEnd, int left, int right)
     {
         Node returnNode = new Node();
-        if (left > sEnd || right < sStart)
+        if (left > sEnd || right < sStart || idx >= mSChildren + mPSize)
         {
             // Search range is outside the query
             return returnNode;
@@ -170,7 +171,7 @@ class SegmentTree
         //int quadE = mPoints[updateIdx - 1].GetQuadrant();
 
 
-        Update(1, 1, mPSize, uBegin, uEnd, xflip);
+        Update(1, 1, mSTSize - mSChildren + 1, uBegin, uEnd, xflip);
 
     }
 
@@ -181,6 +182,9 @@ class SegmentTree
     //    Very similar to BuildTree
     private Node Update(int idx, int sStart, int sEnd, int uBegin, int uEnd, bool xflip)
     {
+        if (idx >= mSChildren + mPSize)
+            return new Node();
+
         // Update node if in range
         if (idx >= mSChildren && idx < mSChildren + mPSize && uBegin <= sStart && sEnd <= uEnd)
         {
@@ -204,8 +208,10 @@ class SegmentTree
         }
 
         // If udix is out of range return. 
-        if (uBegin > sEnd || uEnd < sStart || sStart == sEnd || idx >= mSChildren + mPSize)
+        if (uBegin > sEnd || uEnd < sStart || sStart == sEnd)
+        {
             return mSegTree[idx - 1];
+        }
 
         int midPoint = (sStart + sEnd) / 2;
         Node left = Update(idx * 2, sStart, midPoint, uBegin, uEnd, xflip);
