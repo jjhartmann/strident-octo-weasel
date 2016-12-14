@@ -155,7 +155,7 @@ class SegmentTree
 
 
     // Update Values for Points in Tree
-    public void Update(int uBegin, int uEnd, bool xFlip)
+    public void Update(int uBegin, int uEnd, bool xflip)
     {
         // Get start quadrant
         //int quadS = mPoints[updateIdx - 1].GetQuadrant();
@@ -170,7 +170,7 @@ class SegmentTree
         //int quadE = mPoints[updateIdx - 1].GetQuadrant();
 
 
-        Update(1, 1, mPSize, updateIdx, quadS, quadE);
+        Update(1, 1, mPSize, uBegin, uEnd, xflip);
 
     }
 
@@ -179,23 +179,40 @@ class SegmentTree
     //    Take in a range for udating the xflips and yflips
     //    Need to drill down to leafs and update them then merge
     //    Very similar to BuildTree
-    private void Update(int idx, int sStart, int sEnd, int uBegin, int uEnd)
+    private Node Update(int idx, int sStart, int sEnd, int uBegin, int uEnd, bool xflip)
     {
         // Update node if in range
-        if (idx < mSChildren + mPSize && uBegin >= sStart && uEnd <= sEnd)
+        if (idx >= mSChildren && idx < mSChildren + mPSize && uBegin <= sStart && sEnd <= uEnd)
         {
-            mSegTree[idx - 1].Decrement(qStart);
-            mSegTree[idx - 1].Increment(qEnd);
+            int mPidx = idx - mSChildren;
+            // Get start quadrant
+            int quadS = mPoints[mPidx].GetQuadrant();
+
+            // Update point
+            if (xflip)
+                mPoints[mPidx].Y = -mPoints[mPidx].Y;
+            else
+                mPoints[mPidx].X = -mPoints[mPidx].X;
+
+            // Get  end quadrant
+            int quadE = mPoints[mPidx].GetQuadrant();
+
+            mSegTree[idx - 1].Decrement(quadS);
+            mSegTree[idx - 1].Increment(quadE);
+
+            return mSegTree[idx - 1];
         }
 
         // If udix is out of range return. 
         if (uBegin > sEnd || uEnd < sStart || sStart == sEnd || idx >= mSChildren + mPSize)
-            return;
+            return mSegTree[idx - 1];
 
         int midPoint = (sStart + sEnd) / 2;
-        Update(idx * 2, sStart, midPoint, uIdx, qStart, qEnd);
-        Update(idx * 2 + 1, midPoint + 1, sEnd, uIdx, qStart, qEnd);
+        Node left = Update(idx * 2, sStart, midPoint, uBegin, uEnd, xflip);
+        Node right = Update(idx * 2 + 1, midPoint + 1, sEnd, uBegin, uEnd, xflip);
 
+        mSegTree[idx - 1].merge(left, right);
+        return mSegTree[idx - 1];
     }
 
 }
@@ -279,6 +296,10 @@ class Solution
                 //{
                 //    XFlips[j]++;
                 //}
+
+
+                // Process query
+                sgTree.Update(q_i + 1, q_j + 1, true);
             }
             else
             {
@@ -286,6 +307,8 @@ class Solution
                 //{
                 //    YFlips[j]++;
                 //}
+
+                sgTree.Update(q_i + 1, q_j + 1, false);
             }
         }
 
