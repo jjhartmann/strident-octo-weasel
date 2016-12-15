@@ -251,8 +251,8 @@ class Solution
         //   Count X and Y flips
         //   If odd then flip once
         //   Remove all others. 
-        bool[] XFlips = new bool[n];
-        bool[] YFlips = new bool[n];
+        bool[] XFlips = new bool[n + 1];
+        bool[] YFlips = new bool[n + 1];
 
         System.IO.StreamWriter foutput = new System.IO.StreamWriter("output.txt");
         for (int i = 0; i < q; ++i)
@@ -268,23 +268,61 @@ class Solution
             {
                 //// Iterate through range and process flips for Count
                 //// Only reset the values for the processed flips.
-                // TODO: Fix this
-                for (int k = q_i; k <= q_j; ++k)
+                int xprev = q_i;
+                int yprev = q_i;
+                
+                // Check edges Xflips
+                while (xprev > 0 && XFlips[xprev] && XFlips[xprev - 1])
                 {
-                    if (XFlips[k])
+                    --xprev;
+                }
+                
+                // Check YFILPS
+                while (xprev > 0 && YFlips[xprev] && YFlips[xprev - 1])
+                {
+                    --xprev;
+                }
+
+                for (int k = q_i + 1; k <= q_j + 1; ++k)
+                {
+                    if (!XFlips[k] && XFlips[k - 1])
                     {
-                        //sgTree.Update(k + 1, true);
+                        if (k == q_j + 1)
+                        {
+                            while (k < n + 1 && XFlips[k] && XFlips[k + 1])
+                            {
+                                ++k;
+                            }
+                        }
+            
+                        sgTree.Update(xprev + 1, k, true);
                     }
-                    if (YFlips[k])
+                    else if (XFlips[k] && !XFlips[k-1])
                     {
-                        //sgTree.Update(k + 1, false);
+                        xprev = k;
+                    }
+
+                    if (!YFlips[k] && YFlips[k - 1])
+                    {
+                        if (k == q_j + 1)
+                        {
+                            while (k < n + 1 && YFlips[k] && YFlips[k + 1])
+                            {
+                                ++k;
+                            }
+                        }
+
+                        sgTree.Update(yprev + 1, k, false);
+                    }
+                    else if (YFlips[k] && !YFlips[k - 1])
+                    {
+                        yprev = k;
                     }
 
                     // Reset FLips
-                    XFlips[k] = false;
-                    YFlips[k] = false;
+                    XFlips[k - 1] = false;
+                    YFlips[k - 1] = false;
                 }
-
 
                 // Print Result
                 // Processes points (inclusive) 
