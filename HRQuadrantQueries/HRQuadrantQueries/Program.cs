@@ -270,31 +270,12 @@ class Solution
                 //// Only reset the values for the processed flips.
                 int xprev = q_i;
                 int yprev = q_i;
-                
-                // Check edges Xflips
-                while (xprev > 0 && XFlips[xprev] && XFlips[xprev - 1])
-                {
-                    --xprev;
-                }
-                
-                // Check YFILPS
-                while (xprev > 0 && YFlips[xprev] && YFlips[xprev - 1])
-                {
-                    --xprev;
-                }
+               
 
-                for (int k = q_i + 1; k <= q_j + 1; ++k)
+                for (int k = q_i; k <= q_j + 1; ++k)
                 {
-                    if (!XFlips[k] && XFlips[k - 1])
+                    if ((!XFlips[k] && XFlips[k - 1]) || (k == q_j + 1 && XFlips[k]))
                     {
-                        if (k == q_j + 1)
-                        {
-                            while (k < n + 1 && XFlips[k] && XFlips[k + 1])
-                            {
-                                ++k;
-                            }
-                        }
-            
                         sgTree.Update(xprev + 1, k, true);
                     }
                     else if (XFlips[k] && !XFlips[k-1])
@@ -302,16 +283,8 @@ class Solution
                         xprev = k;
                     }
 
-                    if (!YFlips[k] && YFlips[k - 1])
+                    if ((!YFlips[k] && YFlips[k - 1]) || (k == q_j + 1 && YFlips[k]))
                     {
-                        if (k == q_j + 1)
-                        {
-                            while (k < n + 1 && YFlips[k] && YFlips[k + 1])
-                            {
-                                ++k;
-                            }
-                        }
-
                         sgTree.Update(yprev + 1, k, false);
                     }
                     else if (YFlips[k] && !YFlips[k - 1])
