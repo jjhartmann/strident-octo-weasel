@@ -147,8 +147,8 @@ class SegmentTree
 
         // Recurse on subtrees
         int midPoint = (sStart + sEnd) / 2;
-        Node tmpLeft = Query(idx * 2, sStart, midPoint, left, right);
-        Node tmpRight = Query(idx * 2 + 1, midPoint + 1, sEnd, left, right);
+        Node tmpLeft = left <= midPoint ? Query(idx * 2, sStart, midPoint, left, right) : returnNode;
+        Node tmpRight = right >= midPoint + 1 ? Query(idx * 2 + 1, midPoint + 1, sEnd, left, right) : returnNode;
 
         returnNode.merge(tmpLeft, tmpRight);
         return returnNode;
@@ -272,9 +272,9 @@ class Solution
                 int yprev = q_i;
                
 
-                for (int k = q_i; k <= q_j + 1; ++k)
+                for (int k = q_i + 1; k <= q_j + 1; ++k)
                 {
-                    if ((!XFlips[k] && XFlips[k - 1]) || (k == q_j + 1 && XFlips[k]))
+                    if ((!XFlips[k] && XFlips[k - 1]) || (k == q_j + 1 && XFlips[k - 1]))
                     {
                         sgTree.Update(xprev + 1, k, true);
                     }
@@ -283,9 +283,9 @@ class Solution
                         xprev = k;
                     }
 
-                    if ((!YFlips[k] && YFlips[k - 1]) || (k == q_j + 1 && YFlips[k]))
+                    if ((!YFlips[k] && YFlips[k - 1]) || (k == q_j + 1 && YFlips[k - 1]))
                     {
-                        sgTree.Update(yprev + 1, k, false);
+                        sgTree.Update(yprev + 1, k, false); 
                     }
                     else if (YFlips[k] && !YFlips[k - 1])
                     {
