@@ -141,6 +141,11 @@ class Node
         }
     }
 
+    public QType GetQType()
+    {
+        return qType;
+    }
+
     private QType[,] transfromMat = { {  } };
 
     public void Increment(int q)
@@ -162,6 +167,9 @@ class Node
         {
             mQuad[i] = l.mQuad[i] + r.mQuad[i];
         }
+
+        // Rest Qtype
+        qType = QType.None;
     }
 
     public int[] getArray()
@@ -177,6 +185,11 @@ class Node
     public bool IsValid()
     {
         return Start > 0 && End > 0;
+    }
+
+    public bool IsUpdated()
+    {
+        return qType == QType.None;
     }
 
 }
@@ -255,13 +268,20 @@ class SegmentTree
     private Node Query(int idx ,int left, int right)
     {
         Node seg = mSegTree[idx - 1];
+
+        if (!seg.IsUpdated())
+        {
+            //Update(idx, left, right, QType.None);
+            Update(idx, seg.Start, seg.End, QType.None);
+        }
+        
         if (left <= seg.Start && right >= seg.End)
         {
             // Search range is within query, so return substree parent node
-            if (mSegTree[idx - 1] == null)
+            if (seg == null)
                 return new Node();
 
-            return mSegTree[idx - 1];
+            return seg;
         }
 
         int leftIdx = GetLeftChild(idx);
@@ -283,7 +303,6 @@ class SegmentTree
     public void Update(int uBegin, int uEnd, QType type)
     {
         Update(1, uBegin, uEnd, type);
-
     }
 
 
@@ -305,35 +324,44 @@ class SegmentTree
             return seg;
         }
 
-        //if (uBegin <= seg.Start && seg.End <= uEnd)
-        //{
-        //    seg.SetType(type);
-        //    seg.Transform();
-        //    return seg;
-        //}
-
-
-        // If udix is out of range return. 
-        if (uBegin > seg.End || uEnd < seg.Start)
-        {
-            return mSegTree[idx - 1];
-        }
-
+        // Retrive Child nodes and set type
         int leftIdx = GetLeftChild(idx);
         int rightIdx = GetRightChild(idx);
-        Node lSeg = mSegTree[leftIdx - 1];
-        Node rSeg = mSegTree[rightIdx - 1];
+        Node lSeg = mSegTree[leftIdx - 1] != null ? mSegTree[leftIdx - 1] : new Node();
+        Node rSeg = mSegTree[rightIdx - 1] != null ? mSegTree[rightIdx - 1] : new Node();
 
+        if (uBegin <= seg.Start && seg.End <= uEnd)
+        {
+            // Set Type
+            seg.SetType(type);
+
+            // Set QType for child segment nodes
+            lSeg.SetType(seg.GetQType());
+            rSeg.SetType(seg.GetQType());
+
+            // Transfrom Quads
+            seg.Transform();
+            return seg;
+        }
+
+        // Propogate the changes down the tree.
+        lSeg.SetType(seg.GetQType());
+        rSeg.SetType(seg.GetQType());
+        seg.SetType(seg.GetQType()); // Reset to NONE
+
+        // Query Child nodes
         Node left = leftIdx < mMaxNodes && uBegin <= lSeg.End ?
-            Update(GetLeftChild(idx), uBegin, uEnd, type) : lSeg;
+            Update(leftIdx, uBegin, uEnd, type) :
+            Update(leftIdx, lSeg.Start, lSeg.End, QType.None);
         Node right = rightIdx < mMaxNodes && uEnd >= rSeg.Start ?  
-            Update(GetRightChild(idx), uBegin, uEnd, type) : rSeg;
+            Update(rightIdx, uBegin, uEnd, type) : 
+            Update(rightIdx, rSeg.Start, rSeg.End, QType.None);
 
-       seg.merge(left, right);
+        seg.merge(left, right);
         return seg;
     }
-
 }
+
 
 
 class Solution
