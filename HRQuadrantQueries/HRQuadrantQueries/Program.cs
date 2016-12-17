@@ -40,11 +40,25 @@ class Node
 {
     const int QSize = 4;
     int[] mQuad = new int[QSize];
-    public Node()
+    public int Start, End;
+    public Node(int s, int e)
     {
-        ; // Do nothing
+        Start = s;
+        End = e;
     }
 
+    public Node(Node l, Node r)
+    {
+        Start = -1;
+        End = -1;
+        merge(l, r);
+    }
+
+    public Node()
+    {
+        Start = -1;
+        End = -1;
+    }
 
     public void Increment(int q)
     {
@@ -81,6 +95,7 @@ class SegmentTree
     int mPSize;
     int mHeight;
     int mSChildren;
+    int mMaxNodes;
 
     public SegmentTree(Point[] points, int n)
     {
@@ -91,32 +106,48 @@ class SegmentTree
         mSegTree = new Node[mSTSize];
 
         mSChildren = (int)Math.Pow(2, mHeight);
+        mMaxNodes = mSChildren + mPSize;
+
         // Initialize the end nodes
         for (int i = mSChildren - 1, j = 0; j < mPSize; ++i, ++j) {
-            mSegTree[i] = new Node();
+            mSegTree[i] = new Node(j + 1, j + 1);
             mSegTree[i].Increment(mPoints[j].GetQuadrant());
         }
 
-        BuildTree(1);
+        BuildTree(1, 1, mSChildren);
+    }
+
+    int GetLeftChild(int idx)
+    {
+        return idx * 2;
+    }
+
+    int GetRightChild(int idx)
+    {
+        return idx * 2 + 1;
     }
     
     // Build and merge tree
-    private Node BuildTree(int idx)
+    private Node BuildTree(int idx, int sStart, int sEnd)
     {
         // Base
         if (idx >= mSChildren)
         {
             if (mSegTree[idx - 1] == null)
-                return new Node();
+                return new Node(-1, -1);
 
             return mSegTree[idx - 1];
         }
 
-        Node left = BuildTree(idx * 2);
-        Node right = BuildTree(idx * 2 + 1);
+        int leftIdx = GetLeftChild(idx);
+        int rightIdx = GetRightChild(idx);
+        int midpoint = (sStart + sEnd) / 2;
+
+        Node left = BuildTree(leftIdx, sStart, midpoint);
+        Node right = BuildTree(rightIdx, midpoint + 1, sEnd);
 
         // Merge
-        mSegTree[idx - 1] = new Node();
+        mSegTree[idx - 1] = new Node(sStart, sEnd);
         mSegTree[idx - 1].merge(left, right);
         return mSegTree[idx - 1];  
     }
@@ -124,53 +155,45 @@ class SegmentTree
     // Query range
     public Node Query(int left, int right)
     {
-        return Query(1, 1, mSTSize - mSChildren + 1 , left, right);
+        return Query(1, left, right);
     }
 
-    private Node Query(int idx, int sStart, int sEnd, int left, int right)
+    private Node Query(int idx ,int left, int right)
     {
-        Node returnNode = new Node();
-        if (left > sEnd || right < sStart || idx >= mSChildren + mPSize)
-        {
-            // Search range is outside the query
-            return returnNode;
-        }
+        Node seg = mSegTree[idx - 1];
+        //if (left > seg.End || right < seg.Start || idx >= mSChildren + mPSize)
+        //{
+        //    // Search range is outside the query
+        //    return returnNode;
+        //}
 
-        if (left <= sStart && right >= sEnd)
+        if (left <= seg.Start && right >= seg.End)
         {
             // Search range is within query, so return substree parent node
             if (mSegTree[idx - 1] == null)
-                return returnNode;
+                return new Node();
 
             return mSegTree[idx - 1];
         }
 
-        // Recurse on subtrees
-        int midPoint = (sStart + sEnd) / 2;
-        Node tmpLeft = left <= midPoint ? Query(idx * 2, sStart, midPoint, left, right) : returnNode;
-        Node tmpRight = right >= midPoint + 1 ? Query(idx * 2 + 1, midPoint + 1, sEnd, left, right) : returnNode;
+        int leftIdx = GetLeftChild(idx);
+        int rightIdx = GetRightChild(idx);
+        Node leftSeg = mSegTree[leftIdx - 1];
+        Node rightSeg = mSegTree[rightIdx - 1];
 
-        returnNode.merge(tmpLeft, tmpRight);
-        return returnNode;
+        // Recurse on subtrees
+        Node tmpLeft = leftIdx < mMaxNodes && left <= leftSeg.End ? 
+            Query(idx * 2, left, right) : new Node();
+        Node tmpRight = rightIdx < mMaxNodes && right >= rightSeg.Start ? 
+            Query(idx * 2 + 1, left, right) : new Node();
+
+        return new Node(tmpLeft, tmpRight); 
     }
 
 
     // Update Values for Points in Tree
     public void Update(int uBegin, int uEnd, bool xflip)
     {
-        // Get start quadrant
-        //int quadS = mPoints[updateIdx - 1].GetQuadrant();
-
-        //// Update point
-        //if (xFlip)
-        //    mPoints[updateIdx - 1].Y = -mPoints[updateIdx - 1].Y;
-        //else
-        //    mPoints[updateIdx - 1].X = -mPoints[updateIdx - 1].X;
-
-        //// Get  end quadrant
-        //int quadE = mPoints[updateIdx - 1].GetQuadrant();
-
-
         Update(1, 1, mSTSize - mSChildren + 1, uBegin, uEnd, xflip);
 
     }
@@ -332,51 +355,6 @@ class Solution
 
         // Close file
         foutput.Close();
-
-
-        //for (int i = 0; i < nQuerys.Count; ++i)
-        //{
-        //    // Process Flips
-        //    for (int k = 0; k < n; ++k)
-        //    {
-        //        if (XFlips[i][k] % 2 > 0)
-        //        {
-        //            points[k].Y = -points[k].Y;
-        //        }
-
-        //        if (YFlips[i][k] % 2 > 0)
-        //        {
-        //            points[k].X = -points[k].X;
-        //        }
-        //    }
-
-        //    // Count Quadrants
-        //    string[] sQuery = nQuerys[i].Split(' ');
-        //    string type = sQuery[0];
-        //    int q_i = Convert.ToInt32(sQuery[1]) - 1;
-        //    int q_j = Convert.ToInt32(sQuery[2]) - 1;
-
-        //    // Processes points (inclusive) 
-        //    int[] count = new int[4];
-        //    for (int k = q_i; k <= q_j; ++k)
-        //    {
-        //        if (type == "C")
-        //        {
-        //            count[points[k].GetQuadrant()]++;
-        //        }
-        //    }
-
-        //    // Print count if type is "C"
-        //    if (type == "C")
-        //    {
-        //        Console.WriteLine("{0} {1} {2} {3}", count[0], count[1], count[2], count[3]);
-        //        StringBuilder line = new StringBuilder();
-        //        line.AppendFormat("{0} {1} {2} {3}", count[0], count[1], count[2], count[3]);
-        //        foutput.WriteLine(line);
-        //    }
-        //}
-
-
 
     }
 }
