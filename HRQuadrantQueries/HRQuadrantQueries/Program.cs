@@ -35,12 +35,20 @@ public class Point
     }
 }
 
+public enum QType
+{
+    X = 0,
+    Y,
+    XY,
+    None
+}
 
 class Node
 {
     const int QSize = 4;
     int[] mQuad = new int[QSize];
     public int Start, End;
+    QType qType = QType.None;
     public Node(int s, int e)
     {
         Start = s;
@@ -60,20 +68,96 @@ class Node
         End = -1;
     }
 
+    public void Transform()
+    {
+        int tmp = 0;
+        switch (qType)
+        {
+            case QType.Y:
+                tmp = mQuad[0];
+                mQuad[0] = mQuad[1];
+                mQuad[1] = tmp;
+                tmp = mQuad[2];
+                mQuad[2] = mQuad[3];
+                mQuad[3] = tmp;
+                break;
+            case QType.X:
+                tmp = mQuad[0];
+                mQuad[0] = mQuad[3];
+                mQuad[3] = tmp;
+                tmp = mQuad[2];
+                mQuad[2] = mQuad[1];
+                mQuad[1] = tmp;
+                break;
+            case QType.XY:
+                tmp = mQuad[0];
+                mQuad[0] = mQuad[2];
+                mQuad[2] = tmp;
+                tmp = mQuad[1];
+                mQuad[1] = mQuad[3];
+                mQuad[3] = tmp;
+                break;
+            case QType.None:
+                break;
+            default:
+                break;
+        }
+
+        // Set Qtype to None after transform
+        qType = QType.None;
+    }
+
+    public void SetType(QType t)
+    {
+        if (t == QType.X)
+        {
+            switch (qType)
+            {
+                case QType.X: qType = QType.None; break;
+                case QType.Y: qType = QType.XY; break;
+                case QType.XY: qType = QType.Y; break;
+                case QType.None: qType = QType.X; break;
+            }
+        }
+        else if (t == QType.Y)
+        {
+            switch (qType)
+            {
+                case QType.X: qType = QType.XY; break;
+                case QType.Y: qType = QType.None; break;
+                case QType.XY: qType = QType.X; break;
+                case QType.None: qType = QType.Y; break;
+            }
+        }
+        else if (t == QType.XY)
+        {
+            switch (qType)
+            {
+                case QType.X: qType = QType.Y; break;
+                case QType.Y: qType = QType.X; break;
+                case QType.XY: qType = QType.None; break;
+                case QType.None: qType = QType.XY; break;
+            }
+        }
+    }
+
+    private QType[,] transfromMat = { {  } };
+
     public void Increment(int q)
     {
         if (q >= 0 && q < QSize)
             mQuad[q]++;
     }
 
-    public void Decrement(int q)
-    {
-        if (q >= 0 && q < QSize)
-            mQuad[q]--;
-    }
+    //public void Decrement(int q)
+    //{
+    //    if (q >= 0 && q < QSize)
+    //        mQuad[q]--;
+    //}
     public void merge(Node l, Node r)
     {
-
+        r = r == null ? new Node() : r;
+        l = l == null ? new Node() : l;
         for (int i = 0; i < QSize; ++i)
         {
             mQuad[i] = l.mQuad[i] + r.mQuad[i];
@@ -83,6 +167,16 @@ class Node
     public int[] getArray()
     {
         return mQuad;
+    }
+
+    public bool IsLeaf()
+    {
+        return Start == End && IsValid();
+    }
+
+    public bool IsValid()
+    {
+        return Start > 0 && End > 0;
     }
 
 }
@@ -161,12 +255,6 @@ class SegmentTree
     private Node Query(int idx ,int left, int right)
     {
         Node seg = mSegTree[idx - 1];
-        //if (left > seg.End || right < seg.Start || idx >= mSChildren + mPSize)
-        //{
-        //    // Search range is outside the query
-        //    return returnNode;
-        //}
-
         if (left <= seg.Start && right >= seg.End)
         {
             // Search range is within query, so return substree parent node
@@ -192,9 +280,9 @@ class SegmentTree
 
 
     // Update Values for Points in Tree
-    public void Update(int uBegin, int uEnd, bool xflip)
+    public void Update(int uBegin, int uEnd, QType type)
     {
-        Update(1, 1, mSTSize - mSChildren + 1, uBegin, uEnd, xflip);
+        Update(1, uBegin, uEnd, type);
 
     }
 
@@ -203,45 +291,46 @@ class SegmentTree
     //    Take in a range for udating the xflips and yflips
     //    Need to drill down to leafs and update them then merge
     //    Very similar to BuildTree
-    private Node Update(int idx, int sStart, int sEnd, int uBegin, int uEnd, bool xflip)
+    private Node Update(int idx, int uBegin, int uEnd, QType type)
     {
-        if (idx >= mSChildren + mPSize)
+        Node seg = mSegTree[idx - 1];
+        if (idx >= mMaxNodes || !seg.IsValid())
             return new Node();
 
         // Update node if in range
-        if (idx >= mSChildren && idx < mSChildren + mPSize && uBegin <= sStart && sEnd <= uEnd)
+        if (seg.IsLeaf())
         {
-            int mPidx = idx - mSChildren;
-            // Get start quadrant
-            int quadS = mPoints[mPidx].GetQuadrant();
-
-            // Update point
-            if (xflip)
-                mPoints[mPidx].Y = -mPoints[mPidx].Y;
-            else
-                mPoints[mPidx].X = -mPoints[mPidx].X;
-
-            // Get  end quadrant
-            int quadE = mPoints[mPidx].GetQuadrant();
-
-            mSegTree[idx - 1].Decrement(quadS);
-            mSegTree[idx - 1].Increment(quadE);
-
-            return mSegTree[idx - 1];
+            seg.SetType(type);
+            seg.Transform();
+            return seg;
         }
+
+        //if (uBegin <= seg.Start && seg.End <= uEnd)
+        //{
+        //    seg.SetType(type);
+        //    seg.Transform();
+        //    return seg;
+        //}
+
 
         // If udix is out of range return. 
-        if (uBegin > sEnd || uEnd < sStart || sStart == sEnd)
+        if (uBegin > seg.End || uEnd < seg.Start)
         {
             return mSegTree[idx - 1];
         }
 
-        int midPoint = (sStart + sEnd) / 2;
-        Node left = Update(idx * 2, sStart, midPoint, uBegin, uEnd, xflip);
-        Node right = Update(idx * 2 + 1, midPoint + 1, sEnd, uBegin, uEnd, xflip);
+        int leftIdx = GetLeftChild(idx);
+        int rightIdx = GetRightChild(idx);
+        Node lSeg = mSegTree[leftIdx - 1];
+        Node rSeg = mSegTree[rightIdx - 1];
 
-        mSegTree[idx - 1].merge(left, right);
-        return mSegTree[idx - 1];
+        Node left = leftIdx < mMaxNodes && uBegin <= lSeg.End ?
+            Update(GetLeftChild(idx), uBegin, uEnd, type) : lSeg;
+        Node right = rightIdx < mMaxNodes && uEnd >= rSeg.Start ?  
+            Update(GetRightChild(idx), uBegin, uEnd, type) : rSeg;
+
+       seg.merge(left, right);
+        return seg;
     }
 
 }
@@ -299,7 +388,7 @@ class Solution
                 {
                     if ((!XFlips[k] && XFlips[k - 1]) || (k == q_j + 1 && XFlips[k - 1]))
                     {
-                        sgTree.Update(xprev + 1, k, true);
+                        sgTree.Update(xprev + 1, k, QType.X);
                     }
                     else if (XFlips[k] && !XFlips[k-1])
                     {
@@ -308,7 +397,7 @@ class Solution
 
                     if ((!YFlips[k] && YFlips[k - 1]) || (k == q_j + 1 && YFlips[k - 1]))
                     {
-                        sgTree.Update(yprev + 1, k, false); 
+                        sgTree.Update(yprev + 1, k, QType.Y); 
                     }
                     else if (YFlips[k] && !YFlips[k - 1])
                     {
