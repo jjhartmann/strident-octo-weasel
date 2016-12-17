@@ -406,36 +406,36 @@ class Solution
 
             if (type == "C")
             {
-                //// Iterate through range and process flips for Count
-                //// Only reset the values for the processed flips.
-                int xprev = q_i;
-                int yprev = q_i;
+                ////// Iterate through range and process flips for Count
+                ////// Only reset the values for the processed flips.
+                //int xprev = q_i;
+                //int yprev = q_i;
                
 
-                for (int k = q_i + 1; k <= q_j + 1; ++k)
-                {
-                    if ((!XFlips[k] && XFlips[k - 1]) || (k == q_j + 1 && XFlips[k - 1]))
-                    {
-                        sgTree.Update(xprev + 1, k, QType.X);
-                    }
-                    else if (XFlips[k] && !XFlips[k-1])
-                    {
-                        xprev = k;
-                    }
+                //for (int k = q_i + 1; k <= q_j + 1; ++k)
+                //{
+                //    if ((!XFlips[k] && XFlips[k - 1]) || (k == q_j + 1 && XFlips[k - 1]))
+                //    {
+                //        sgTree.Update(xprev + 1, k, QType.X);
+                //    }
+                //    else if (XFlips[k] && !XFlips[k-1])
+                //    {
+                //        xprev = k;
+                //    }
 
-                    if ((!YFlips[k] && YFlips[k - 1]) || (k == q_j + 1 && YFlips[k - 1]))
-                    {
-                        sgTree.Update(yprev + 1, k, QType.Y); 
-                    }
-                    else if (YFlips[k] && !YFlips[k - 1])
-                    {
-                        yprev = k;
-                    }
+                //    if ((!YFlips[k] && YFlips[k - 1]) || (k == q_j + 1 && YFlips[k - 1]))
+                //    {
+                //        sgTree.Update(yprev + 1, k, QType.Y); 
+                //    }
+                //    else if (YFlips[k] && !YFlips[k - 1])
+                //    {
+                //        yprev = k;
+                //    }
 
-                    // Reset FLips
-                    XFlips[k - 1] = false;
-                    YFlips[k - 1] = false;
-                }
+                //    // Reset FLips
+                //    XFlips[k - 1] = false;
+                //    YFlips[k - 1] = false;
+                //}
 
                 // Print Result
                 // Processes points (inclusive) 
@@ -450,23 +450,23 @@ class Solution
             }
             else if (type == "X")
             {
-                for (int j = q_i; j <= q_j; ++j)
-                {
-                    XFlips[j] = !XFlips[j];
-                }
+                //for (int j = q_i; j <= q_j; ++j)
+                //{
+                //    XFlips[j] = !XFlips[j];
+                //}
 
 
                 //// Process query
-                //sgTree.Update(q_i + 1, q_j + 1, true);
+                sgTree.Update(q_i + 1, q_j + 1, QType.X);
             }
             else
             {
-                for (int j = q_i; j <= q_j; ++j)
-                {
-                    YFlips[j] = !YFlips[j];
-                }
+                //for (int j = q_i; j <= q_j; ++j)
+                //{
+                //    YFlips[j] = !YFlips[j];
+                //}
 
-                //sgTree.Update(q_i + 1, q_j + 1, false);
+                sgTree.Update(q_i + 1, q_j + 1, QType.Y);
             }
         }
 
