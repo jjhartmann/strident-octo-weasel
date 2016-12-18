@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 class Solution
 {
-    static int[,] DP;
-    static public int CountCoins(int N, int[] coins, int M)
+    static double[,] DP;
+    static public double CountCoins(int N, int[] coins, int M)
     {
         if (N < 0 || M < 0)
         {
@@ -37,8 +37,8 @@ class Solution
         ln = Console.ReadLine().Split(' ');
         int[] coins = Array.ConvertAll(ln, s => int.Parse(s));
 
-        DP = new int[N + 1, M];
-        int count = CountCoins(N, coins, M - 1);
+        DP = new double[N + 1, M];
+        double count = CountCoins(N, coins, M - 1);
         Console.WriteLine(count);
 
 
