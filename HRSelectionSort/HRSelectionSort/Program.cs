@@ -29,7 +29,7 @@ class Solution
 					ar[j + 1] = ar[j];
 					--j;
 
-					printArray(ar, n);
+					//printArray(ar, n);
 				}
 
 				ar[j + 1] = num;
