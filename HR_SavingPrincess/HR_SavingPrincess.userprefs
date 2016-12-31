@@ -1,0 +1,14 @@
+﻿<Properties StartupConfiguration="{D10B079C-22D6-403B-BD9B-DAEDFD9B7222}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HR_SavingPrincess/Program.cs">
+    <Files>
+      <File FileName="HR_SavingPrincess/Program.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.HR__SavingPrincess PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
+</Properties>
