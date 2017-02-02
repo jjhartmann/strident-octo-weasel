@@ -36,6 +36,38 @@ class Solution
             }
         }
 
+        // Verify Max on cols
+        for (int i = 0; i < Mat.Count; ++i)
+        {
+            int maxL = 0;
+            int maxR = 0;
+            int[] tmp = new int[Mat.Count];
+            for (int j = 0; j < Mat.Count; ++j)
+            {
+                int curr = Mat[j][i];
+                if (Mat.Count / 2 > j)
+                {
+                    maxL += curr;
+                }
+                else
+                {
+                    maxR += curr;
+                }
+
+                tmp[j] = curr;
+            }
+
+            //Flip
+            if (maxR > maxL)
+            {
+                for (int j = 0; j < Mat.Count; ++j)
+                {
+                    Mat[j][i] = tmp[Mat.Count - 1 - j];
+                }
+            }
+        }
+
+
         // Print Total
         int totalMax = 0; 
         for (int i = 0; i < Mat.Count/2; ++i)
