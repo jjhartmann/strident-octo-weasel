@@ -4,6 +4,7 @@ namespace LC_BitStringEven
 {
     public class Solution
     {
+        // Working. 
         public bool HasAlternatingBits(int n)
         {
             int prevFlag = n % 2;
@@ -37,10 +38,28 @@ namespace LC_BitStringEven
             return ((n & mask1) == 0);
         }
 
+        // Attemp 3
+        public bool HasAlternatingBits3(int n)
+        {
+            if (n <= 0) return false;
+            string bits = Convert.ToString(n, 2);
+            char b1 = bits[0];
+            char b2 = 'c';
+            foreach (var b in bits){
+                if (b1 == b2)
+                    return false;
+
+                b2 = b1;
+                b1 = b;
+            }
+
+            return true;
+        }
+
         static void Main(string[] args)
         {
             Solution sol = new Solution(); 
-            Console.WriteLine(sol.HasAlternatingBits2(8));
+            Console.WriteLine(sol.HasAlternatingBits3(2));
 
         }
     }
