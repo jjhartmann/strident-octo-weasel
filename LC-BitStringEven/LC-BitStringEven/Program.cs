@@ -21,16 +21,26 @@ namespace LC_BitStringEven
             return true;
         }
 
+        // Does not work :(
+        public bool HasAlternatingBits2(int n)
+        {
+            int mask1 = 0;
+            int bit0 = 0;
+            for (int i = 0; i < sizeof(int) * 8; ++i){
+                mask1 |= (bit0 << i);
+                bit0 = (bit0 == 0) ? 1 : 0;
+            }
+
+            if (n % 2 == 0){
+                return (n & (mask1 >> 1)) == 0;
+            }
+            return ((n & mask1) == 0);
+        }
+
         static void Main(string[] args)
         {
             Solution sol = new Solution(); 
-            Console.WriteLine(sol.HasAlternatingBits(23452353));
-            Console.WriteLine(sol.HasAlternatingBits(7));
-            Console.WriteLine(sol.HasAlternatingBits(11));
-            Console.WriteLine(sol.HasAlternatingBits(10));
-            Console.WriteLine(sol.HasAlternatingBits(123));
-            Console.WriteLine(sol.HasAlternatingBits(0));
-            Console.WriteLine(sol.HasAlternatingBits(11));
+            Console.WriteLine(sol.HasAlternatingBits2(8));
 
         }
     }
