@@ -46,15 +46,36 @@ namespace LC_BitStringEven
             char b1 = bits[0];
             char b2 = 'c';
             foreach (var b in bits){
+                b1 = b;
                 if (b1 == b2)
                     return false;
-
                 b2 = b1;
-                b1 = b;
             }
 
             return true;
         }
+
+        // Optimise 4
+        public bool HasAlternatingBits4(int n)
+        {
+            if (n <= 0) return false;
+            int curr = n % 2;
+            int last = 2;
+
+            int mask = ~1;
+
+            while (n > 0){
+                curr = n & mask;
+                if (curr == last)
+                    return false;
+                last = curr;
+
+                n = n / 2;
+            }
+
+            return true;
+        }
+
 
         static void Main(string[] args)
         {
