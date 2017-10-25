@@ -56,21 +56,22 @@ namespace LC_BitStringEven
         }
 
         // Optimise 4
+        // 
         public bool HasAlternatingBits4(int n)
         {
             if (n <= 0) return false;
             int curr = n % 2;
             int last = 2;
 
-            int mask = ~1;
-
-            while (n > 0){
+            int mask = 1;
+            while (n > 0)
+            {
                 curr = n & mask;
                 if (curr == last)
                     return false;
                 last = curr;
 
-                n = n / 2;
+                n = n >> 1;
             }
 
             return true;
