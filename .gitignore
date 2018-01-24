@@ -25,3 +25,6 @@ xcdebugger/*
 **/xcdebugger/*
 .settings/*
 Scrap/a.*
+*.vs
+main.exe
+*/packages/*
