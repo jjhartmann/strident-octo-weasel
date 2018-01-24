@@ -1,0 +1,14 @@
+﻿<Properties StartupConfiguration="{AC33EFF4-3279-4389-8352-E3AAAFD24CED}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HR-LonelyIntegers/Program.cs">
+    <Files>
+      <File FileName="HR-LonelyIntegers/Program.cs" Line="6" Column="6" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.HR-LonelyIntegers PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
+</Properties>
