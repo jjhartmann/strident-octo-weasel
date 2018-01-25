@@ -14,7 +14,17 @@ namespace MatrixLayerRotation
         private static int M;
         static void matrixRotation(int[][] matrix)
         {
-            int circles = (M % 2 == 0) ? M/2 : N/2;
+            int evenNum = 0;
+            if (M % 2 == 0 && N % 2 == 0)
+            {
+                evenNum = (M < N) ? M : N;
+            }
+            else
+            {
+                evenNum = (M % 2 == 0) ? M : N;
+            }
+            int circles = evenNum/2;
+
             List<List<int>> concentricCircles = new List<List<int>>(circles);
 
             for (int i = 0; i < circles; ++i)
